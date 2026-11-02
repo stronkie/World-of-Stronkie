@@ -3,7 +3,7 @@ Adventure Game made for the Commodore 64
 
 Created By Mark Stronks
 
-**Current version: V0.09** — download `The_World_of_Stronkie_V0.09.d64`
+**Current version: V1.0 (release)** — download `The_World_of_Stronkie_V1.0.d64`
 
 Older versions are in the `previous versions` folder.
 
@@ -36,7 +36,7 @@ A letter from your uncle Edmund brought you to Ravenmoor Manor: *"Come to Ravenm
 
 ### How to play
 
-1. Attach `The_World_of_Stronkie_V0.09.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
+1. Attach `The_World_of_Stronkie_V1.0.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
 2. Type `LOAD"*",8` and then `RUN`.
 3. The main menu appears with music while the first chapter loads ("LOADING... PLEASE WAIT"). When loading is done the text changes to "N:NEW GAME  L:LOAD GAME" and the border flashes.
 4. Press `N` to start a new game, or `L` to continue your saved game. If there is no saved game on the disk, a new game starts.
@@ -152,6 +152,7 @@ Memory map:
 
 | Version | Date | Notes |
 |---|---|---|
+| V1.0 | 2 Nov 2026 | **Release version.** The complete game: prologue + 7 chapters, 54 locations, 580 points, 10 star fragments |
 | V0.09 | 2 Nov 2026 | Five new chapters on the planet Stronkie (the story now has 7 chapters), RUN/STOP + RESTORE leaves the game |
 | V0.08 | 2 Nov 2026 | New game / load game choice, title cards, animated pictures, picture wipes, coloured text |
 | V0.07 | 2 Nov 2026 | Faster loading, save/load, retry after dying, hints, star fragments, TAKE ALL and AGAIN |
@@ -163,6 +164,11 @@ Memory map:
 | V0.01 | 2 Nov 2026 | First playable version (as "Stronkie's Quest", not published) |
 
 ## Change log
+
+### V1.0 — release
+- First release version of The World of Stronkie: the three-part prologue and seven chapters, from Uncle Edmund's manor to the Star Heart on the planet Stronkie
+- Same game as V0.09, which was tested from start to finish; only the version number changed
+- Complete walkthrough added: [walkthrough.txt](walkthrough.txt), with all 580 points, all 10 star fragments and a Bad Endings section that lists every way to die
 
 ### V0.09
 - Five new chapters on the planet Stronkie: **Landfall**, **The Village**, **The Crystal Mountains**, **The Sky Temple** and the finale **The Star Heart** (26 new locations with pictures and animations)
