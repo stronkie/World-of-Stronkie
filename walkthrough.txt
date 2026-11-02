@@ -325,3 +325,78 @@ STAR FRAGMENTS AT A GLANCE
  10  Chapter 7   West gallery      SEARCH MURALS
 
 =====================================================================
+
+
+=====================================================================
+BAD ENDINGS - EVERY WAY TO DIE
+=====================================================================
+These commands end your game. After a death you can type RETRY to
+start the current part again, or LOAD your saved game.
+
+Words that mean the same thing count too:
+  TAKE  = GET, GRAB, PICK         KILL  = ATTACK, HIT, FIGHT
+  SHOUT = SAY, YELL, TYPE         GO    = CROSS
+
+PROLOGUE, PART 1: THE GROUNDS
+  At the well:
+  > CLIMB  (or D)         The old rope snaps. You plunge into the
+                          icy water far below.
+  > JUMP                  You jump into the well. Not your brightest
+                          idea.
+
+PROLOGUE, PART 2: THE MANOR ............ no deaths
+PROLOGUE, PART 3: THE LAUNCH PAD ....... no deaths
+
+CHAPTER 1: INTO SPACE
+  In the airlock:
+  > OPEN DOOR             WHOOSH! The air rushes out into space,
+                          and you with it...
+
+CHAPTER 2: THE DERELICT STATION
+  In the station corridor:
+  > TOUCH WIRES           ZZZAP! A hundred-year-old power cable
+  > TAKE WIRES            still has plenty of power left...
+
+CHAPTER 3: LANDFALL
+  At the glowing river:
+  > SWIM                  The current sweeps you away in seconds...
+  > GO RIVER              Same ending. Careful: CROSS RIVER does
+                          this too! Use SWING ON VINE instead.
+
+CHAPTER 4: THE VILLAGE
+  On the lookout tower:
+  > JUMP                  You find out that Stronkie has very strong
+                          gravity. Use FLY GLIDER instead.
+
+CHAPTER 5: THE CRYSTAL MOUNTAINS
+  In the ice cave (the beast opens one huge eye... then its mouth):
+  > SHOUT                 Careful: SAY, YELL and TYPE count as
+                          SHOUT here!
+  > KILL BEAST
+  > KICK BEAST
+  > WAKE BEAST
+  > TALK TO BEAST
+  > TAKE BEAST
+  At the ice bridge:
+  > JUMP                  Into a bottomless gorge? Really?
+
+CHAPTER 6: THE SKY TEMPLE
+  At the endless drop:
+  > JUMP                  You step into nothing and fall... and
+                          fall...
+
+CHAPTER 7: THE STAR HEART
+  In the heart chamber, while Vex is still there:
+  > KILL VEX              Vex is faster. ZAP!
+  > GIVE AMULET           THE WORST ENDING: Vex grabs the amulet and
+                          laughs. His machine roars, and the Star
+                          Heart goes dark forever...
+
+SAFE, EVEN IF THEY LOOK DANGEROUS
+  > TOUCH REACTOR         (Chapter 1) Ouch, it's hot. Nothing more.
+  > E at the ice bridge   (Chapter 5) Without spiked boots you just
+                          slide back.
+  > N at the endless drop (Chapter 6) Before the bridge appears you
+                          just pull your foot back.
+
+=====================================================================
