@@ -3,7 +3,7 @@ Adventure Game made for the Commodore 64
 
 Created By Mark Stronks
 
-**Current version: V0.05** — download `The_World_of_Stronkie_V0.05.d64`
+**Current version: V0.06** — download `The_World_of_Stronkie_V0.06.d64`
 
 Older versions are in the `previous versions` folder.
 
@@ -28,7 +28,7 @@ A letter from your uncle Edmund brought you to Ravenmoor Manor: *"Come to Ravenm
 
 ### How to play
 
-1. Attach `The_World_of_Stronkie_V0.05.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
+1. Attach `The_World_of_Stronkie_V0.06.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
 2. Type `LOAD"*",8` and then `RUN`.
 3. The main menu appears with music while the first chapter loads ("LOADING... PLEASE WAIT"). When loading is done the text changes to "PRESS ANY KEY TO START" and the border flashes. Press any key to begin.
 
@@ -44,11 +44,18 @@ Type two-word commands, for example:
 | `OPEN DOOR`, `PULL LEVER`, `DIG`, `LIGHT CANDLE`, `PRESS BUTTON`, `TALK TO NOVA` | interact with the world |
 | `HELP`, `SCORE`, `QUIT` | help, your score, quit the game |
 
-Only the first four letters of a word count, and small words like THE, WITH and UNDER are skipped. The maximum score is 220.
+Only the first four letters of a word count, and small words like THE, WITH and UNDER are skipped.
+
+### Score
+
+The status bar under the picture always shows the part you are in, your **score** and the number of **moves** (every command you type counts as one move). You earn points for solving puzzles, for example 10 points for digging up the handle or opening a door. Every time you score, a short jingle plays. The maximum score is 220. Try to get it in as few moves as possible!
 
 ### Features
 
 - Full-screen multicolour main menu picture with music
+- Status bar with the current part, score and moves
+- Music during the game: every part has its own tune, which only changes when the next part loads
+- Sound effects: key clicks, taking and dropping items, errors, points, doors, thunder, rocket launch, hyperspace, robot zaps, death and a victory fanfare
 - A picture for every location (multicolour bitmap in the top half of the screen, text in the bottom half, using a raster split)
 - Two-word command parser with about 60 verbs
 - 28 locations with pictures in five parts
@@ -78,11 +85,13 @@ The game is written in 6502 machine language (64tass-compatible assembler syntax
 - **Chapters:** each chapter is a separate data file that is loaded to `$4000`. It holds the rooms, objects, words, puzzle scripts (conditions and actions), messages, and the room pictures (RLE compressed).
 - **Pictures:** drawn at 160×96 pixels in the 16 C64 colours and converted to C64 multicolour bitmap format. The main menu picture was converted from Mark's artwork to a full 160×200 multicolour screen.
 - **Music:** the main menu plays the SID tune "Contest Demo (part 4)", which the game calls 50 times a second from a raster interrupt. It also keeps playing while chapter 1 loads.
+- **In-game music and sound:** the engine has its own small 3-voice music player. Each part's file contains its own tune, so the music changes only when a new part is loaded. Sound effects borrow the third SID voice for a moment, while the music keeps playing on the other two.
 
 ### Credits
 
 - Game: Created By Mark Stronks
 - Menu music: "Contest Demo (part 4)" by Sami Seppä (Rock), 1988 Finnish Gold
+- In-game music: original tunes made for this game (The Grounds, The Manor, The Launch Pad, Into Space, The Derelict Station)
 
 Memory map:
 
@@ -90,7 +99,7 @@ Memory map:
 |---|---|
 | `$0801-$17FF` | game engine code |
 | `$1800-$280C` | menu music |
-| `$2810-$2FFF` | engine texts, word lists and variables |
+| `$2810-$37FF` | engine texts, word lists, variables, status bar, in-game music player and sound effects |
 | `$4000-$BFFF` | menu picture or the current part (32 KB, BASIC ROM switched off) |
 | `$C400` / `$C800` | screen memory / copy of the C64 font (VIC bank 3) |
 | `$D800` | colour memory |
@@ -100,6 +109,7 @@ Memory map:
 
 | Version | Date | Notes |
 |---|---|---|
+| V0.06 | 2 Nov 2026 | Score and moves on screen, music for every part, sound effects |
 | V0.05 | 2 Nov 2026 | Three new parts: the launch pad and the first two space chapters |
 | V0.04 | 2 Nov 2026 | "Press any key to start" on the main menu |
 | V0.03 | 2 Nov 2026 | Main menu music |
@@ -107,6 +117,13 @@ Memory map:
 | V0.01 | 2 Nov 2026 | First playable version (as "Stronkie's Quest", not published) |
 
 ## Change log
+
+### V0.06
+- Status bar under the picture with the current part, the score and the number of moves
+- Score is now 16-bit (room for many more chapters); a jingle plays whenever you score
+- In-game music: every part has its own original tune, which keeps playing for the whole part and changes only when the next part loads
+- Sound effects: key clicks, take, drop, error buzz, points, doors, thunder, rocket launch, hyperspace, computer beeps, robot zap, death and a victory fanfare
+- Text window is now rows 14-23 (one row went to the status bar)
 
 ### V0.05
 - The Ravenmoor story is now the **Prologue** of the game (parts 1 and 2)
