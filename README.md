@@ -3,7 +3,9 @@ Adventure Game made for the Commodore 64
 
 Created By Mark Stronks
 
-**Current version: V1.4** — download both disk sides: `The_World_of_Stronkie_V1.4_sideA.d64` and `The_World_of_Stronkie_V1.4_sideB.d64`
+**Current version: V1.4** — download both disk sides: `The_World_of_Stronkie_V1.4_sideA.d64` and `The_World_of_Stronkie_V1.4_sideB.d64`, or both at once in `The_World_of_Stronkie_V1.4.zip`
+
+Playing on real floppies? Print the black and white disk labels for side A and side B from the [`disk labels`](disk%20labels) folder (`Disk_Labels_A4.pdf` prints both at their real size, 3.5 x 1.5 inch).
 
 Older versions are in the `previous versions` folder.
 
@@ -195,6 +197,8 @@ Memory map:
 - Beat Stronkie's high score on the Astro Chicken arcade machine for a 5 point bonus (maximum score now 735)
 - The game no longer fits on one disk side: the final chapter is on side B, and both sides can start the game
 - Texts can now show double quotes and the $ sign
+- Both disk sides are also available together in one zip file
+- Black and white disk labels for side A and side B, in the `disk labels` folder
 - The walkthrough is updated, with a list of all the jokes and secret commands
 
 ### V1.3
