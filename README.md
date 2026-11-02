@@ -3,7 +3,7 @@ Adventure Game made for the Commodore 64
 
 Created By Mark Stronks
 
-**Current version: V1.4** — download both disk sides: `The_World_of_Stronkie_V1.4_sideA.d64` and `The_World_of_Stronkie_V1.4_sideB.d64`, or both at once in `The_World_of_Stronkie_V1.4.zip`
+**Current version: V1.5** — download both disk sides: `The_World_of_Stronkie_V1.5_sideA.d64` and `The_World_of_Stronkie_V1.5_sideB.d64`, or both at once in `The_World_of_Stronkie_V1.5.zip`
 
 Playing on real floppies? Print the black and white disk labels for side A and side B from the [`disk labels`](disk%20labels) folder (`Disk_Labels_A4.pdf` prints both at their real size, 3.5 x 1.5 inch).
 
@@ -39,11 +39,21 @@ The space chapters are full of nods to the classic adventure games: Space Quest,
 - **Chapter 6 – The Village:** the Stronkies only chirp until you find a way to understand them. Elder Zooma tells you the truth: your amulet is the key of the Sky Temple, where the Star Heart keeps the planet alive, and Commander Vex has come to steal its power. Bix the inventor can fly you there, if you find him a sail.
 - **Chapter 7 – The Crystal Mountains:** Vex has stolen the amulet from your ship! Cross an ice bridge without waking the beast in the ice cave, sneak into Vex's camp and take the amulet back.
 - **Chapter 8 – The Sky Temple:** open the crystal gate, catch the sunlight with a silver mirror and make an invisible bridge appear. But behind the golden door, Vex is waiting.
-- **Chapter 9 – The Star Heart:** Vex is draining the Star Heart with his machine. Use the old Stronkie legends to stop him and save the World of Stronkie. *The end... for now!*
+- **Chapter 9 – The Star Heart:** Vex is draining the Star Heart with his machine. Use the old Stronkie legends to stop him, chase him into the catacombs and trap him. Uncle Edmund turns up just in time to help you save the World of Stronkie... but Vex's flagship beams him up from orbit, and takes Uncle Edmund with him!
+
+**Vex's flagship**
+
+- **Chapter 10 – Repairs:** Bix can repair the STARRAVEN, but he needs a star crystal from the old mines. The tunnels are pitch dark and twist like a maze, so you'll need a friend with glowing ears.
+- **Chapter 11 – Vex's Flagship:** sneak aboard the IRON RAVEN. Find a disguise to get past the guards, and beat the Insult-o-Tron 3000 at insult swordfighting with the comebacks you learned along the way.
+- **Chapter 12 – The Prison Deck:** free Uncle Edmund, and find out who Commander Vex really is. Some old friends turn up again...
+- **Chapter 13 – The Bridge:** Vex's star cannon is aimed at the World of Stronkie. Stop it, and end this once and for all.
+- **Epilogue – Home Again:** back at Ravenmoor Manor, where it all began. Did you find all the star fragments? Then the true ending awaits.
+
+**Choices that matter:** some things you do early on (or don't do) change what happens later: who helps you, which way you get past the guards, and whether a secret room opens. You can always finish the game either way.
 
 ### How to play
 
-1. Attach `The_World_of_Stronkie_V1.4_sideA.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE). Keep `The_World_of_Stronkie_V1.4_sideB.d64` ready: the final chapter is on side B, and the game will ask you to flip the disk.
+1. Attach `The_World_of_Stronkie_V1.5_sideA.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE). Keep `The_World_of_Stronkie_V1.5_sideB.d64` ready: from chapter 9 on the game is on side B, and it will ask you to flip the disk.
 2. Type `LOAD"*",8` and then `RUN`.
 3. The main menu appears with music while the first chapter loads ("LOADING... PLEASE WAIT"). When loading is done the text changes to "N:NEW GAME  L:LOAD GAME" and the border flashes.
 4. Press `N` to start a new game, or `L` to continue your saved game. If there is no saved game on the disk, a new game starts.
@@ -81,19 +91,19 @@ Only the first four letters of a word count, and small words like THE, WITH and 
 
 The status bar under the picture always shows the part you are in, your **score** and the number of **moves** (every command you type counts as one move). You earn points for solving puzzles, for example 10 points for digging up the handle or opening a door. Every time you score, a short jingle plays.
 
-**Star fragments:** every part hides one star fragment, worth 10 points each. They only turn up if you search the right place carefully. The status bar shows how many you have found (`*02/12`).
+**Star fragments:** almost every part hides one star fragment, worth 10 points each: 16 in total. They only turn up if you search the right place carefully. The status bar shows how many you have found (`*02/16`). Find them all for the true ending!
 
 **Hints:** stuck? Type `HINT` for a clue about your next step. Each hint costs 3 points.
 
-The maximum score is 735 (610 for the story, 120 for the twelve star fragments, and a 5 point bonus for a certain arcade machine). Rumour has it that there is also something secret hidden on the planet...
+The maximum score is 1070 (with all 16 star fragments, every good choice and the true ending). Rumour has it that there is also something secret hidden on the planet...
 
-Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes you through the whole game with all 735 points, all twelve star fragments and the secret, plus a list of jokes and secret commands to try. Try to get it in as few moves as possible, without hints!
+Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes you through the whole game with all 1070 points, all 16 star fragments, every choice that matters, the secret and the true ending, plus a list of jokes and secret commands to try. Try to get it in as few moves as possible, without hints!
 
 ### Saving, dying and disk sides
 
 - `SAVE` (or `F3`) writes your game to the disk under the name of the part you are in, for example `SAVE-LANDFALL` or `SAVE-SKY TEMPLE`, so the disk directory shows how far you got. A new save replaces the old one, and the disk must not be write-protected. `LOAD`, `RESTORE` or `F1` asks if you are sure, then brings you back to the exact same spot, with all your items, score and moves. You can type `LOAD` right after starting a new game.
 - If you die, the game asks **TRY THIS PART AGAIN?** Press `Y` to restart the current part with the score you had when you entered it, or `N` to go back to the main menu.
-- The game is on two disk sides. Side A holds the program, the menu and parts 1 to 11; side B holds the final chapter (and its own copy of the program and the menu, so either side can start the game). When the game needs a part that is not on the disk in the drive, it says **INSERT THE OTHER SIDE AND PRESS A KEY**.
+- The game is on two disk sides. Side A holds the program, the menu and parts 1 to 11; side B holds parts 12 to 17, from chapter 9 to the epilogue (and its own copy of the program and the menu, so either side can start the game). When the game needs a part that is not on the disk in the drive, it says **INSERT THE OTHER SIDE AND PRESS A KEY**.
 - A save is written to the side that is in the drive. If you saved on side B, start the game from side A as usual, then insert side B before you press `L` in the main menu.
 
 ### Features
@@ -106,7 +116,7 @@ Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes y
 - Status bar with the current part, score and moves
 - Music during the game: every part has its own tune, which only changes when the next part loads
 - Sound effects: key clicks, taking and dropping items, errors, points, doors, thunder, rocket launch, hyperspace, robot zaps, death and a victory fanfare
-- A picture for every location (multicolour bitmap in the top half of the screen, text in the bottom half, using a raster split): 65 locations in 12 parts
+- A picture for every location (multicolour bitmap in the top half of the screen, text in the bottom half, using a raster split): 92 locations in 17 parts
 - Two-word command parser with about 65 verbs, TAKE ALL / DROP ALL, AGAIN, and messages that tell you which word was not understood
 - Save and load, retry a part after dying, hints, and hidden star fragments
 - All data files are compressed, so every part loads about twice as fast
@@ -131,9 +141,14 @@ Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes y
 | `PART09` | Chapter 6: The Village |
 | `PART10` | Chapter 7: The Crystal Mountains |
 | `PART11` | Chapter 8: The Sky Temple |
-| `PART12` | Chapter 9: The Star Heart (on side B) |
+| `PART12` | Chapter 9: The Star Heart (side B) |
+| `PART13` | Chapter 10: Repairs (side B) |
+| `PART14` | Chapter 11: Vex's Flagship (side B) |
+| `PART15` | Chapter 12: The Prison Deck (side B) |
+| `PART16` | Chapter 13: The Bridge (side B) |
+| `PART17` | Epilogue: Home Again (side B) |
 
-All data files are packed. Side A holds the program, the menu and parts 1 to 11; side B holds part 12, together with a copy of the program and the menu. When you save, a file named after the part you are in (like `SAVE-THE MANOR`) is added to the disk. New chapters that no longer fit will go on side B, and the game will ask you to flip the disk when it needs them.
+All data files are packed. Side A holds the program, the menu and parts 1 to 11; side B holds parts 12 to 17, together with a copy of the program and the menu. When you save, a file named after the part you are in (like `SAVE-THE MANOR`) is added to the disk. New chapters that no longer fit will go on side B, and the game will ask you to flip the disk when it needs them.
 
 ## How was it created
 
@@ -172,6 +187,7 @@ Memory map:
 
 | Version | Date | Notes |
 |---|---|---|
+| V1.5 | 2 Nov 2026 | Act 3: four new chapters and an epilogue, a longer finale, choices that matter, a true ending, a maze and a companion |
 | V1.4 | 2 Nov 2026 | Jokes and secret commands about other games, Sierra-style death jokes, Astro Chicken high score; the game now uses two disk sides |
 | V1.3 | 2 Nov 2026 | Internal update for testing; the game itself is unchanged |
 | V1.2 | 2 Nov 2026 | Two new space chapters (Asteroid 42 and Space Pirates), humour and classic adventure game references, a secret on the planet |
@@ -188,6 +204,18 @@ Memory map:
 | V0.01 | 2 Nov 2026 | First playable version (as "Stronkie's Quest", not published) |
 
 ## Change log
+
+### V1.5
+- A longer Star Heart finale: Vex flees into the catacombs, you trap him, and Uncle Edmund turns up to help you open the altar
+- Act 3, all on side B: **Chapter 10 – Repairs**, **Chapter 11 – Vex's Flagship**, **Chapter 12 – The Prison Deck**, **Chapter 13 – The Bridge** and the **Epilogue – Home Again** at Ravenmoor Manor (27 new locations, 15 new pictures, 4 new tunes)
+- The big secret: who Commander Vex really is
+- Choices that matter: being kind to Roger, beating the Astro Chicken high score, freeing Ensign Ricky, out-insulting Captain LeChuckle, finding the wooden monkey and wearing the Groucho glasses all pay off later in the game. There is always another way through.
+- A true ending for players who find all 16 star fragments (4 new fragments; maximum score now 1070)
+- New kinds of puzzles: a classic maze of twisty little passages, dark tunnels, Pip the glowing companion who follows you around, and an insult swordfighting rematch against the Insult-o-Tron 3000
+- A secret holodeck room, for those who kept the wooden monkey
+- Engine: some game flags now carry over from part to part, and a character can follow you from room to room
+- Saved games from older versions can't be loaded in V1.5
+- The walkthrough covers all 17 parts, every choice, the true ending and the new bad endings
 
 ### V1.4
 - Secret commands that work everywhere: try XYZZY, IDDQD, 42, USE THE FORCE and GET LAMP
