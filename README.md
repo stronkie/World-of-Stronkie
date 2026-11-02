@@ -3,7 +3,7 @@ Adventure Game made for the Commodore 64
 
 Created By Mark Stronks
 
-**Current version: V1.2** — download `The_World_of_Stronkie_V1.2.d64`
+**Current version: V1.3** — download `The_World_of_Stronkie_V1.3.d64`
 
 Older versions are in the `previous versions` folder.
 
@@ -41,7 +41,7 @@ The space chapters are full of nods to the classic adventure games: Space Quest,
 
 ### How to play
 
-1. Attach `The_World_of_Stronkie_V1.2.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
+1. Attach `The_World_of_Stronkie_V1.3.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
 2. Type `LOAD"*",8` and then `RUN`.
 3. The main menu appears with music while the first chapter loads ("LOADING... PLEASE WAIT"). When loading is done the text changes to "N:NEW GAME  L:LOAD GAME" and the border flashes.
 4. Press `N` to start a new game, or `L` to continue your saved game. If there is no saved game on the disk, a new game starts.
@@ -169,6 +169,7 @@ Memory map:
 
 | Version | Date | Notes |
 |---|---|---|
+| V1.3 | 2 Nov 2026 | Internal update for testing; the game itself is unchanged |
 | V1.2 | 2 Nov 2026 | Two new space chapters (Asteroid 42 and Space Pirates), humour and classic adventure game references, a secret on the planet |
 | V1.1 | 2 Nov 2026 | Function keys: F1 load, F3 save, F5 music on/off, F7 quit to the menu; save files named after the part |
 | V1.0 | 2 Nov 2026 | **Release version.** The complete game: prologue + 7 chapters, 54 locations, 580 points, 10 star fragments |
@@ -183,6 +184,9 @@ Memory map:
 | V0.01 | 2 Nov 2026 | First playable version (as "Stronkie's Quest", not published) |
 
 ## Change log
+
+### V1.3
+- Internal update for testing; the game itself is unchanged
 
 ### V1.2
 - Two new chapters in space, before the landing on Stronkie: **Chapter 3 – Asteroid 42** and **Chapter 4 – Space Pirates**, with 11 new locations, new puzzles, new music and two more star fragments (12 in total, maximum score 730)
