@@ -3,7 +3,7 @@ Adventure Game made for the Commodore 64
 
 Created By Mark Stronks
 
-**Current version: V0.07** — download `The_World_of_Stronkie_V0.07.d64`
+**Current version: V0.08** — download `The_World_of_Stronkie_V0.08.d64`
 
 Older versions are in the `previous versions` folder.
 
@@ -28,9 +28,10 @@ A letter from your uncle Edmund brought you to Ravenmoor Manor: *"Come to Ravenm
 
 ### How to play
 
-1. Attach `The_World_of_Stronkie_V0.07.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
+1. Attach `The_World_of_Stronkie_V0.08.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
 2. Type `LOAD"*",8` and then `RUN`.
-3. The main menu appears with music while the first chapter loads ("LOADING... PLEASE WAIT"). When loading is done the text changes to "PRESS ANY KEY TO START" and the border flashes. Press any key to begin.
+3. The main menu appears with music while the first chapter loads ("LOADING... PLEASE WAIT"). When loading is done the text changes to "N:NEW GAME  L:LOAD GAME" and the border flashes.
+4. Press `N` to start a new game, or `L` to continue your saved game. If there is no saved game on the disk, a new game starts.
 
 Type two-word commands, for example:
 
@@ -68,7 +69,11 @@ The maximum score is 270 (220 for the story, 50 for the five star fragments). Tr
 
 ### Features
 
-- Full-screen multicolour main menu picture with music
+- Full-screen multicolour main menu picture with music, and a choice between a new game and loading a saved game
+- Full-screen title cards: when you finish a part, the next part's title and picture are shown while it loads
+- Animated pictures: twinkling stars, flickering lamps and candles, blinking console lights, a pulsing reactor, a glowing hologram, and screen flashes for lightning, the rocket launch and hyperspace
+- New pictures sweep in from left to right when you enter a room
+- Coloured text: room descriptions in green, events in white, NOVA in cyan, uncle Edmund in yellow, points and discoveries in yellow, your commands in light blue; every part has its own status bar and border colour
 - Status bar with the current part, score and moves
 - Music during the game: every part has its own tune, which only changes when the next part loads
 - Sound effects: key clicks, taking and dropping items, errors, points, doors, thunder, rocket launch, hyperspace, robot zaps, death and a victory fanfare
@@ -93,7 +98,7 @@ The maximum score is 270 (220 for the story, 50 for the five star fragments). Tr
 | `CHAPTER4` | Chapter 1: Into Space |
 | `CHAPTER5` | Chapter 2: The Derelict Station |
 
-All data files are packed, so the disk still has 387 free blocks for new chapters. When you save, the file `SAVEGAME` is added to the disk.
+All data files are packed, so the disk still has 342 free blocks for new chapters. When you save, the file `SAVEGAME` is added to the disk.
 
 ## How was it created
 
@@ -104,6 +109,7 @@ The game is written in 6502 machine language (64tass-compatible assembler syntax
 - **Chapters:** each chapter is a separate data file that is unpacked to `$4000`. It holds the rooms, objects, words, puzzle scripts (conditions and actions), messages, and the room pictures (RLE compressed).
 - **Pictures:** drawn at 160×96 pixels in the 16 C64 colours and converted to C64 multicolour bitmap format. The main menu picture was converted from Mark's artwork to a full 160×200 multicolour screen.
 - **Music:** the main menu plays the SID tune "Contest Demo (part 4)", which the game calls 50 times a second from a raster interrupt. It also keeps playing while chapter 1 loads.
+- **Animations:** each room can have a list of up to 16 picture cells whose colours the raster interrupt changes in turn (colour cycling), so lights and stars move without any extra pictures. The title card of the next part is stored in the file of the part before it, so it can be shown while the next part loads.
 - **In-game music and sound:** the engine has its own small 3-voice music player. Each part's file contains its own tune, so the music changes only when a new part is loaded. Sound effects borrow the third SID voice for a moment, while the music keeps playing on the other two.
 
 ### Credits
@@ -116,11 +122,13 @@ Memory map:
 
 | Address | Use |
 |---|---|
+| `$0200-$024F`, `$033C-$03DB` | input buffers, flags and music state (unused system areas) |
 | `$0801-$17FF` | game engine code |
 | `$1800-$280C` | menu music |
 | `$2810-$3BFF` | engine texts, word lists, variables, status bar, in-game music player, sound effects, save/load |
-| `$3C00-$3FFF` | buffer for the menu's PRESS ANY KEY rows and for save games |
-| `$4000-$BFFF` | menu picture or the current part (32 KB, BASIC ROM switched off); packed files are loaded just below `$C400` and unpacked to `$4000` |
+| `$3C00-$3FFF` | in the program file: code for `$C000` (copied at start); afterwards a buffer for the menu rows, save games and the picture wipe |
+| `$4000-$BFFF` | menu picture or the current part (32 KB, BASIC ROM switched off); packed files are loaded just below `$C000` and unpacked to `$4000` |
+| `$C000-$C3FF` | title cards, colour cycling, flashes and the picture wipe |
 | `$C400` / `$C800` | screen memory / copy of the C64 font (VIC bank 3) |
 | `$D800` | colour memory |
 | `$E000-$FF3F` | bitmap under the KERNAL ROM (menu: full screen, in game: top 12 rows) |
@@ -129,6 +137,7 @@ Memory map:
 
 | Version | Date | Notes |
 |---|---|---|
+| V0.08 | 2 Nov 2026 | New game / load game choice, title cards, animated pictures, picture wipes, coloured text |
 | V0.07 | 2 Nov 2026 | Faster loading, save/load, retry after dying, hints, star fragments, TAKE ALL and AGAIN |
 | V0.06 | 2 Nov 2026 | Score and moves on screen, music for every part, sound effects |
 | V0.05 | 2 Nov 2026 | Three new parts: the launch pad and the first two space chapters |
@@ -138,6 +147,16 @@ Memory map:
 | V0.01 | 2 Nov 2026 | First playable version (as "Stronkie's Quest", not published) |
 
 ## Change log
+
+### V0.08
+- Main menu: press `N` for a new game or `L` to load your saved game
+- Title cards: while the next part loads, a full-screen card shows its name and first picture (for at least 3 seconds)
+- Colour-cycling animations in 24 rooms: stars, lamps, candles, fires, console lights, warning lights, the reactor, the robot's eye and the hologram
+- Screen flashes for the lightning, the rocket launch, hyperspace, the generator and the electric wires
+- Room pictures now sweep in from left to right
+- Coloured text: descriptions green, events white, NOVA cyan, uncle Edmund yellow, points yellow, commands light blue, messages grey
+- Every part has its own status bar and border colour
+- Before moving on to the next part, the game waits for a key so you can read the last message
 
 ### V0.07
 - All data files are compressed: every part loads about twice as fast, and the disk has 387 free blocks
