@@ -1,0 +1,327 @@
+=====================================================================
+               THE WORLD OF STRONKIE - COMPLETE WALKTHROUGH
+                 All 580 points and all 10 star fragments
+                     Created By Mark Stronks - V0.09
+=====================================================================
+
+HOW TO USE THIS WALKTHROUGH
+---------------------------
+Type every line that starts with ">" exactly as shown and press RETURN.
+The number in [brackets] is your score after that command.
+Points are shown as (+10).
+
+ * Do NOT type HINT anywhere. Every hint costs 3 points, and you
+   need all of them for the full 580.
+ * The star fragments (*) are worth 10 points each. They only turn
+   up if you SEARCH the right thing in the right room.
+ * Type SAVE now and then. If you die you can RETRY, or LOAD your
+   saved game.
+ * If the text stops with MORE, press SPACE.
+
+Points per part:
+  Prologue 1  The Grounds ............  50
+  Prologue 2  The Manor ..............  70
+  Prologue 3  The Launch Pad .........  50
+  Chapter 1   Into Space .............  50
+  Chapter 2   The Derelict Station ...  50
+  Chapter 3   Landfall ...............  70
+  Chapter 4   The Village ............  70
+  Chapter 5   The Crystal Mountains ..  55
+  Chapter 6   The Sky Temple .........  55
+  Chapter 7   The Star Heart .........  60
+                                      -----
+  Total ............................. 580
+
+At the main menu, press N to start a new game.
+
+
+=====================================================================
+PROLOGUE, PART 1: THE GROUNDS
+=====================================================================
+You stand on a muddy road in front of the iron gates of Uncle
+Edmund's manor.
+
+> N                       Into the overgrown garden.
+> E                       Into the garden shed.
+> TAKE SHOVEL
+> SEARCH TOOLS            * Star fragment 1!             (+10) [10]
+> W                       Back to the garden.
+> DIG MOUND               You dig up an iron handle.     (+10) [20]
+> GET HANDLE
+> W                       To the old stone well.
+> TURN HANDLE             The bucket brings up a key.    (+10) [30]
+> TAKE KEY
+> E                       Back to the garden.
+> N                       To the porch of the manor.
+> OPEN DOOR               The front door creaks open.    (+10) [40]
+> N                       Into the manor...              (+10) [50]
+
+
+=====================================================================
+PROLOGUE, PART 2: THE MANOR
+=====================================================================
+You are in the grand hall.
+
+> E                       Into the kitchen.
+> TAKE CANDLE
+> GET MATCHES
+> TAKE KNIFE              You will need it later.
+> LIGHT CANDLE                                           (+10) [60]
+> D                       Down into the wine cellar.
+> SEARCH BARRELS          * Star fragment 2!             (+10) [70]
+> TAKE KEY                A small silver key.
+> U                       Back to the kitchen.
+> W                       Back to the hall.
+> UNLOCK DOOR             The small door swings open.    (+10) [80]
+> N                       Into Uncle Edmund's study.
+> READ DIARY              "...pull the red book."        (+5)  [85]
+> S                       Back to the hall.
+> W                       Into the library.
+> PULL RED BOOK           A passage opens to the west.   (+15) [100]
+> W                       The hidden chamber. Uncle Edmund is tied up!
+> CUT ROPES               You free him. He leads you
+                          down a secret stairway.        (+20) [120]
+
+
+=====================================================================
+PROLOGUE, PART 3: THE LAUNCH PAD
+=====================================================================
+You are on a narrow stairway. Don't go back up: the intruders are
+up there!
+
+> SEARCH STAIRS           * Star fragment 3!             (+10) [130]
+> D                       Into the steel corridor.
+> W                       Into the locker room.
+> OPEN LOCKER             The locker marked PILOT.
+> TAKE CARD
+> TAKE SUIT
+> WEAR SUIT                                              (+5)  [135]
+> E                       Back to the corridor.
+> INSERT CARD             The blast door rolls open.     (+10) [145]
+> E                       Into the giant hangar.
+> N                       Into the launch control room.
+> TALK TO UNCLE           (optional) "The ship needs power."
+> PUT AMULET IN SLOT      The hangar roof slides open.   (+10) [155]
+> PULL LEVER              The ship's hatch opens.        (+5)  [160]
+> S                       Back to the hangar.
+> BOARD SHIP              Inside the STARRAVEN.
+> SIT IN SEAT
+> PRESS BUTTON            LIFT-OFF!                      (+10) [170]
+
+Note: you must be wearing the spacesuit, or you can't launch.
+
+
+=====================================================================
+CHAPTER 1: INTO SPACE
+=====================================================================
+You are in the cockpit of the STARRAVEN. The ship's computer NOVA
+says the navigation crystal is cracked.
+
+> TALK TO NOVA            (optional) The spare is in the cargo hold.
+> S                       To the main corridor.
+> W                       Into the galley.
+> PRESS DISPENSER         A ration drops into the tray.
+> SEARCH TABLE            * Star fragment 4!             (+10) [180]
+> TAKE RATION
+> EAT RATION                                             (+5)  [185]
+> E                       Back to the corridor.
+> E                       Into the engine room.
+> TAKE CROWBAR
+> W                       Back to the corridor.
+> D                       Down into the airlock.
+> TAKE BOOTS              Magnetic boots.
+> WEAR BOOTS                                             (+5)  [190]
+> U                       Back to the corridor.
+> S                       Into the cargo hold. The boots
+                          keep you on the floor.
+> OPEN CRATE              With the crowbar.              (+10) [200]
+> TAKE CRYSTAL
+> N                       Back to the corridor.
+> N                       Back to the cockpit.
+> INSERT CRYSTAL          Course set for station KX-9.   (+10) [210]
+> PUSH THROTTLE           Hyperdrive!                    (+10) [220]
+
+Warning: never OPEN the outer door of the airlock!
+
+
+=====================================================================
+CHAPTER 2: THE DERELICT STATION
+=====================================================================
+You are in the docking bay of the abandoned station KX-9.
+
+> E                       Into the station corridor. A security
+                          robot blocks the way. Don't touch the
+                          sparking wires!
+> N                       Into the old crew quarters.
+> READ TERMINAL           The code is 1985.
+> SEARCH BUNKS            * Star fragment 5!             (+10) [230]
+> S                       Back to the corridor.
+> TYPE 1985               The robot switches itself off. (+10) [240]
+                          (SAY 1985 also works.)
+> S                       Into the power room.
+> TURN ON GENERATOR       The lights flicker on!         (+10) [250]
+> N                       Back to the corridor.
+> E                       Into the map room.
+> TAKE CHART              The star chart!                (+10) [260]
+> W                       Back to the corridor.
+> W                       Back to the docking bay.
+> ENTER SHIP              Off to the World of Stronkie!  (+10) [270]
+
+
+=====================================================================
+CHAPTER 3: LANDFALL
+=====================================================================
+The STARRAVEN has crash-landed on the planet Stronkie. You are in
+the wrecked cockpit and the hatch is jammed.
+
+> PULL LEVER              Emergency bolts blow the
+                          hatch open.                    (+10) [280]
+> TAKE EXTINGUISHER
+> E                       Outside, beside the burning wreck.
+> SPRAY FIRE              The fire is out. The path
+                          north is clear.                (+10) [290]
+> N                       Into the purple jungle.
+> TAKE FRUIT              Don't eat it! You need it later.
+> E                       To the glowing river.
+> SWING ON VINE           You swing over to the cave.    (+5)  [295]
+> SEARCH ROCKS            * Star fragment 6!             (+10) [305]
+> BREAK CRYSTAL           A power crystal comes loose.   (+10) [315]
+> TAKE CRYSTAL
+> W                       Back to the river.
+> W                       Back to the jungle.
+> S                       Back to the wreck.
+> W                       Into the wrecked cockpit.
+> INSERT CRYSTAL          NOVA wakes up again.           (+10) [325]
+> E                       Out of the wreck.
+> E                       To the gate in the woven wall. A little
+                          Stronkie guard chirps angrily.
+> GIVE FRUIT TO GUARD     He opens the gate.             (+10) [335]
+> E                       Into the village...            (+5)  [340]
+
+Warning: don't try to swim in or jump into the glowing river!
+
+
+=====================================================================
+CHAPTER 4: THE VILLAGE
+=====================================================================
+You are in the village square. The Stronkies only chirp at you.
+
+> TALK                    (optional) You can't understand them.
+> SEARCH FOUNTAIN         You fish out a coin.           (+5)  [345]
+> E                       To the market.
+> GIVE COIN               The trader gives you a
+                          spiral shell.                  (+10) [355]
+> LISTEN TO SHELL         Now you understand the
+                          Stronkies!                     (+10) [365]
+> TALK TO TRADER          (optional) "The Elder wants to see you."
+> W                       Back to the square.
+> N                       Into the Elder's hut.
+> TALK TO ELDER           Elder Zooma tells you about the
+                          Sky Temple and Commander Vex.  (+10) [375]
+> S                       Back to the square.
+> W                       Into Bix's workshop.
+> TALK TO BIX             Bix needs a sail for his glider.
+> E                       Back to the square.
+> S                       Up the lookout tower.
+> TAKE BANNER                                            (+5)  [380]
+> SEARCH NEST             * Star fragment 7!             (+10) [390]
+> D                       Back to the square.
+> W                       Back to the workshop.
+> GIVE BANNER TO BIX      The glider is ready.           (+10) [400]
+> E                       Back to the square.
+> S                       Up the lookout tower.
+> FLY GLIDER              You soar away to the
+                          Crystal Mountains.             (+10) [410]
+
+
+=====================================================================
+CHAPTER 5: THE CRYSTAL MOUNTAINS
+=====================================================================
+You land on a snowy ledge. Vex has stolen your amulet!
+
+> N                       Into the ice cave. Be quiet: a huge
+                          white beast is sleeping here.
+> TAKE BOOTS              Spiked boots.
+> SEARCH JUNK             * Star fragment 8!             (+10) [420]
+> WEAR BOOTS                                             (+5)  [425]
+> S                       Back to the ledge.
+> E                       To the ice bridge.
+> E                       With the spiked boots you get
+                          safely across to Vex's camp.   (+10) [435]
+> MAKE SNOWBALL
+> THROW SNOWBALL          The soldiers run off to look
+                          at the rocks.                  (+10) [445]
+> E                       Into Vex's tent.
+> TAKE AMULET             Your amulet is back!           (+10) [455]
+> W                       Back to the camp.
+> N                       To the temple steps.
+> CLIMB STEPS             Up to the Sky Temple.          (+10) [465]
+
+Warnings: in the ice cave, don't SHOUT and don't touch, wake or attack
+the beast. Never JUMP at the ice bridge.
+
+
+=====================================================================
+CHAPTER 6: THE SKY TEMPLE
+=====================================================================
+You stand in front of the closed crystal gate of the Sky Temple.
+
+> PUT AMULET IN HOLLOW    The gate opens.                (+10) [475]
+> N                       Into the hall of statues.
+> SEARCH STATUES          * Star fragment 9!             (+10) [485]
+> TAKE MIRROR             A silver mirror.               (+5)  [490]
+> TAKE DUST               A handful of star dust.
+> E                       Into the round room with the
+                          beam of sunlight.
+> PUT MIRROR ON STAND     The beam opens the way north.  (+10) [500]
+> N                       To the edge of an endless drop.
+> THROW DUST              An invisible, glittering
+                          bridge appears!                (+10) [510]
+> N                       To the golden door.
+> OPEN DOOR               Into the Star Heart...         (+10) [520]
+
+Warning: never JUMP at the endless drop!
+
+
+=====================================================================
+CHAPTER 7: THE STAR HEART
+=====================================================================
+In the heart chamber, Commander Vex is draining the Star Heart with
+his machine. A soldier guards the machine in the east gallery.
+
+> TALK TO VEX             (optional) "Give me the amulet!"
+                          Never give it to him, and don't attack him!
+> W                       Into the west gallery.
+> TAKE HORN               An old Stronkie horn.
+> SEARCH MURALS           * Star fragment 10!            (+10) [530]
+> E                       Back to the heart chamber.
+> E                       Into the east gallery.
+> BLOW HORN               The soldier runs away!         (+10) [540]
+> PULL PLUG               Vex's machine stops.           (+10) [550]
+> W                       Back to the heart chamber.
+> BLOW HORN               Vex flees from the altar.      (+10) [560]
+> U                       Up onto the altar.
+> PUT AMULET IN HOLLOW    The Star Heart shines again!   (+20) [580]
+
+      *** CONGRATULATIONS! ***
+      YOUR SCORE IS 580.
+      STAR FRAGMENTS FOUND: 10 OF 10.
+
+THE END... FOR NOW!
+
+
+=====================================================================
+STAR FRAGMENTS AT A GLANCE
+=====================================================================
+  1  Prologue 1  Garden shed       SEARCH TOOLS
+  2  Prologue 2  Wine cellar       SEARCH BARRELS  (light the candle)
+  3  Prologue 3  Stairway          SEARCH STAIRS
+  4  Chapter 1   Galley            SEARCH TABLE
+  5  Chapter 2   Crew quarters     SEARCH BUNKS
+  6  Chapter 3   Crystal cave      SEARCH ROCKS
+  7  Chapter 4   Lookout tower     SEARCH NEST
+  8  Chapter 5   Ice cave          SEARCH JUNK
+  9  Chapter 6   Hall of statues   SEARCH STATUES
+ 10  Chapter 7   West gallery      SEARCH MURALS
+
+=====================================================================

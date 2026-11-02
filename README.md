@@ -68,7 +68,9 @@ The status bar under the picture always shows the part you are in, your **score*
 
 **Hints:** stuck? Type `HINT` for a clue about your next step. Each hint costs 3 points.
 
-The maximum score is 580 (480 for the story, 100 for the ten star fragments). Try to get it in as few moves as possible, without hints!
+The maximum score is 580 (480 for the story, 100 for the ten star fragments).
+
+Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes you through the whole game with all 580 points and all ten star fragments. Try to get it in as few moves as possible, without hints!
 
 ### Saving, dying and disk sides
 
