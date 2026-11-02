@@ -1,7 +1,7 @@
 =====================================================================
                THE WORLD OF STRONKIE - COMPLETE WALKTHROUGH
-                 All 580 points and all 10 star fragments
-                     Created By Mark Stronks - V1.1
+                 All 730 points and all 12 star fragments
+                     Created By Mark Stronks - V1.2
 =====================================================================
 
 HOW TO USE THIS WALKTHROUGH
@@ -11,7 +11,7 @@ The number in [brackets] is your score after that command.
 Points are shown as (+10).
 
  * Do NOT type HINT anywhere. Every hint costs 3 points, and you
-   need all of them for the full 580.
+   need all of them for the full 730.
  * The star fragments (*) are worth 10 points each. They only turn
    up if you SEARCH the right thing in the right room.
  * Type SAVE now and then. If you die you can RETRY, or LOAD your
@@ -24,13 +24,15 @@ Points per part:
   Prologue 3  The Launch Pad .........  50
   Chapter 1   Into Space .............  50
   Chapter 2   The Derelict Station ...  50
-  Chapter 3   Landfall ...............  70
-  Chapter 4   The Village ............  70
-  Chapter 5   The Crystal Mountains ..  55
-  Chapter 6   The Sky Temple .........  55
-  Chapter 7   The Star Heart .........  60
+  Chapter 3   Asteroid 42 ............  70
+  Chapter 4   Space Pirates ..........  70
+  Chapter 5   Landfall ...............  80  (with the secret monkey)
+  Chapter 6   The Village ............  70
+  Chapter 7   The Crystal Mountains ..  55
+  Chapter 8   The Sky Temple .........  55
+  Chapter 9   The Star Heart .........  60
                                       -----
-  Total ............................. 580
+  Total ............................. 730
 
 At the main menu, press N to start a new game.
 
@@ -165,126 +167,211 @@ You are in the docking bay of the abandoned station KX-9.
 > TAKE CHART              The star chart!                (+10) [260]
 > W                       Back to the corridor.
 > W                       Back to the docking bay.
-> ENTER SHIP              Off to the World of Stronkie!  (+10) [270]
+> ENTER SHIP              Off to the World of Stronkie... (+10) [270]
 
 
 =====================================================================
-CHAPTER 3: LANDFALL
+CHAPTER 3: ASTEROID 42
 =====================================================================
-The STARRAVEN has crash-landed on the planet Stronkie. You are in
-the wrecked cockpit and the hatch is jammed.
+The hyperjump drained the fuel cells. NOVA lands the STARRAVEN on
+Asteroid 42, a dusty space port full of pirates and strange people.
+You need a fuel cell, and fuel cells cost 50 buckazoids.
+
+> TALK TO JANITOR         (optional) Roger is starving.
+> N                       To the space port plaza.
+> TAKE BURGER             A free sample from Monolith Burger.
+> S                       Back to the landing pad.
+> GIVE BURGER TO JANITOR  Roger gives you a buckazoid.   (+10) [280]
+> N                       To the plaza.
+> W                       Into the Scumm Bar.
+> SEARCH JUKEBOX          * Star fragment 6!             (+10) [290]
+> TAKE NAPKIN
+> READ NAPKIN             "Password: KEN SENT ME."
+> TALK TO PIRATES         (optional, but listen well: it
+                          helps in the next chapter!)
+> E                       Back to the plaza.
+> N                       Into the dark alley.
+> KEN SENT ME             Larry opens the door.          (+10) [300]
+> N                       Into Lefty's back room.
+> PUT COIN IN SLOT        Slots-o-Death eats your coin...
+> KICK MACHINE            JACKPOT! 50 buckazoids.        (+10) [310]
+> S                       Back to the alley.
+> S                       Back to the plaza.
+> E                       Into Stan's Pre-Owned Starships.
+> BUY FUEL                A fuel cell, plus a free rubber
+                          chicken with a pulley in the
+                          middle. Keep it!               (+10) [320]
+> W                       Back to the plaza.
+> S                       Back to the landing pad.
+> PUT FUEL IN SHIP                                       (+10) [330]
+> ENTER SHIP              Off to Stronkie... almost.     (+10) [340]
+
+Warnings: don't DRINK the GROG, don't JUMP on the landing pad, and
+don't kick Slots-o-Death a second time!
+
+
+=====================================================================
+CHAPTER 4: SPACE PIRATES
+=====================================================================
+Captain LeChuckle's pirate ship, the SPACE MONKEY, holds the
+STARRAVEN in a green tractor beam. You must switch it off.
+
+> D                       Down into the airlock.
+> OPEN DOOR               Your helmet is on, so this
+                          time it's safe.                (+5)  [345]
+> RIDE CABLE              WHEEE! The rubber chicken carries
+                          you to the pirate ship.        (+5)  [350]
+                          The guard: "You fight like a
+                          dairy farmer!"
+> SAY COW                 "How appropriate. You fight
+                          like a cow!"                   (+10) [360]
+                          The guard: "I've spoken with apes
+                          more polite than you!"
+> LISTEN TO PARROT        The parrot knows the answer.
+> SAY REUNION             "I'm glad to hear you attended
+                          your family reunion." The guard
+                          runs off crying.               (+10) [370]
+> N                       Into the captain's cabin.
+> TALK TO CAPTAIN         (optional) He'd love to see a
+                          three-headed monkey...
+> SAY LOOK BEHIND YOU, A THREE-HEADED MONKEY!
+                          He turns around, you grab the
+                          key. (SAY MONKEY works too.)   (+10) [380]
+> S                       Back to the deck.
+> E                       Into the engine room.
+> SEARCH CRATES           * Star fragment 7!             (+10) [390]
+> USE KEY                 The tractor beam goes off!     (+10) [400]
+> W                       Back to the deck.
+> RIDE CABLE              Back to the STARRAVEN.
+> U                       Up to the cockpit.
+> FLY                     You break free... but the pirates
+                          fire one parting shot.         (+10) [410]
+
+Warnings: don't JUMP in the open airlock, don't attack the captain,
+and don't drink the grog in the engine room either!
+
+
+=====================================================================
+CHAPTER 5: LANDFALL
+=====================================================================
+After the pirates' parting shot, the STARRAVEN has crash-landed on
+the planet Stronkie. You are in the wrecked cockpit and the hatch is
+jammed.
 
 > PULL LEVER              Emergency bolts blow the
-                          hatch open.                    (+10) [280]
+                          hatch open.                    (+10) [420]
 > TAKE EXTINGUISHER
 > E                       Outside, beside the burning wreck.
 > SPRAY FIRE              The fire is out. The path
-                          north is clear.                (+10) [290]
+                          north is clear.                (+10) [430]
 > N                       Into the purple jungle.
 > TAKE FRUIT              Don't eat it! You need it later.
+> SEARCH BUSHES          Something is hiding in there...
+> TAKE MONKEY             A secret wooden monkey! Listen
+                          to the tune...                 (+10) [440]
 > E                       To the glowing river.
-> SWING ON VINE           You swing over to the cave.    (+5)  [295]
-> SEARCH ROCKS            * Star fragment 6!             (+10) [305]
-> BREAK CRYSTAL           A power crystal comes loose.   (+10) [315]
+> SWING ON VINE           You swing over to the cave.    (+5)  [445]
+> SEARCH ROCKS            * Star fragment 6!             (+10) [455]
+> BREAK CRYSTAL           A power crystal comes loose.   (+10) [465]
 > TAKE CRYSTAL
 > W                       Back to the river.
 > W                       Back to the jungle.
 > S                       Back to the wreck.
 > W                       Into the wrecked cockpit.
-> INSERT CRYSTAL          NOVA wakes up again.           (+10) [325]
+> INSERT CRYSTAL          NOVA wakes up again.           (+10) [475]
 > E                       Out of the wreck.
 > E                       To the gate in the woven wall. A little
                           Stronkie guard chirps angrily.
-> GIVE FRUIT TO GUARD     He opens the gate.             (+10) [335]
-> E                       Into the village...            (+5)  [340]
+> GIVE FRUIT TO GUARD     He opens the gate.             (+10) [485]
+> E                       Into the village...            (+5)  [490]
 
 Warning: don't try to swim in or jump into the glowing river!
 
 
 =====================================================================
-CHAPTER 4: THE VILLAGE
+CHAPTER 6: THE VILLAGE
 =====================================================================
 You are in the village square. The Stronkies only chirp at you.
 
 > TALK                    (optional) You can't understand them.
-> SEARCH FOUNTAIN         You fish out a coin.           (+5)  [345]
+> SEARCH FOUNTAIN         You fish out a coin.           (+5)  [495]
 > E                       To the market.
 > GIVE COIN               The trader gives you a
-                          spiral shell.                  (+10) [355]
+                          spiral shell.                  (+10) [505]
 > LISTEN TO SHELL         Now you understand the
-                          Stronkies!                     (+10) [365]
+                          Stronkies!                     (+10) [515]
 > TALK TO TRADER          (optional) "The Elder wants to see you."
 > W                       Back to the square.
 > N                       Into the Elder's hut.
 > TALK TO ELDER           Elder Zooma tells you about the
-                          Sky Temple and Commander Vex.  (+10) [375]
+                          Sky Temple and Commander Vex.  (+10) [525]
 > S                       Back to the square.
 > W                       Into Bix's workshop.
 > TALK TO BIX             Bix needs a sail for his glider.
 > E                       Back to the square.
 > S                       Up the lookout tower.
-> TAKE BANNER                                            (+5)  [380]
-> SEARCH NEST             * Star fragment 7!             (+10) [390]
+> TAKE BANNER                                            (+5)  [530]
+> SEARCH NEST             * Star fragment 7!             (+10) [540]
 > D                       Back to the square.
 > W                       Back to the workshop.
-> GIVE BANNER TO BIX      The glider is ready.           (+10) [400]
+> GIVE BANNER TO BIX      The glider is ready.           (+10) [550]
 > E                       Back to the square.
 > S                       Up the lookout tower.
 > FLY GLIDER              You soar away to the
-                          Crystal Mountains.             (+10) [410]
+                          Crystal Mountains.             (+10) [560]
 
 
 =====================================================================
-CHAPTER 5: THE CRYSTAL MOUNTAINS
+CHAPTER 7: THE CRYSTAL MOUNTAINS
 =====================================================================
 You land on a snowy ledge. Vex has stolen your amulet!
 
 > N                       Into the ice cave. Be quiet: a huge
                           white beast is sleeping here.
 > TAKE BOOTS              Spiked boots.
-> SEARCH JUNK             * Star fragment 8!             (+10) [420]
-> WEAR BOOTS                                             (+5)  [425]
+> SEARCH JUNK             * Star fragment 8!             (+10) [570]
+> WEAR BOOTS                                             (+5)  [575]
 > S                       Back to the ledge.
 > E                       To the ice bridge.
 > E                       With the spiked boots you get
-                          safely across to Vex's camp.   (+10) [435]
+                          safely across to Vex's camp.   (+10) [585]
 > MAKE SNOWBALL
 > THROW SNOWBALL          The soldiers run off to look
-                          at the rocks.                  (+10) [445]
+                          at the rocks.                  (+10) [595]
 > E                       Into Vex's tent.
-> TAKE AMULET             Your amulet is back!           (+10) [455]
+> TAKE AMULET             Your amulet is back!           (+10) [605]
 > W                       Back to the camp.
 > N                       To the temple steps.
-> CLIMB STEPS             Up to the Sky Temple.          (+10) [465]
+> CLIMB STEPS             Up to the Sky Temple.          (+10) [615]
 
 Warnings: in the ice cave, don't SHOUT and don't touch, wake or attack
 the beast. Never JUMP at the ice bridge.
 
 
 =====================================================================
-CHAPTER 6: THE SKY TEMPLE
+CHAPTER 8: THE SKY TEMPLE
 =====================================================================
 You stand in front of the closed crystal gate of the Sky Temple.
 
-> PUT AMULET IN HOLLOW    The gate opens.                (+10) [475]
+> PUT AMULET IN HOLLOW    The gate opens.                (+10) [625]
 > N                       Into the hall of statues.
-> SEARCH STATUES          * Star fragment 9!             (+10) [485]
-> TAKE MIRROR             A silver mirror.               (+5)  [490]
+> SEARCH STATUES          * Star fragment 9!             (+10) [635]
+> TAKE MIRROR             A silver mirror.               (+5)  [640]
 > TAKE DUST               A handful of star dust.
 > E                       Into the round room with the
                           beam of sunlight.
-> PUT MIRROR ON STAND     The beam opens the way north.  (+10) [500]
+> PUT MIRROR ON STAND     The beam opens the way north.  (+10) [650]
 > N                       To the edge of an endless drop.
 > THROW DUST              An invisible, glittering
-                          bridge appears!                (+10) [510]
+                          bridge appears!                (+10) [660]
 > N                       To the golden door.
-> OPEN DOOR               Into the Star Heart...         (+10) [520]
+> OPEN DOOR               Into the Star Heart...         (+10) [670]
 
 Warning: never JUMP at the endless drop!
 
 
 =====================================================================
-CHAPTER 7: THE STAR HEART
+CHAPTER 9: THE STAR HEART
 =====================================================================
 In the heart chamber, Commander Vex is draining the Star Heart with
 his machine. A soldier guards the machine in the east gallery.
@@ -293,19 +380,19 @@ his machine. A soldier guards the machine in the east gallery.
                           Never give it to him, and don't attack him!
 > W                       Into the west gallery.
 > TAKE HORN               An old Stronkie horn.
-> SEARCH MURALS           * Star fragment 10!            (+10) [530]
+> SEARCH MURALS           * Star fragment 10!            (+10) [680]
 > E                       Back to the heart chamber.
 > E                       Into the east gallery.
-> BLOW HORN               The soldier runs away!         (+10) [540]
-> PULL PLUG               Vex's machine stops.           (+10) [550]
+> BLOW HORN               The soldier runs away!         (+10) [690]
+> PULL PLUG               Vex's machine stops.           (+10) [700]
 > W                       Back to the heart chamber.
-> BLOW HORN               Vex flees from the altar.      (+10) [560]
+> BLOW HORN               Vex flees from the altar.      (+10) [710]
 > U                       Up onto the altar.
-> PUT AMULET IN HOLLOW    The Star Heart shines again!   (+20) [580]
+> PUT AMULET IN HOLLOW    The Star Heart shines again!   (+20) [730]
 
       *** CONGRATULATIONS! ***
-      YOUR SCORE IS 580.
-      STAR FRAGMENTS FOUND: 10 OF 10.
+      YOUR SCORE IS 730.
+      STAR FRAGMENTS FOUND: 12 OF 12.
 
 THE END... FOR NOW!
 
@@ -318,11 +405,16 @@ STAR FRAGMENTS AT A GLANCE
   3  Prologue 3  Stairway          SEARCH STAIRS
   4  Chapter 1   Galley            SEARCH TABLE
   5  Chapter 2   Crew quarters     SEARCH BUNKS
-  6  Chapter 3   Crystal cave      SEARCH ROCKS
-  7  Chapter 4   Lookout tower     SEARCH NEST
-  8  Chapter 5   Ice cave          SEARCH JUNK
-  9  Chapter 6   Hall of statues   SEARCH STATUES
- 10  Chapter 7   West gallery      SEARCH MURALS
+  6  Chapter 3   Scumm Bar         SEARCH JUKEBOX
+  7  Chapter 4   Pirate engine rm  SEARCH CRATES
+  8  Chapter 5   Crystal cave      SEARCH ROCKS
+  9  Chapter 6   Lookout tower     SEARCH NEST
+ 10  Chapter 7   Ice cave          SEARCH JUNK
+ 11  Chapter 8   Hall of statues   SEARCH STATUES
+ 12  Chapter 9   West gallery      SEARCH MURALS
+
+ BONUS: the secret wooden monkey, Chapter 5, in the jungle:
+        SEARCH BUSHES, then TAKE MONKEY (+10).
 
 =====================================================================
 
@@ -357,18 +449,39 @@ CHAPTER 2: THE DERELICT STATION
   > TOUCH WIRES           ZZZAP! A hundred-year-old power cable
   > TAKE WIRES            still has plenty of power left...
 
-CHAPTER 3: LANDFALL
+CHAPTER 3: ASTEROID 42
+  On the landing pad:
+  > JUMP                  The gravity is very low. You jump... and
+                          keep going. And going.
+  In the Scumm Bar:
+  > DRINK GROG            It melts through the mug, your teeth and
+                          then the rest of you.
+  In Lefty's back room, after the jackpot:
+  > KICK MACHINE          Slots-o-Death kicks back. Hard.
+
+CHAPTER 4: SPACE PIRATES
+  In the airlock, with the outer door open:
+  > JUMP                  You miss the pirate ship. Guybrush could
+                          hold his breath for ten minutes. You can't.
+  In the captain's cabin:
+  > KILL CAPTAIN          Your fist goes right through him: he's a
+                          ghost pirate. His fist doesn't go through
+                          you...
+  In the pirate engine room:
+  > DRINK GROG            Your insides dissolve in a colourful way.
+
+CHAPTER 5: LANDFALL
   At the glowing river:
   > SWIM                  The current sweeps you away in seconds...
   > GO RIVER              Same ending. Careful: CROSS RIVER does
                           this too! Use SWING ON VINE instead.
 
-CHAPTER 4: THE VILLAGE
+CHAPTER 6: THE VILLAGE
   On the lookout tower:
   > JUMP                  You find out that Stronkie has very strong
                           gravity. Use FLY GLIDER instead.
 
-CHAPTER 5: THE CRYSTAL MOUNTAINS
+CHAPTER 7: THE CRYSTAL MOUNTAINS
   In the ice cave (the beast opens one huge eye... then its mouth):
   > SHOUT                 Careful: SAY, YELL and TYPE count as
                           SHOUT here!
@@ -380,12 +493,12 @@ CHAPTER 5: THE CRYSTAL MOUNTAINS
   At the ice bridge:
   > JUMP                  Into a bottomless gorge? Really?
 
-CHAPTER 6: THE SKY TEMPLE
+CHAPTER 8: THE SKY TEMPLE
   At the endless drop:
   > JUMP                  You step into nothing and fall... and
                           fall...
 
-CHAPTER 7: THE STAR HEART
+CHAPTER 9: THE STAR HEART
   In the heart chamber, while Vex is still there:
   > KILL VEX              Vex is faster. ZAP!
   > GIVE AMULET           THE WORST ENDING: Vex grabs the amulet and
@@ -393,10 +506,30 @@ CHAPTER 7: THE STAR HEART
                           Heart goes dark forever...
 
 SAFE, EVEN IF THEY LOOK DANGEROUS
+  > OPEN DOOR             (Chapter 4) In the pirate chapter your
+                          helmet is on, so the airlock is safe.
+  > KICK MACHINE          (Chapter 3) The first kick, after it ate
+                          your coin, is the jackpot!
   > TOUCH REACTOR         (Chapter 1) Ouch, it's hot. Nothing more.
-  > E at the ice bridge   (Chapter 5) Without spiked boots you just
+  > E at the ice bridge   (Chapter 7) Without spiked boots you just
                           slide back.
-  > N at the endless drop (Chapter 6) Before the bridge appears you
+  > N at the endless drop (Chapter 8) Before the bridge appears you
                           just pull your foot back.
+
+=====================================================================
+
+
+=====================================================================
+FUN THINGS TO TRY (NO POINTS, JUST FOR LAUGHS)
+=====================================================================
+  > MAKE IT SO            Anywhere in space (chapters 1 to 4).
+  > PLAY ASTRO CHICKEN    Scumm Bar. Who holds the high score?
+  > EXAMINE PHOTO         Scumm Bar. Somebody still owes money...
+  > TALK TO BAND          Scumm Bar. The Two Guys from Andromeda.
+  > TALK TO STAN          Stan's. Everything is pre-owned.
+  > TALK TO MAN           The alley. Larry is waiting for someone.
+  > READ POSTER           Pirate deck. Look who is WANTED.
+  > TALK TO CREWMAN       Pirate engine room. Red shirts...
+  > TALK TO MONKEY        After you find the wooden monkey.
 
 =====================================================================

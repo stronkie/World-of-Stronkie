@@ -3,7 +3,7 @@ Adventure Game made for the Commodore 64
 
 Created By Mark Stronks
 
-**Current version: V1.1** — download `The_World_of_Stronkie_V1.1.d64`
+**Current version: V1.2** — download `The_World_of_Stronkie_V1.2.d64`
 
 Older versions are in the `previous versions` folder.
 
@@ -23,20 +23,25 @@ A letter from your uncle Edmund brought you to Ravenmoor Manor: *"Come to Ravenm
 
 **The space adventure**
 
+The space chapters are full of nods to the classic adventure games: Space Quest, Leisure Suit Larry, Monkey Island, The Hitchhiker's Guide to the Galaxy and Star Trek. And watch out for a certain C64 programmer called Mark Stronks AKA Stronkie...
+
+
 - **Chapter 1 – Into Space:** the ship's computer NOVA wakes up. The navigation crystal cracked during the launch. Find magnetic boots for the zero-gravity cargo hold, pry open the spare-parts crate, repair the navigation and jump into hyperspace.
 - **Chapter 2 – The Derelict Station:** dock at the abandoned space station KX-9. Get past the security robot, restart the generator and take the star chart that shows the way to the World of Stronkie.
+- **Chapter 3 – Asteroid 42:** the hyperjump drained the fuel cells, so NOVA lands on Asteroid 42, the most wretched hive of scum and villainy this side of Andromeda. A fuel cell costs 50 buckazoids and you have none. Help Roger the janitor, find the password for Lefty's back room, outsmart the Slots-o-Death machine and do business with Stan.
+- **Chapter 4 – Space Pirates:** Captain LeChuckle's pirate ship, the SPACE MONKEY, grabs you with a tractor beam. Cross to the pirate ship in a very unusual way, beat the guard at insult swordfighting, trick the captain and switch off the beam.
 
 **The World of Stronkie**
 
-- **Chapter 3 – Landfall:** the STARRAVEN crash-lands in a purple jungle under two suns. Blow the jammed hatch, put out the burning engine, swing across a glowing river and break a new power crystal loose for the ship. A hungry little Stronkie guards the gate to his village...
-- **Chapter 4 – The Village:** the Stronkies only chirp until you find a way to understand them. Elder Zooma tells you the truth: your amulet is the key of the Sky Temple, where the Star Heart keeps the planet alive, and Commander Vex has come to steal its power. Bix the inventor can fly you there, if you find him a sail.
-- **Chapter 5 – The Crystal Mountains:** Vex has stolen the amulet from your ship! Cross an ice bridge without waking the beast in the ice cave, sneak into Vex's camp and take the amulet back.
-- **Chapter 6 – The Sky Temple:** open the crystal gate, catch the sunlight with a silver mirror and make an invisible bridge appear. But behind the golden door, Vex is waiting.
-- **Chapter 7 – The Star Heart:** Vex is draining the Star Heart with his machine. Use the old Stronkie legends to stop him and save the World of Stronkie. *The end... for now!*
+- **Chapter 5 – Landfall:** hit by the pirates' parting shot, the STARRAVEN crash-lands in a purple jungle under two suns. Blow the jammed hatch, put out the burning engine, swing across a glowing river and break a new power crystal loose for the ship. A hungry little Stronkie guards the gate to his village...
+- **Chapter 6 – The Village:** the Stronkies only chirp until you find a way to understand them. Elder Zooma tells you the truth: your amulet is the key of the Sky Temple, where the Star Heart keeps the planet alive, and Commander Vex has come to steal its power. Bix the inventor can fly you there, if you find him a sail.
+- **Chapter 7 – The Crystal Mountains:** Vex has stolen the amulet from your ship! Cross an ice bridge without waking the beast in the ice cave, sneak into Vex's camp and take the amulet back.
+- **Chapter 8 – The Sky Temple:** open the crystal gate, catch the sunlight with a silver mirror and make an invisible bridge appear. But behind the golden door, Vex is waiting.
+- **Chapter 9 – The Star Heart:** Vex is draining the Star Heart with his machine. Use the old Stronkie legends to stop him and save the World of Stronkie. *The end... for now!*
 
 ### How to play
 
-1. Attach `The_World_of_Stronkie_V1.1.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
+1. Attach `The_World_of_Stronkie_V1.2.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
 2. Type `LOAD"*",8` and then `RUN`.
 3. The main menu appears with music while the first chapter loads ("LOADING... PLEASE WAIT"). When loading is done the text changes to "N:NEW GAME  L:LOAD GAME" and the border flashes.
 4. Press `N` to start a new game, or `L` to continue your saved game. If there is no saved game on the disk, a new game starts.
@@ -74,13 +79,13 @@ Only the first four letters of a word count, and small words like THE, WITH and 
 
 The status bar under the picture always shows the part you are in, your **score** and the number of **moves** (every command you type counts as one move). You earn points for solving puzzles, for example 10 points for digging up the handle or opening a door. Every time you score, a short jingle plays.
 
-**Star fragments:** every part hides one star fragment, worth 10 points each. They only turn up if you search the right place carefully. The status bar shows how many you have found (`*02/10`).
+**Star fragments:** every part hides one star fragment, worth 10 points each. They only turn up if you search the right place carefully. The status bar shows how many you have found (`*02/12`).
 
 **Hints:** stuck? Type `HINT` for a clue about your next step. Each hint costs 3 points.
 
-The maximum score is 580 (480 for the story, 100 for the ten star fragments).
+The maximum score is 730 (610 for the story, 120 for the twelve star fragments). Rumour has it that there is also something secret hidden on the planet...
 
-Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes you through the whole game with all 580 points and all ten star fragments. Try to get it in as few moves as possible, without hints!
+Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes you through the whole game with all 730 points, all twelve star fragments and the secret. Try to get it in as few moves as possible, without hints!
 
 ### Saving, dying and disk sides
 
@@ -98,8 +103,8 @@ Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes y
 - Status bar with the current part, score and moves
 - Music during the game: every part has its own tune, which only changes when the next part loads
 - Sound effects: key clicks, taking and dropping items, errors, points, doors, thunder, rocket launch, hyperspace, robot zaps, death and a victory fanfare
-- A picture for every location (multicolour bitmap in the top half of the screen, text in the bottom half, using a raster split): 54 locations in 10 parts
-- Two-word command parser with about 60 verbs, TAKE ALL / DROP ALL, AGAIN, and messages that tell you which word was not understood
+- A picture for every location (multicolour bitmap in the top half of the screen, text in the bottom half, using a raster split): 65 locations in 12 parts
+- Two-word command parser with about 65 verbs, TAKE ALL / DROP ALL, AGAIN, and messages that tell you which word was not understood
 - Save and load, retry a part after dying, hints, and hidden star fragments
 - All data files are compressed, so every part loads about twice as fast
 - Every part is its own file on the disk and is loaded when you reach it, so the game can grow far beyond the memory of the C64 (each part can be up to 32 KB)
@@ -117,13 +122,15 @@ Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes y
 | `PART03` | Prologue, part 3: The Launch Pad |
 | `PART04` | Chapter 1: Into Space |
 | `PART05` | Chapter 2: The Derelict Station |
-| `PART06` | Chapter 3: Landfall |
-| `PART07` | Chapter 4: The Village |
-| `PART08` | Chapter 5: The Crystal Mountains |
-| `PART09` | Chapter 6: The Sky Temple |
-| `PART10` | Chapter 7: The Star Heart |
+| `PART06` | Chapter 3: Asteroid 42 |
+| `PART07` | Chapter 4: Space Pirates |
+| `PART08` | Chapter 5: Landfall |
+| `PART09` | Chapter 6: The Village |
+| `PART10` | Chapter 7: The Crystal Mountains |
+| `PART11` | Chapter 8: The Sky Temple |
+| `PART12` | Chapter 9: The Star Heart |
 
-All data files are packed, so all ten parts fit on side A with 132 blocks to spare. When you save, a file named after the part you are in (like `SAVE-THE MANOR`) is added to the disk. New chapters that no longer fit will go on side B, and the game will ask you to flip the disk when it needs them.
+All data files are packed, so all twelve parts still fit on side A, with 12 blocks to spare. When you save, a file named after the part you are in (like `SAVE-THE MANOR`) is added to the disk. New chapters that no longer fit will go on side B, and the game will ask you to flip the disk when it needs them.
 
 ## How was it created
 
@@ -162,6 +169,7 @@ Memory map:
 
 | Version | Date | Notes |
 |---|---|---|
+| V1.2 | 2 Nov 2026 | Two new space chapters (Asteroid 42 and Space Pirates), humour and classic adventure game references, a secret on the planet |
 | V1.1 | 2 Nov 2026 | Function keys: F1 load, F3 save, F5 music on/off, F7 quit to the menu; save files named after the part |
 | V1.0 | 2 Nov 2026 | **Release version.** The complete game: prologue + 7 chapters, 54 locations, 580 points, 10 star fragments |
 | V0.09 | 2 Nov 2026 | Five new chapters on the planet Stronkie (the story now has 7 chapters), RUN/STOP + RESTORE leaves the game |
@@ -175,6 +183,18 @@ Memory map:
 | V0.01 | 2 Nov 2026 | First playable version (as "Stronkie's Quest", not published) |
 
 ## Change log
+
+### V1.2
+- Two new chapters in space, before the landing on Stronkie: **Chapter 3 – Asteroid 42** and **Chapter 4 – Space Pirates**, with 11 new locations, new puzzles, new music and two more star fragments (12 in total, maximum score 730)
+- The planet chapters are now chapters 5 to 9 (files `PART08` to `PART12`)
+- Lots of humour and nods to Space Quest, Leisure Suit Larry, Monkey Island, The Hitchhiker's Guide to the Galaxy and Star Trek, and a few references to Mark Stronks AKA Stronkie
+- Insult swordfighting with space pirates, a rubber chicken with a pulley in the middle, and a slot machine called Slots-o-Death
+- Type `MAKE IT SO` anywhere in space, in memory of Sir Patrick Stewart (1940-2026)
+- Something secret is hidden on the planet. When you find it, you will hear it...
+- New verbs: RIDE / SLIDE / ZIP, ORDER, and KEN (try it in the right place)
+- Engine: tunes can now play once and then hand back to the part's music; every part now has its own set of 64 game flags
+- Saved games from older versions can't be loaded in V1.2, because the parts have been renumbered
+- The walkthrough is updated for all 12 parts, with new bad endings and a list of fun things to try
 
 ### V1.1
 - Function keys while you play: **F1** loads your saved game, **F3** saves, **F5** turns the music off and on, **F7** quits to the main menu
