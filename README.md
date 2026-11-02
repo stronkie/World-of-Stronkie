@@ -3,7 +3,7 @@ Adventure Game made for the Commodore 64
 
 Created By Mark Stronks
 
-**Current version: V0.03** — download `The_World_of_Stronkie_V0.03.d64`
+**Current version: V0.04** — download `The_World_of_Stronkie_V0.04.d64`
 
 Older versions are in the `previous versions` folder.
 
@@ -18,9 +18,9 @@ The World of Stronkie is a text and graphics adventure in the style of the class
 
 ### How to play
 
-1. Attach `The_World_of_Stronkie_V0.03.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
+1. Attach `The_World_of_Stronkie_V0.04.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
 2. Type `LOAD"*",8` and then `RUN`.
-3. The main menu appears with music while the first chapter loads. When the border flashes, press any key.
+3. The main menu appears with music while the first chapter loads ("LOADING... PLEASE WAIT"). When loading is done the text changes to "PRESS ANY KEY TO START" and the border flashes. Press any key to begin.
 
 Type two-word commands, for example:
 
@@ -84,11 +84,15 @@ Memory map:
 
 | Version | Date | Notes |
 |---|---|---|
+| V0.04 | 2 Nov 2026 | "Press any key to start" on the main menu |
 | V0.03 | 2 Nov 2026 | Main menu music |
 | V0.02 | 2 Nov 2026 | Renamed to The World of Stronkie, new main menu picture |
 | V0.01 | 2 Nov 2026 | First playable version (as "Stronkie's Quest", not published) |
 
 ## Change log
+
+### V0.04
+- Main menu shows "PRESS ANY KEY TO START" (in place of "LOADING... PLEASE WAIT") as soon as chapter 1 has loaded
 
 ### V0.03
 - Main menu music: "Contest Demo (part 4)" by Sami Seppä (Rock), playing at the correct PAL speed
