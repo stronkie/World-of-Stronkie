@@ -3,7 +3,7 @@ Adventure Game made for the Commodore 64
 
 Created By Mark Stronks
 
-**Current version: V1.3** — download `The_World_of_Stronkie_V1.3.d64`
+**Current version: V1.4** — download both disk sides: `The_World_of_Stronkie_V1.4_sideA.d64` and `The_World_of_Stronkie_V1.4_sideB.d64`
 
 Older versions are in the `previous versions` folder.
 
@@ -41,7 +41,7 @@ The space chapters are full of nods to the classic adventure games: Space Quest,
 
 ### How to play
 
-1. Attach `The_World_of_Stronkie_V1.3.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
+1. Attach `The_World_of_Stronkie_V1.4_sideA.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE). Keep `The_World_of_Stronkie_V1.4_sideB.d64` ready: the final chapter is on side B, and the game will ask you to flip the disk.
 2. Type `LOAD"*",8` and then `RUN`.
 3. The main menu appears with music while the first chapter loads ("LOADING... PLEASE WAIT"). When loading is done the text changes to "N:NEW GAME  L:LOAD GAME" and the border flashes.
 4. Press `N` to start a new game, or `L` to continue your saved game. If there is no saved game on the disk, a new game starts.
@@ -83,15 +83,16 @@ The status bar under the picture always shows the part you are in, your **score*
 
 **Hints:** stuck? Type `HINT` for a clue about your next step. Each hint costs 3 points.
 
-The maximum score is 730 (610 for the story, 120 for the twelve star fragments). Rumour has it that there is also something secret hidden on the planet...
+The maximum score is 735 (610 for the story, 120 for the twelve star fragments, and a 5 point bonus for a certain arcade machine). Rumour has it that there is also something secret hidden on the planet...
 
-Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes you through the whole game with all 730 points, all twelve star fragments and the secret. Try to get it in as few moves as possible, without hints!
+Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes you through the whole game with all 735 points, all twelve star fragments and the secret, plus a list of jokes and secret commands to try. Try to get it in as few moves as possible, without hints!
 
 ### Saving, dying and disk sides
 
 - `SAVE` (or `F3`) writes your game to the disk under the name of the part you are in, for example `SAVE-LANDFALL` or `SAVE-SKY TEMPLE`, so the disk directory shows how far you got. A new save replaces the old one, and the disk must not be write-protected. `LOAD`, `RESTORE` or `F1` asks if you are sure, then brings you back to the exact same spot, with all your items, score and moves. You can type `LOAD` right after starting a new game.
 - If you die, the game asks **TRY THIS PART AGAIN?** Press `Y` to restart the current part with the score you had when you entered it, or `N` to go back to the main menu.
-- When the game grows too big for one disk side, the later parts go on side B. The game will then ask you to insert the other side when it needs a part that is not on the current one.
+- The game is on two disk sides. Side A holds the program, the menu and parts 1 to 11; side B holds the final chapter (and its own copy of the program and the menu, so either side can start the game). When the game needs a part that is not on the disk in the drive, it says **INSERT THE OTHER SIDE AND PRESS A KEY**.
+- A save is written to the side that is in the drive. If you saved on side B, start the game from side A as usual, then insert side B before you press `L` in the main menu.
 
 ### Features
 
@@ -128,9 +129,9 @@ Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes y
 | `PART09` | Chapter 6: The Village |
 | `PART10` | Chapter 7: The Crystal Mountains |
 | `PART11` | Chapter 8: The Sky Temple |
-| `PART12` | Chapter 9: The Star Heart |
+| `PART12` | Chapter 9: The Star Heart (on side B) |
 
-All data files are packed, so all twelve parts still fit on side A, with 12 blocks to spare. When you save, a file named after the part you are in (like `SAVE-THE MANOR`) is added to the disk. New chapters that no longer fit will go on side B, and the game will ask you to flip the disk when it needs them.
+All data files are packed. Side A holds the program, the menu and parts 1 to 11; side B holds part 12, together with a copy of the program and the menu. When you save, a file named after the part you are in (like `SAVE-THE MANOR`) is added to the disk. New chapters that no longer fit will go on side B, and the game will ask you to flip the disk when it needs them.
 
 ## How was it created
 
@@ -169,6 +170,7 @@ Memory map:
 
 | Version | Date | Notes |
 |---|---|---|
+| V1.4 | 2 Nov 2026 | Jokes and secret commands about other games, Sierra-style death jokes, Astro Chicken high score; the game now uses two disk sides |
 | V1.3 | 2 Nov 2026 | Internal update for testing; the game itself is unchanged |
 | V1.2 | 2 Nov 2026 | Two new space chapters (Asteroid 42 and Space Pirates), humour and classic adventure game references, a secret on the planet |
 | V1.1 | 2 Nov 2026 | Function keys: F1 load, F3 save, F5 music on/off, F7 quit to the menu; save files named after the part |
@@ -184,6 +186,16 @@ Memory map:
 | V0.01 | 2 Nov 2026 | First playable version (as "Stronkie's Quest", not published) |
 
 ## Change log
+
+### V1.4
+- Secret commands that work everywhere: try XYZZY, IDDQD, 42, USE THE FORCE and GET LAMP
+- Nods to classic Commodore 64 games: Impossible Mission, Paradroid, Boulder Dash, The Last Ninja, and a well-known disk command
+- Nods to classic adventure games hidden in the rooms: King's Quest, Maniac Mansion, Day of the Tentacle, Zak McKracken, Indiana Jones and the Last Crusade, Portal and The Hitchhiker's Guide to the Galaxy
+- Sierra-style death jokes: every part has its own funny line when you die
+- Beat Stronkie's high score on the Astro Chicken arcade machine for a 5 point bonus (maximum score now 735)
+- The game no longer fits on one disk side: the final chapter is on side B, and both sides can start the game
+- Texts can now show double quotes and the $ sign
+- The walkthrough is updated, with a list of all the jokes and secret commands
 
 ### V1.3
 - Internal update for testing; the game itself is unchanged
