@@ -3,7 +3,7 @@ Adventure Game made for the Commodore 64
 
 Created By Mark Stronks
 
-**Current version: V0.04** — download `The_World_of_Stronkie_V0.04.d64`
+**Current version: V0.05** — download `The_World_of_Stronkie_V0.05.d64`
 
 Older versions are in the `previous versions` folder.
 
@@ -11,14 +11,24 @@ Older versions are in the `previous versions` folder.
 
 The World of Stronkie is a text and graphics adventure in the style of the classic 1980s adventure games. You explore the world by typing commands, every location has its own picture, and you solve puzzles by finding, combining and using objects.
 
-**The story (chapters 1 and 2):** a letter from your uncle Edmund brought you to Ravenmoor Manor: *"Come to Ravenmoor at once. I have found it."* Nobody has seen him since. On a stormy night you arrive at the gates of his manor...
+### Storyline
 
-- **Chapter 1 – The Grounds:** search the overgrown garden, the shed, the old well and the porch, and find a way into the manor.
-- **Chapter 2 – The Manor:** explore the hall, the kitchen, the dark cellar, the study and the library, and find out what happened to uncle Edmund.
+A letter from your uncle Edmund brought you to Ravenmoor Manor: *"Come to Ravenmoor at once. I have found it."* Nobody has seen him since. What starts as a mystery in an old manor turns out to be the beginning of a journey through space, to a planet that was lost long ago: **the World of Stronkie**.
+
+**Prologue – Ravenmoor**
+
+- **Part 1 – The Grounds:** on a stormy night you arrive at the gates of the manor. Search the overgrown garden, the shed and the old well to find a way inside.
+- **Part 2 – The Manor:** explore the hall, the kitchen, the dark cellar, the study and the library, and find the secret chamber where uncle Edmund is held prisoner. He reveals that the amulet is no jewel: it is the key to a starship hidden beneath the house.
+- **Part 3 – The Launch Pad:** a hidden stairway leads to a bunker and a giant hangar carved into the rock. There stands the silver starship STARRAVEN. Find a keycard and a flight suit, power up the launch systems with the amulet, board the ship and blast off through the opening roof, while soldiers break into the manor above.
+
+**The space adventure**
+
+- **Chapter 1 – Into Space:** the ship's computer NOVA wakes up. The navigation crystal cracked during the launch. Find magnetic boots for the zero-gravity cargo hold, pry open the spare-parts crate, repair the navigation and jump into hyperspace.
+- **Chapter 2 – The Derelict Station:** dock at the abandoned space station KX-9. Get past the security robot, restart the generator and take the star chart that shows the way to the World of Stronkie... *to be continued.*
 
 ### How to play
 
-1. Attach `The_World_of_Stronkie_V0.04.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
+1. Attach `The_World_of_Stronkie_V0.05.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
 2. Type `LOAD"*",8` and then `RUN`.
 3. The main menu appears with music while the first chapter loads ("LOADING... PLEASE WAIT"). When loading is done the text changes to "PRESS ANY KEY TO START" and the border flashes. Press any key to begin.
 
@@ -30,18 +40,19 @@ Type two-word commands, for example:
 | `L` / `LOOK` | describe the location again |
 | `I` / `INVENTORY` | show what you are carrying |
 | `EXAMINE MAT`, `LOOK UNDER MAT` | look closely at things |
-| `TAKE KEY`, `DROP KEY` | pick up and drop objects |
-| `OPEN DOOR`, `UNLOCK DOOR`, `PULL BOOK`, `DIG`, `TURN HANDLE`, `LIGHT CANDLE` | interact with the world |
+| `TAKE KEY`, `DROP KEY`, `WEAR SUIT`, `INSERT CARD` | pick up, drop, wear and use objects |
+| `OPEN DOOR`, `PULL LEVER`, `DIG`, `LIGHT CANDLE`, `PRESS BUTTON`, `TALK TO NOVA` | interact with the world |
 | `HELP`, `SCORE`, `QUIT` | help, your score, quit the game |
 
-Only the first four letters of a word count, and small words like THE, WITH and UNDER are skipped. The maximum score is 100.
+Only the first four letters of a word count, and small words like THE, WITH and UNDER are skipped. The maximum score is 220.
 
 ### Features
 
 - Full-screen multicolour main menu picture with music
 - A picture for every location (multicolour bitmap in the top half of the screen, text in the bottom half, using a raster split)
-- Two-word command parser with about 50 verbs
-- Every chapter is its own file on the disk and is loaded when you reach it, so the game can grow beyond the memory of the C64
+- Two-word command parser with about 60 verbs
+- 28 locations with pictures in five parts
+- Every part is its own file on the disk and is loaded when you reach it, so the game can grow far beyond the memory of the C64 (each part can be up to 32 KB)
 - Score, death, quit and play-again
 - Works with the normal KERNAL disk routines (no fast loader needed)
 
@@ -51,8 +62,13 @@ Only the first four letters of a word count, and small words like THE, WITH and 
 |---|---|
 | `STRONKIE WORLD` | the game program with the menu music (load this one, or use `LOAD"*",8`) |
 | `MENU` | the main menu picture |
-| `CHAPTER1` | Chapter 1: The Grounds (pictures, texts, objects and puzzles) |
-| `CHAPTER2` | Chapter 2: The Manor |
+| `CHAPTER1` | Prologue, part 1: The Grounds (pictures, texts, objects and puzzles) |
+| `CHAPTER2` | Prologue, part 2: The Manor |
+| `CHAPTER3` | Prologue, part 3: The Launch Pad |
+| `CHAPTER4` | Chapter 1: Into Space |
+| `CHAPTER5` | Chapter 2: The Derelict Station |
+
+The disk still has about 200 free blocks for new chapters.
 
 ## How was it created
 
@@ -75,7 +91,7 @@ Memory map:
 | `$0801-$17FF` | game engine code |
 | `$1800-$280C` | menu music |
 | `$2810-$2FFF` | engine texts, word lists and variables |
-| `$4000-$BFFF` | menu picture or the current chapter (BASIC ROM switched off) |
+| `$4000-$BFFF` | menu picture or the current part (32 KB, BASIC ROM switched off) |
 | `$C400` / `$C800` | screen memory / copy of the C64 font (VIC bank 3) |
 | `$D800` | colour memory |
 | `$E000-$FF3F` | bitmap under the KERNAL ROM (menu: full screen, in game: top 12 rows) |
@@ -84,12 +100,23 @@ Memory map:
 
 | Version | Date | Notes |
 |---|---|---|
+| V0.05 | 2 Nov 2026 | Three new parts: the launch pad and the first two space chapters |
 | V0.04 | 2 Nov 2026 | "Press any key to start" on the main menu |
 | V0.03 | 2 Nov 2026 | Main menu music |
 | V0.02 | 2 Nov 2026 | Renamed to The World of Stronkie, new main menu picture |
 | V0.01 | 2 Nov 2026 | First playable version (as "Stronkie's Quest", not published) |
 
 ## Change log
+
+### V0.05
+- The Ravenmoor story is now the **Prologue** of the game (parts 1 and 2)
+- New: Prologue part 3, **The Launch Pad**: secret bunker, hangar and the starship STARRAVEN (6 locations)
+- New: Chapter 1, **Into Space**: aboard the STARRAVEN with the ship's computer NOVA (6 locations)
+- New: Chapter 2, **The Derelict Station**: space station KX-9 (5 locations), ending with "to be continued"
+- Freeing uncle Edmund now leads to the launch pad instead of ending the game
+- 17 new pictures; maximum score is now 220
+- New verbs: LAUNCH, FLY, ENGAGE, SIT, TOUCH, TYPE, INSERT, BOARD, SWITCH, START
+- End of the game now shows "CONGRATULATIONS!"
 
 ### V0.04
 - Main menu shows "PRESS ANY KEY TO START" (in place of "LOADING... PLEASE WAIT") as soon as chapter 1 has loaded
