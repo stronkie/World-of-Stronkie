@@ -3,7 +3,7 @@ Adventure Game made for the Commodore 64
 
 Created By Mark Stronks
 
-**Current version: V0.06** — download `The_World_of_Stronkie_V0.06.d64`
+**Current version: V0.07** — download `The_World_of_Stronkie_V0.07.d64`
 
 Older versions are in the `previous versions` folder.
 
@@ -28,7 +28,7 @@ A letter from your uncle Edmund brought you to Ravenmoor Manor: *"Come to Ravenm
 
 ### How to play
 
-1. Attach `The_World_of_Stronkie_V0.06.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
+1. Attach `The_World_of_Stronkie_V0.07.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
 2. Type `LOAD"*",8` and then `RUN`.
 3. The main menu appears with music while the first chapter loads ("LOADING... PLEASE WAIT"). When loading is done the text changes to "PRESS ANY KEY TO START" and the border flashes. Press any key to begin.
 
@@ -42,13 +42,29 @@ Type two-word commands, for example:
 | `EXAMINE MAT`, `LOOK UNDER MAT` | look closely at things |
 | `TAKE KEY`, `DROP KEY`, `WEAR SUIT`, `INSERT CARD` | pick up, drop, wear and use objects |
 | `OPEN DOOR`, `PULL LEVER`, `DIG`, `LIGHT CANDLE`, `PRESS BUTTON`, `TALK TO NOVA` | interact with the world |
-| `HELP`, `SCORE`, `QUIT` | help, your score, quit the game |
+| `TAKE ALL`, `DROP ALL` | pick up or drop everything at once |
+| `G` / `AGAIN` | repeat your last command |
+| `HINT` | a clue for your next step (costs 3 points) |
+| `SAVE`, `LOAD` (or `RESTORE`) | save your game to the disk, and continue it later |
+| `HELP`, `SCORE`, `QUIT` | help, your score and star fragments, quit the game |
 
 Only the first four letters of a word count, and small words like THE, WITH and UNDER are skipped.
 
 ### Score
 
-The status bar under the picture always shows the part you are in, your **score** and the number of **moves** (every command you type counts as one move). You earn points for solving puzzles, for example 10 points for digging up the handle or opening a door. Every time you score, a short jingle plays. The maximum score is 220. Try to get it in as few moves as possible!
+The status bar under the picture always shows the part you are in, your **score** and the number of **moves** (every command you type counts as one move). You earn points for solving puzzles, for example 10 points for digging up the handle or opening a door. Every time you score, a short jingle plays.
+
+**Star fragments:** every part hides one star fragment, worth 10 points each. They only turn up if you search the right place carefully. The status bar shows how many you have found (`*2/5`).
+
+**Hints:** stuck? Type `HINT` for a clue about your next step. Each hint costs 3 points.
+
+The maximum score is 270 (220 for the story, 50 for the five star fragments). Try to get it in as few moves as possible, without hints!
+
+### Saving, dying and disk sides
+
+- `SAVE` writes your game to the file `SAVEGAME` on the disk (the disk must not be write-protected). `LOAD` or `RESTORE` brings you back to the exact same spot, with all your items, score and moves. You can type `LOAD` right after starting a new game.
+- If you die, the game asks **TRY THIS PART AGAIN?** Press `Y` to restart the current part with the score you had when you entered it, or `N` to go back to the main menu.
+- When the game grows too big for one disk side, the later parts go on side B. The game will then ask you to insert the other side when it needs a part that is not on the current one.
 
 ### Features
 
@@ -57,7 +73,9 @@ The status bar under the picture always shows the part you are in, your **score*
 - Music during the game: every part has its own tune, which only changes when the next part loads
 - Sound effects: key clicks, taking and dropping items, errors, points, doors, thunder, rocket launch, hyperspace, robot zaps, death and a victory fanfare
 - A picture for every location (multicolour bitmap in the top half of the screen, text in the bottom half, using a raster split)
-- Two-word command parser with about 60 verbs
+- Two-word command parser with about 60 verbs, TAKE ALL / DROP ALL, AGAIN, and messages that tell you which word was not understood
+- Save and load, retry a part after dying, hints, and hidden star fragments
+- All data files are compressed, so every part loads about twice as fast
 - 28 locations with pictures in five parts
 - Every part is its own file on the disk and is loaded when you reach it, so the game can grow far beyond the memory of the C64 (each part can be up to 32 KB)
 - Score, death, quit and play-again
@@ -75,14 +93,15 @@ The status bar under the picture always shows the part you are in, your **score*
 | `CHAPTER4` | Chapter 1: Into Space |
 | `CHAPTER5` | Chapter 2: The Derelict Station |
 
-The disk still has about 200 free blocks for new chapters.
+All data files are packed, so the disk still has 387 free blocks for new chapters. When you save, the file `SAVEGAME` is added to the disk.
 
 ## How was it created
 
 The game is written in 6502 machine language (64tass-compatible assembler syntax).
 
 - **Engine:** handles the screen (raster interrupt that switches between bitmap and text mode halfway down the screen), the command parser, the inventory, and a small script interpreter for the puzzles.
-- **Chapters:** each chapter is a separate data file that is loaded to `$4000`. It holds the rooms, objects, words, puzzle scripts (conditions and actions), messages, and the room pictures (RLE compressed).
+- **Compression:** every data file on the disk is packed with a small LZ packer (to about half its size). The engine loads it and then unpacks it in place to `$4000`, which takes about a second, while the load from disk takes half as long as before.
+- **Chapters:** each chapter is a separate data file that is unpacked to `$4000`. It holds the rooms, objects, words, puzzle scripts (conditions and actions), messages, and the room pictures (RLE compressed).
 - **Pictures:** drawn at 160×96 pixels in the 16 C64 colours and converted to C64 multicolour bitmap format. The main menu picture was converted from Mark's artwork to a full 160×200 multicolour screen.
 - **Music:** the main menu plays the SID tune "Contest Demo (part 4)", which the game calls 50 times a second from a raster interrupt. It also keeps playing while chapter 1 loads.
 - **In-game music and sound:** the engine has its own small 3-voice music player. Each part's file contains its own tune, so the music changes only when a new part is loaded. Sound effects borrow the third SID voice for a moment, while the music keeps playing on the other two.
@@ -99,8 +118,9 @@ Memory map:
 |---|---|
 | `$0801-$17FF` | game engine code |
 | `$1800-$280C` | menu music |
-| `$2810-$37FF` | engine texts, word lists, variables, status bar, in-game music player and sound effects |
-| `$4000-$BFFF` | menu picture or the current part (32 KB, BASIC ROM switched off) |
+| `$2810-$3BFF` | engine texts, word lists, variables, status bar, in-game music player, sound effects, save/load |
+| `$3C00-$3FFF` | buffer for the menu's PRESS ANY KEY rows and for save games |
+| `$4000-$BFFF` | menu picture or the current part (32 KB, BASIC ROM switched off); packed files are loaded just below `$C400` and unpacked to `$4000` |
 | `$C400` / `$C800` | screen memory / copy of the C64 font (VIC bank 3) |
 | `$D800` | colour memory |
 | `$E000-$FF3F` | bitmap under the KERNAL ROM (menu: full screen, in game: top 12 rows) |
@@ -109,6 +129,7 @@ Memory map:
 
 | Version | Date | Notes |
 |---|---|---|
+| V0.07 | 2 Nov 2026 | Faster loading, save/load, retry after dying, hints, star fragments, TAKE ALL and AGAIN |
 | V0.06 | 2 Nov 2026 | Score and moves on screen, music for every part, sound effects |
 | V0.05 | 2 Nov 2026 | Three new parts: the launch pad and the first two space chapters |
 | V0.04 | 2 Nov 2026 | "Press any key to start" on the main menu |
@@ -117,6 +138,16 @@ Memory map:
 | V0.01 | 2 Nov 2026 | First playable version (as "Stronkie's Quest", not published) |
 
 ## Change log
+
+### V0.07
+- All data files are compressed: every part loads about twice as fast, and the disk has 387 free blocks
+- `SAVE` and `LOAD` / `RESTORE`: save the game to the disk and continue it later
+- After dying you can try the current part again, with the score you had when you started it
+- `HINT` gives a clue for your next step in every part, for 3 points
+- Five hidden star fragments, one in each part (+10 points each, shown on the status bar); maximum score is now 270
+- `TAKE ALL`, `DROP ALL`, `AGAIN` / `G`
+- When a word is not understood, the game now says which word (I DON'T KNOW THE WORD 'XYZZY')
+- If a part is not on the disk, the game asks you to insert the other side (ready for a side B)
 
 ### V0.06
 - Status bar under the picture with the current part, the score and the number of moves
