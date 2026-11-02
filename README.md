@@ -3,7 +3,7 @@ Adventure Game made for the Commodore 64
 
 Created By Mark Stronks
 
-**Current version: V1.0 (release)** — download `The_World_of_Stronkie_V1.0.d64`
+**Current version: V1.1** — download `The_World_of_Stronkie_V1.1.d64`
 
 Older versions are in the `previous versions` folder.
 
@@ -36,7 +36,7 @@ A letter from your uncle Edmund brought you to Ravenmoor Manor: *"Come to Ravenm
 
 ### How to play
 
-1. Attach `The_World_of_Stronkie_V1.0.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
+1. Attach `The_World_of_Stronkie_V1.1.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
 2. Type `LOAD"*",8` and then `RUN`.
 3. The main menu appears with music while the first chapter loads ("LOADING... PLEASE WAIT"). When loading is done the text changes to "N:NEW GAME  L:LOAD GAME" and the border flashes.
 4. Press `N` to start a new game, or `L` to continue your saved game. If there is no saved game on the disk, a new game starts.
@@ -55,8 +55,18 @@ Type two-word commands, for example:
 | `G` / `AGAIN` | repeat your last command |
 | `HINT` | a clue for your next step (costs 3 points) |
 | `SAVE`, `LOAD` (or `RESTORE`) | save your game to the disk, and continue it later |
-| `HELP`, `SCORE`, `QUIT` | help, your score and star fragments, quit the game |
+| `HELP`, `SCORE`, `QUIT` | help, your score and star fragments, quit to the main menu |
+| `MUSIC` | turn the music off or back on (sound effects keep playing) |
 | `RUN/STOP` + `RESTORE` | leave the game completely (resets the C64) |
+
+**Function keys** (work at any time while you type a command):
+
+| Key | What it does |
+|---|---|
+| `F1` | load your saved game (asks first: all progress in this game will be lost) |
+| `F3` | save the game, under the name of the part you are in |
+| `F5` | music off / on |
+| `F7` | quit to the main menu (asks first) |
 
 Only the first four letters of a word count, and small words like THE, WITH and UNDER are skipped.
 
@@ -74,7 +84,7 @@ Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes y
 
 ### Saving, dying and disk sides
 
-- `SAVE` writes your game to the file `SAVEGAME` on the disk (the disk must not be write-protected). `LOAD` or `RESTORE` brings you back to the exact same spot, with all your items, score and moves. You can type `LOAD` right after starting a new game.
+- `SAVE` (or `F3`) writes your game to the disk under the name of the part you are in, for example `SAVE-LANDFALL` or `SAVE-SKY TEMPLE`, so the disk directory shows how far you got. A new save replaces the old one, and the disk must not be write-protected. `LOAD`, `RESTORE` or `F1` asks if you are sure, then brings you back to the exact same spot, with all your items, score and moves. You can type `LOAD` right after starting a new game.
 - If you die, the game asks **TRY THIS PART AGAIN?** Press `Y` to restart the current part with the score you had when you entered it, or `N` to go back to the main menu.
 - When the game grows too big for one disk side, the later parts go on side B. The game will then ask you to insert the other side when it needs a part that is not on the current one.
 
@@ -113,7 +123,7 @@ Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes y
 | `PART09` | Chapter 6: The Sky Temple |
 | `PART10` | Chapter 7: The Star Heart |
 
-All data files are packed, so all ten parts fit on side A with 134 blocks to spare. When you save, the file `SAVEGAME` is added to the disk. New chapters that no longer fit will go on side B, and the game will ask you to flip the disk when it needs them.
+All data files are packed, so all ten parts fit on side A with 132 blocks to spare. When you save, a file named after the part you are in (like `SAVE-THE MANOR`) is added to the disk. New chapters that no longer fit will go on side B, and the game will ask you to flip the disk when it needs them.
 
 ## How was it created
 
@@ -152,6 +162,7 @@ Memory map:
 
 | Version | Date | Notes |
 |---|---|---|
+| V1.1 | 2 Nov 2026 | Function keys: F1 load, F3 save, F5 music on/off, F7 quit to the menu; save files named after the part |
 | V1.0 | 2 Nov 2026 | **Release version.** The complete game: prologue + 7 chapters, 54 locations, 580 points, 10 star fragments |
 | V0.09 | 2 Nov 2026 | Five new chapters on the planet Stronkie (the story now has 7 chapters), RUN/STOP + RESTORE leaves the game |
 | V0.08 | 2 Nov 2026 | New game / load game choice, title cards, animated pictures, picture wipes, coloured text |
@@ -164,6 +175,14 @@ Memory map:
 | V0.01 | 2 Nov 2026 | First playable version (as "Stronkie's Quest", not published) |
 
 ## Change log
+
+### V1.1
+- Function keys while you play: **F1** loads your saved game, **F3** saves, **F5** turns the music off and on, **F7** quits to the main menu
+- Loading a saved game during play now asks first: "ALL PROGRESS IN THIS GAME WILL BE LOST. ARE YOU SURE (Y/N)?"
+- The save file is named after the part you are in (`SAVE-THE GROUNDS` ... `SAVE-STAR HEART`), so you can see in the disk directory how far you got. Saving again replaces the old save. Old `SAVEGAME` files still load.
+- New command `MUSIC` (or `SOUND`) turns the music off and on. When the music is off it stays off in the next parts too; sound effects keep playing
+- `QUIT` now goes straight back to the main menu
+- `HELP` lists the function keys
 
 ### V1.0 — release
 - First release version of The World of Stronkie: the three-part prologue and seven chapters, from Uncle Edmund's manor to the Star Heart on the planet Stronkie
