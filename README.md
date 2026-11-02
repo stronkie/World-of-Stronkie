@@ -3,7 +3,7 @@ Adventure Game made for the Commodore 64
 
 Created By Mark Stronks
 
-**Current version: V0.08** — download `The_World_of_Stronkie_V0.08.d64`
+**Current version: V0.09** — download `The_World_of_Stronkie_V0.09.d64`
 
 Older versions are in the `previous versions` folder.
 
@@ -24,11 +24,19 @@ A letter from your uncle Edmund brought you to Ravenmoor Manor: *"Come to Ravenm
 **The space adventure**
 
 - **Chapter 1 – Into Space:** the ship's computer NOVA wakes up. The navigation crystal cracked during the launch. Find magnetic boots for the zero-gravity cargo hold, pry open the spare-parts crate, repair the navigation and jump into hyperspace.
-- **Chapter 2 – The Derelict Station:** dock at the abandoned space station KX-9. Get past the security robot, restart the generator and take the star chart that shows the way to the World of Stronkie... *to be continued.*
+- **Chapter 2 – The Derelict Station:** dock at the abandoned space station KX-9. Get past the security robot, restart the generator and take the star chart that shows the way to the World of Stronkie.
+
+**The World of Stronkie**
+
+- **Chapter 3 – Landfall:** the STARRAVEN crash-lands in a purple jungle under two suns. Blow the jammed hatch, put out the burning engine, swing across a glowing river and break a new power crystal loose for the ship. A hungry little Stronkie guards the gate to his village...
+- **Chapter 4 – The Village:** the Stronkies only chirp until you find a way to understand them. Elder Zooma tells you the truth: your amulet is the key of the Sky Temple, where the Star Heart keeps the planet alive, and Commander Vex has come to steal its power. Bix the inventor can fly you there, if you find him a sail.
+- **Chapter 5 – The Crystal Mountains:** Vex has stolen the amulet from your ship! Cross an ice bridge without waking the beast in the ice cave, sneak into Vex's camp and take the amulet back.
+- **Chapter 6 – The Sky Temple:** open the crystal gate, catch the sunlight with a silver mirror and make an invisible bridge appear. But behind the golden door, Vex is waiting.
+- **Chapter 7 – The Star Heart:** Vex is draining the Star Heart with his machine. Use the old Stronkie legends to stop him and save the World of Stronkie. *The end... for now!*
 
 ### How to play
 
-1. Attach `The_World_of_Stronkie_V0.08.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
+1. Attach `The_World_of_Stronkie_V0.09.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE).
 2. Type `LOAD"*",8` and then `RUN`.
 3. The main menu appears with music while the first chapter loads ("LOADING... PLEASE WAIT"). When loading is done the text changes to "N:NEW GAME  L:LOAD GAME" and the border flashes.
 4. Press `N` to start a new game, or `L` to continue your saved game. If there is no saved game on the disk, a new game starts.
@@ -48,6 +56,7 @@ Type two-word commands, for example:
 | `HINT` | a clue for your next step (costs 3 points) |
 | `SAVE`, `LOAD` (or `RESTORE`) | save your game to the disk, and continue it later |
 | `HELP`, `SCORE`, `QUIT` | help, your score and star fragments, quit the game |
+| `RUN/STOP` + `RESTORE` | leave the game completely (resets the C64) |
 
 Only the first four letters of a word count, and small words like THE, WITH and UNDER are skipped.
 
@@ -55,11 +64,11 @@ Only the first four letters of a word count, and small words like THE, WITH and 
 
 The status bar under the picture always shows the part you are in, your **score** and the number of **moves** (every command you type counts as one move). You earn points for solving puzzles, for example 10 points for digging up the handle or opening a door. Every time you score, a short jingle plays.
 
-**Star fragments:** every part hides one star fragment, worth 10 points each. They only turn up if you search the right place carefully. The status bar shows how many you have found (`*2/5`).
+**Star fragments:** every part hides one star fragment, worth 10 points each. They only turn up if you search the right place carefully. The status bar shows how many you have found (`*02/10`).
 
 **Hints:** stuck? Type `HINT` for a clue about your next step. Each hint costs 3 points.
 
-The maximum score is 270 (220 for the story, 50 for the five star fragments). Try to get it in as few moves as possible, without hints!
+The maximum score is 580 (480 for the story, 100 for the ten star fragments). Try to get it in as few moves as possible, without hints!
 
 ### Saving, dying and disk sides
 
@@ -77,11 +86,10 @@ The maximum score is 270 (220 for the story, 50 for the five star fragments). Tr
 - Status bar with the current part, score and moves
 - Music during the game: every part has its own tune, which only changes when the next part loads
 - Sound effects: key clicks, taking and dropping items, errors, points, doors, thunder, rocket launch, hyperspace, robot zaps, death and a victory fanfare
-- A picture for every location (multicolour bitmap in the top half of the screen, text in the bottom half, using a raster split)
+- A picture for every location (multicolour bitmap in the top half of the screen, text in the bottom half, using a raster split): 54 locations in 10 parts
 - Two-word command parser with about 60 verbs, TAKE ALL / DROP ALL, AGAIN, and messages that tell you which word was not understood
 - Save and load, retry a part after dying, hints, and hidden star fragments
 - All data files are compressed, so every part loads about twice as fast
-- 28 locations with pictures in five parts
 - Every part is its own file on the disk and is loaded when you reach it, so the game can grow far beyond the memory of the C64 (each part can be up to 32 KB)
 - Score, death, quit and play-again
 - Works with the normal KERNAL disk routines (no fast loader needed)
@@ -92,13 +100,18 @@ The maximum score is 270 (220 for the story, 50 for the five star fragments). Tr
 |---|---|
 | `STRONKIE WORLD` | the game program with the menu music (load this one, or use `LOAD"*",8`) |
 | `MENU` | the main menu picture |
-| `CHAPTER1` | Prologue, part 1: The Grounds (pictures, texts, objects and puzzles) |
-| `CHAPTER2` | Prologue, part 2: The Manor |
-| `CHAPTER3` | Prologue, part 3: The Launch Pad |
-| `CHAPTER4` | Chapter 1: Into Space |
-| `CHAPTER5` | Chapter 2: The Derelict Station |
+| `PART01` | Prologue, part 1: The Grounds (pictures, texts, objects, puzzles and music) |
+| `PART02` | Prologue, part 2: The Manor |
+| `PART03` | Prologue, part 3: The Launch Pad |
+| `PART04` | Chapter 1: Into Space |
+| `PART05` | Chapter 2: The Derelict Station |
+| `PART06` | Chapter 3: Landfall |
+| `PART07` | Chapter 4: The Village |
+| `PART08` | Chapter 5: The Crystal Mountains |
+| `PART09` | Chapter 6: The Sky Temple |
+| `PART10` | Chapter 7: The Star Heart |
 
-All data files are packed, so the disk still has 342 free blocks for new chapters. When you save, the file `SAVEGAME` is added to the disk.
+All data files are packed, so all ten parts fit on side A with 134 blocks to spare. When you save, the file `SAVEGAME` is added to the disk. New chapters that no longer fit will go on side B, and the game will ask you to flip the disk when it needs them.
 
 ## How was it created
 
@@ -116,7 +129,7 @@ The game is written in 6502 machine language (64tass-compatible assembler syntax
 
 - Game: Created By Mark Stronks
 - Menu music: "Contest Demo (part 4)" by Sami Seppä (Rock), 1988 Finnish Gold
-- In-game music: original tunes made for this game (The Grounds, The Manor, The Launch Pad, Into Space, The Derelict Station)
+- In-game music: original tunes made for this game, one for each part (The Grounds, The Manor, The Launch Pad, Into Space, The Derelict Station, Landfall, The Village, The Crystal Mountains, The Sky Temple, The Star Heart)
 
 Memory map:
 
@@ -137,6 +150,7 @@ Memory map:
 
 | Version | Date | Notes |
 |---|---|---|
+| V0.09 | 2 Nov 2026 | Five new chapters on the planet Stronkie (the story now has 7 chapters), RUN/STOP + RESTORE leaves the game |
 | V0.08 | 2 Nov 2026 | New game / load game choice, title cards, animated pictures, picture wipes, coloured text |
 | V0.07 | 2 Nov 2026 | Faster loading, save/load, retry after dying, hints, star fragments, TAKE ALL and AGAIN |
 | V0.06 | 2 Nov 2026 | Score and moves on screen, music for every part, sound effects |
@@ -147,6 +161,16 @@ Memory map:
 | V0.01 | 2 Nov 2026 | First playable version (as "Stronkie's Quest", not published) |
 
 ## Change log
+
+### V0.09
+- Five new chapters on the planet Stronkie: **Landfall**, **The Village**, **The Crystal Mountains**, **The Sky Temple** and the finale **The Star Heart** (26 new locations with pictures and animations)
+- New characters: the Stronkies, Elder Zooma, Bix the inventor, and the villain Commander Vex
+- Chapter 2 now continues to the World of Stronkie; the game ends after chapter 7
+- Every new chapter has its own music, title card, hints, death traps and a hidden star fragment (10 in total, maximum score 580)
+- New verbs: SWING, SPRAY, EXTINGUISH, LISTEN, BLOW, MAKE, FIX, WAKE, SHOW, TRADE, BUY, CROSS
+- The data files on the disk are now called `PART01` to `PART10`
+- RUN/STOP + RESTORE resets the C64 and leaves the game completely; RESTORE alone is ignored
+- All ten parts fit on side A; side B is used automatically when the story grows further
 
 ### V0.08
 - Main menu: press `N` for a new game or `L` to load your saved game
