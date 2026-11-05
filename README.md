@@ -9,6 +9,8 @@ New in V1.7: a printable manual with "feelies" in the style of the old Infocom b
 
 Lost in space? [`The_World_of_Stronkie_Map.jpg`](The_World_of_Stronkie_Map.jpg) is a map of the whole game: all 17 parts and 92 locations, every room with its picture from the game.
 
+Want the full 1980s experience? The [`game box`](game%20box) folder has a printable retro game box (`The_World_of_Stronkie_Box_A3.pdf`, print on A3 at 100%, then cut, fold and glue) with cover art on the front, system requirements on the side and screenshots and the story on the back.
+
 Playing on real floppies? Print the black and white disk labels for side A and side B from the [`disk labels`](disk%20labels) folder (`Disk_Labels_A4.pdf` prints both at their real size, 3.5 x 1.5 inch).
 
 Older versions are in the `previous versions` folder.
