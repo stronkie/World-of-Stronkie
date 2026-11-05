@@ -3,7 +3,9 @@ Adventure Game made for the Commodore 64
 
 Created By Mark Stronks
 
-**Current version: V1.6** — download both disk sides: `The_World_of_Stronkie_V1.6_sideA.d64` and `The_World_of_Stronkie_V1.6_sideB.d64`, or both at once in `The_World_of_Stronkie_V1.6.zip`
+**Current version: V1.7** — download both disk sides: `The_World_of_Stronkie_V1.7_sideA.d64` and `The_World_of_Stronkie_V1.7_sideB.d64`, or both at once in `The_World_of_Stronkie_V1.7.zip`
+
+New in V1.7: a printable manual with "feelies" in the style of the old Infocom boxes: [`The_World_of_Stronkie_Manual.pdf`](The_World_of_Stronkie_Manual.pdf) (A5 pages: a letter from Uncle Edmund, a map of the Ravenmoor estate, a blueprint of the STARRAVEN, a Space Port 42 leaflet, a 50 buckazoid note and a star fragment log).
 
 Playing on real floppies? Print the black and white disk labels for side A and side B from the [`disk labels`](disk%20labels) folder (`Disk_Labels_A4.pdf` prints both at their real size, 3.5 x 1.5 inch).
 
@@ -53,10 +55,10 @@ The space chapters are full of nods to the classic adventure games: Space Quest,
 
 ### How to play
 
-1. Attach `The_World_of_Stronkie_V1.6_sideA.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE). Keep `The_World_of_Stronkie_V1.6_sideB.d64` ready: from chapter 9 on the game is on side B, and it will ask you to flip the disk.
+1. Attach `The_World_of_Stronkie_V1.7_sideA.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE). Keep `The_World_of_Stronkie_V1.7_sideB.d64` ready: from chapter 12 on the game is on side B, and it will ask you to flip the disk.
 2. Type `LOAD"*",8` and then `RUN`.
 3. The main menu appears with music while the first chapter loads ("LOADING... PLEASE WAIT"). When loading is done the text changes to "N:NEW GAME  L:LOAD GAME" and the border flashes.
-4. Press `N` to start a new game, or `L` to continue your saved game. If there is no saved game on the disk, a new game starts.
+4. Press `N` to start a new game, or `L` to continue a saved game (then press the slot number, 1 to 3). If there is no saved game in that slot, a new game starts.
 
 Type two-word commands, for example:
 
@@ -71,7 +73,8 @@ Type two-word commands, for example:
 | `TAKE ALL`, `DROP ALL` | pick up or drop everything at once |
 | `G` / `AGAIN` | repeat your last command |
 | `HINT` | a clue for your next step (costs 3 points) |
-| `SAVE`, `LOAD` (or `RESTORE`) | save your game to the disk, and continue it later |
+| `SAVE`, `LOAD` (or `RESTORE`) | save your game in slot 1, 2 or 3 on the disk, and continue it later |
+| `MAP` | a map of the part you are in: where you are, where you have been, and the places you haven't seen yet |
 | `HELP`, `SCORE`, `QUIT` | help, your score and star fragments, quit to the main menu |
 | `MUSIC` | turn the music off or back on (sound effects keep playing) |
 | `RUN/STOP` + `RESTORE` | leave the game completely (resets the C64) |
@@ -81,7 +84,7 @@ Type two-word commands, for example:
 | Key | What it does |
 |---|---|
 | `F1` | load your saved game (asks first: all progress in this game will be lost) |
-| `F3` | save the game, under the name of the part you are in |
+| `F3` | save the game in slot 1, 2 or 3, under the name of the part you are in |
 | `F5` | music off / on |
 | `F7` | quit to the main menu (asks first) |
 
@@ -101,9 +104,9 @@ Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes y
 
 ### Saving, dying and disk sides
 
-- `SAVE` (or `F3`) writes your game to the disk under the name of the part you are in, for example `SAVE-LANDFALL` or `SAVE-SKY TEMPLE`, so the disk directory shows how far you got. A new save replaces the old one, and the disk must not be write-protected. `LOAD`, `RESTORE` or `F1` asks if you are sure, then brings you back to the exact same spot, with all your items, score and moves. You can type `LOAD` right after starting a new game.
+- `SAVE` (or `F3`) asks for a slot: press `1`, `2` or `3` (any other key cancels). The game is written to the disk under the slot number and the name of the part you are in, for example `SAVE1-LANDFALL` or `SAVE3-SKYTEMPLE`, so the disk directory shows how far you got in every slot. A new save replaces the old one in that slot, and the disk must not be write-protected. `LOAD`, `RESTORE` or `F1` asks if you are sure and which slot, then brings you back to the exact same spot, with all your items, score, moves and the map. You can type `LOAD` right after starting a new game.
 - If you die, the game asks **TRY THIS PART AGAIN?** Press `Y` to restart the current part with the score you had when you entered it, or `N` to go back to the main menu.
-- The game is on two disk sides. Side A holds the program, the menu and parts 1 to 11; side B holds parts 12 to 17, from chapter 9 to the epilogue (and its own copy of the program and the menu, so either side can start the game). When the game needs a part that is not on the disk in the drive, it says **INSERT THE OTHER SIDE AND PRESS A KEY**.
+- The game is on two disk sides. Side A holds the program, the menu and parts 1 to 14; side B holds parts 15 to 17, from chapter 12 to the epilogue (and its own copy of the program and the menu, so either side can start the game). When the game needs a part that is not on the disk in the drive, it says **INSERT THE OTHER SIDE AND PRESS A KEY**.
 - A save is written to the side that is in the drive. If you saved on side B, start the game from side A as usual, then insert side B before you press `L` in the main menu.
 
 ### Features
@@ -141,21 +144,22 @@ Stuck? [walkthrough.txt](walkthrough.txt) is a complete walkthrough that takes y
 | `PART09` | Chapter 6: The Village |
 | `PART10` | Chapter 7: The Crystal Mountains |
 | `PART11` | Chapter 8: The Sky Temple |
-| `PART12` | Chapter 9: The Star Heart (side B) |
-| `PART13` | Chapter 10: Repairs (side B) |
-| `PART14` | Chapter 11: Vex's Flagship (side B) |
+| `PART12` | Chapter 9: The Star Heart |
+| `PART13` | Chapter 10: Repairs |
+| `PART14` | Chapter 11: Vex's Flagship |
 | `PART15` | Chapter 12: The Prison Deck (side B) |
 | `PART16` | Chapter 13: The Bridge (side B) |
 | `PART17` | Epilogue: Home Again (side B) |
 
-All data files are packed. Side A holds the program, the menu and parts 1 to 11; side B holds parts 12 to 17, together with a copy of the program and the menu. When you save, a file named after the part you are in (like `SAVE-THE MANOR`) is added to the disk. New chapters that no longer fit will go on side B, and the game will ask you to flip the disk when it needs them.
+All files are crunched, the program file too. Side A holds the program, the menu and parts 1 to 14; side B holds parts 15 to 17, together with a copy of the program and the menu. When you save, a file named after the slot and the part you are in (like `SAVE1-MANOR`) is added to the disk. New chapters that no longer fit will go on side B, and the game will ask you to flip the disk when it needs them.
 
 ## How was it created
 
 The game is written in 6502 machine language (64tass-compatible assembler syntax).
 
 - **Engine:** handles the screen (raster interrupt that switches between bitmap and text mode halfway down the screen), the command parser, the inventory, and a small script interpreter for the puzzles.
-- **Compression:** every data file on the disk is packed with a small LZ packer (to about half its size). The engine loads it and then unpacks it in place to `$4000`, which takes about a second, while the load from disk takes half as long as before.
+- **Compression (V1.7):** every file on the disk is crunched with a bit-oriented LZ packer with an optimal parse (in the spirit of ZX0: Elias gamma codes for lengths and offsets). That is about 20% smaller than the byte-oriented packer of earlier versions, and less than half the original size. The engine loads a part and unpacks it in place to `$4000`. The program file itself is crunched too: a small stub moves the packed engine and its unpacker up to just below `$D000`, unpacks the engine to `$0801` and starts it. In total the game went from 996 to 818 blocks, and the program file from 61 to 42 blocks.
+- **Map (V1.7):** the build lays out the rooms of every part on a grid from their exits and stores the map in the part's file. The `MAP` command prints it with C64 line characters; the engine remembers which rooms you have visited (it is part of a saved game), shows your room in yellow and hides secret rooms until you have found them.
 - **Chapters:** each chapter is a separate data file that is unpacked to `$4000`. It holds the rooms, objects, words, puzzle scripts (conditions and actions), messages, and the room pictures (RLE compressed).
 - **Pictures:** drawn at 160×96 pixels in the 16 C64 colours and converted to C64 multicolour bitmap format. The main menu picture was converted from Mark's artwork to a full 160×200 multicolour screen.
 - **Music:** the main menu plays the SID tune "Contest Demo (part 4)", which the game calls 50 times a second from a raster interrupt. It also keeps playing while chapter 1 loads.
@@ -192,6 +196,7 @@ Memory map:
 
 | Version | Date | Notes |
 |---|---|---|
+| V1.7 | 5 Nov 2026 | MAP command, three save slots, a printable manual with feelies, and a crunched game: 178 blocks smaller |
 | V1.6 | 5 Nov 2026 | Graphics update: moving sprites, gradient skies, a raster bar behind the status bar, a scrolling title screen and rolling end credits |
 | V1.5 | 2 Nov 2026 | Act 3: four new chapters and an epilogue, a longer finale, choices that matter, a true ending, a maze and a companion |
 | V1.4 | 2 Nov 2026 | Jokes and secret commands about other games, Sierra-style death jokes, Astro Chicken high score; the game now uses two disk sides |
@@ -210,6 +215,15 @@ Memory map:
 | V0.01 | 2 Nov 2026 | First playable version (as "Stronkie's Quest", not published) |
 
 ## Change log
+
+### V1.7
+- New command `MAP`: a map of the part you are in. Your room is yellow, rooms you have been in are white, rooms you haven't seen yet show as `?????`, and secret rooms stay hidden until you find them. Twisty mine tunnels can't be mapped, of course.
+- Three save slots: `SAVE`, `F3`, `LOAD`, `F1` and `L` in the main menu ask for slot 1, 2 or 3. Save files are named after the slot and the part, like `SAVE2-ASTEROID42`.
+- Saved games now remember which rooms you have visited, for the map. Saved games from V1.6 and older can't be loaded in V1.7.
+- A printable manual with feelies (PDF): how to play, a letter from Uncle Edmund, a map of the Ravenmoor estate, a blueprint of the STARRAVEN, a Space Port 42 visitor's leaflet, a 50 buckazoid note and a star fragment log
+- The game is crunched with a new packer, the program file too: 818 blocks instead of 996, and every part loads faster. Side A now holds the game up to chapter 11; side B has chapter 12 to the epilogue.
+- `HELP` lists the new commands
+- The walkthrough is updated
 
 ### V1.6
 - Moving sprites in the pictures: bats over Ravenmoor, comets past the cockpit windows, spaceships over the docks and the launch pad, alien birds in the skies of Stronkie, clouds over the mountains, seagulls on the holodeck and butterflies in the garden at the end

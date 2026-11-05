@@ -2,7 +2,7 @@
                THE WORLD OF STRONKIE - COMPLETE WALKTHROUGH
                  All 1070 points, all 16 star fragments
                  and the true ending
-                     Created By Mark Stronks - V1.6
+                     Created By Mark Stronks - V1.7
 =====================================================================
 
 HOW TO USE THIS WALKTHROUGH
@@ -15,8 +15,9 @@ Points are shown as (+10).
    need all of them for the full 1070.
  * The star fragments (*) are worth 10 points each. They only turn
    up if you SEARCH the right thing in the right room.
- * Type SAVE now and then. If you die you can RETRY, or LOAD your
-   saved game.
+ * Type SAVE now and then and pick a slot (1, 2 or 3). If you die
+   you can RETRY, or LOAD your saved game from its slot.
+ * Lost? Type MAP for a map of the part you are in.
  * If the text stops with MORE, press SPACE.
 
 Points per part:
@@ -403,10 +404,6 @@ Warning: never JUMP at the endless drop!
 =====================================================================
 CHAPTER 9: THE STAR HEART
 =====================================================================
-The last part is on side B of the disk. When the game says INSERT
-THE OTHER SIDE AND PRESS A KEY, flip the disk (or attach the side B
-disk image in your emulator) and press a key.
-
 In the heart chamber, Commander Vex is draining the Star Heart with
 his machine. A soldier guards the machine in the east gallery.
 
@@ -519,6 +516,10 @@ be reached with the lift, and a guard watches the way.
 =====================================================================
 CHAPTER 12: THE PRISON DECK
 =====================================================================
+From here on the game is on side B of the disk. When the game says
+INSERT THE OTHER SIDE AND PRESS A KEY, flip the disk (or attach the
+side B disk image in your emulator) and press a key.
+
 Uncle Edmund is in a cell. A guard with a keycard guards the control
 room.
 
