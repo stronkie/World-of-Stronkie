@@ -3,7 +3,7 @@ Adventure Game made for the Commodore 64
 
 Created By Mark Stronks
 
-**Current version: V1.5** — download both disk sides: `The_World_of_Stronkie_V1.5_sideA.d64` and `The_World_of_Stronkie_V1.5_sideB.d64`, or both at once in `The_World_of_Stronkie_V1.5.zip`
+**Current version: V1.6** — download both disk sides: `The_World_of_Stronkie_V1.6_sideA.d64` and `The_World_of_Stronkie_V1.6_sideB.d64`, or both at once in `The_World_of_Stronkie_V1.6.zip`
 
 Playing on real floppies? Print the black and white disk labels for side A and side B from the [`disk labels`](disk%20labels) folder (`Disk_Labels_A4.pdf` prints both at their real size, 3.5 x 1.5 inch).
 
@@ -53,7 +53,7 @@ The space chapters are full of nods to the classic adventure games: Space Quest,
 
 ### How to play
 
-1. Attach `The_World_of_Stronkie_V1.5_sideA.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE). Keep `The_World_of_Stronkie_V1.5_sideB.d64` ready: from chapter 9 on the game is on side B, and it will ask you to flip the disk.
+1. Attach `The_World_of_Stronkie_V1.6_sideA.d64` as drive 8 (real 1541, SD2IEC, or an emulator like VICE). Keep `The_World_of_Stronkie_V1.6_sideB.d64` ready: from chapter 9 on the game is on side B, and it will ask you to flip the disk.
 2. Type `LOAD"*",8` and then `RUN`.
 3. The main menu appears with music while the first chapter loads ("LOADING... PLEASE WAIT"). When loading is done the text changes to "N:NEW GAME  L:LOAD GAME" and the border flashes.
 4. Press `N` to start a new game, or `L` to continue your saved game. If there is no saved game on the disk, a new game starts.
@@ -160,6 +160,9 @@ The game is written in 6502 machine language (64tass-compatible assembler syntax
 - **Pictures:** drawn at 160×96 pixels in the 16 C64 colours and converted to C64 multicolour bitmap format. The main menu picture was converted from Mark's artwork to a full 160×200 multicolour screen.
 - **Music:** the main menu plays the SID tune "Contest Demo (part 4)", which the game calls 50 times a second from a raster interrupt. It also keeps playing while chapter 1 loads.
 - **Animations:** each room can have a list of up to 16 picture cells whose colours the raster interrupt changes in turn (colour cycling), so lights and stars move without any extra pictures. The title card of the next part is stored in the file of the part before it, so it can be shown while the next part loads.
+- **Moving sprites (V1.6):** bats, birds, comets, spaceships, clouds and butterflies fly through the pictures as hardware sprites. Every part's file brings its own sprite images, which the engine copies into the RAM under the I/O chips ($D000-$DFFF), plus a list of which sprites fly in which room.
+- **Raster effects (V1.6):** pictures with an open sky get a colour gradient: a raster interrupt changes the background colour at the start of every character row, so the sky fades from dark to light without using any of the cell colours. The status bar sits on a raster bar that changes colour line by line, in the colour of the current part.
+- **Title screen and credits (V1.6):** the main menu has a smooth scrolling text in the bottom row (the screen switches from bitmap to text mode just for that row) and a spaceship flying by. After the final part the end credits roll by with smooth scrolling and the title music. The code for both comes with the part files, so it doesn't take any room in the engine.
 - **In-game music and sound:** the engine has its own small 3-voice music player. Each part's file contains its own tune, so the music changes only when a new part is loaded. Sound effects borrow the third SID voice for a moment, while the music keeps playing on the other two.
 
 ### Credits
@@ -179,7 +182,9 @@ Memory map:
 | `$3C00-$3FFF` | in the program file: code for `$C000` (copied at start); afterwards a buffer for the menu rows, save games and the picture wipe |
 | `$4000-$BFFF` | menu picture or the current part (32 KB, BASIC ROM switched off); packed files are loaded just below `$C000` and unpacked to `$4000` |
 | `$C000-$C3FF` | title cards, colour cycling, flashes and the picture wipe |
-| `$C400` / `$C800` | screen memory / copy of the C64 font (VIC bank 3) |
+| `$CC00-$CFFF` | sprites, sky gradients and the raster bar (copied there at start) |
+| `$D000-$DFFF` | sprite images, in the RAM under the I/O chips |
+| `$C400` / `$C800` | screen memory / copy of the C64 font, characters 0-127 (VIC bank 3) |
 | `$D800` | colour memory |
 | `$E000-$FF3F` | bitmap under the KERNAL ROM (menu: full screen, in game: top 12 rows) |
 
@@ -187,6 +192,7 @@ Memory map:
 
 | Version | Date | Notes |
 |---|---|---|
+| V1.6 | 5 Nov 2026 | Graphics update: moving sprites, gradient skies, a raster bar behind the status bar, a scrolling title screen and rolling end credits |
 | V1.5 | 2 Nov 2026 | Act 3: four new chapters and an epilogue, a longer finale, choices that matter, a true ending, a maze and a companion |
 | V1.4 | 2 Nov 2026 | Jokes and secret commands about other games, Sierra-style death jokes, Astro Chicken high score; the game now uses two disk sides |
 | V1.3 | 2 Nov 2026 | Internal update for testing; the game itself is unchanged |
@@ -204,6 +210,14 @@ Memory map:
 | V0.01 | 2 Nov 2026 | First playable version (as "Stronkie's Quest", not published) |
 
 ## Change log
+
+### V1.6
+- Moving sprites in the pictures: bats over Ravenmoor, comets past the cockpit windows, spaceships over the docks and the launch pad, alien birds in the skies of Stronkie, clouds over the mountains, seagulls on the holodeck and butterflies in the garden at the end
+- Gradient skies: night skies, alien skies and snowy skies now fade from dark to light, using a raster interrupt for every character row
+- The status bar now sits on a raster bar in the colour of each part
+- Title screen: a scrolling text along the bottom of the main menu, and a spaceship flying by
+- Rolling end credits with the title music after you finish the game
+- The game plays exactly the same: same puzzles, same walkthrough, same 1070 points
 
 ### V1.5
 - A longer Star Heart finale: Vex flees into the catacombs, you trap him, and Uncle Edmund turns up to help you open the altar

@@ -2,7 +2,7 @@
                THE WORLD OF STRONKIE - COMPLETE WALKTHROUGH
                  All 1070 points, all 16 star fragments
                  and the true ending
-                     Created By Mark Stronks - V1.5
+                     Created By Mark Stronks - V1.6
 =====================================================================
 
 HOW TO USE THIS WALKTHROUGH
@@ -593,6 +593,9 @@ Back at Ravenmoor Manor, weeks later.
       STAR FRAGMENTS FOUND: 16 OF 16.
 
 THE WORLD OF STRONKIE WILL RETURN...
+
+Press a key and the end credits roll by, with the title music.
+Press a key again to go back to the main menu.
 
 
 =====================================================================
