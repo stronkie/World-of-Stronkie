@@ -7,6 +7,8 @@ Created By Mark Stronks
 
 New in V1.7: a printable manual with "feelies" in the style of the old Infocom boxes: [`The_World_of_Stronkie_Manual.pdf`](The_World_of_Stronkie_Manual.pdf) (A5 pages: a letter from Uncle Edmund, a map of the Ravenmoor estate, a blueprint of the STARRAVEN, a Space Port 42 leaflet, a 50 buckazoid note and a star fragment log).
 
+Lost in space? [`The_World_of_Stronkie_Map.jpg`](The_World_of_Stronkie_Map.jpg) is a map of the whole game: all 17 parts and 92 locations, every room with its picture from the game.
+
 Playing on real floppies? Print the black and white disk labels for side A and side B from the [`disk labels`](disk%20labels) folder (`Disk_Labels_A4.pdf` prints both at their real size, 3.5 x 1.5 inch).
 
 Older versions are in the `previous versions` folder.
