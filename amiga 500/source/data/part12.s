@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.1 (Amiga) - CHAPTER 9: THE STAR HEART
+;  THE WORLD OF STRONKIE V2.2 (Amiga) - CHAPTER 9: THE STAR HEART
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART12": vasm -Fbin -o part12.bin part12.s

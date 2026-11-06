@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.1 (Amiga) - PROLOGUE, PART 1: THE GROUNDS
+;  THE WORLD OF STRONKIE V2.2 (Amiga) - PROLOGUE, PART 1: THE GROUNDS
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART01": vasm -Fbin -o part01.bin part01.s

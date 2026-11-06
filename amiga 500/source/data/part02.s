@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.1 (Amiga) - PROLOGUE, PART 2: THE MANOR
+;  THE WORLD OF STRONKIE V2.2 (Amiga) - PROLOGUE, PART 2: THE MANOR
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART02": vasm -Fbin -o part02.bin part02.s

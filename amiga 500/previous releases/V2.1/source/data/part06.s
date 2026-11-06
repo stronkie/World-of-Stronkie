@@ -1,0 +1,693 @@
+;======================================================================
+;  THE WORLD OF STRONKIE V2.1 (Amiga) - CHAPTER 3: ASTEROID 42
+;  Created By Mark Stronks
+;
+;  Part file "PART06": vasm -Fbin -o part06.bin part06.s
+;  On the disk it is packed (zxpack); the engine unpacks it into its part buffer.
+;  All pointers are offsets from the start of the file.
+;======================================================================
+PIC_PAD         = $000000      ; picture "pad" in the blob
+PIC_PLAZA       = $0023d0      ; picture "plaza" in the blob
+PIC_BAR         = $005de6      ; picture "bar" in the blob
+PIC_STAN        = $00b2a0      ; picture "stan" in the blob
+PIC_ALLEY       = $00f54c      ; picture "alley" in the blob
+PIC_BACKROOM    = $015698      ; picture "backroom" in the blob
+
+base
+        dc.b "CHAP"
+        dc.b 6,1,6,21       ; part, start room, rooms, objects
+        dc.l rooms-base
+        dc.l objects-base
+        dc.l nouns-base
+        dc.l actions-base
+        dc.l messages-base
+        dc.l t_intro-base
+        dc.l song-base            ; music
+        dc.l t_title-base
+        dc.l t_short-base
+        dc.l card-base            ; title card of the next part
+        dc.l t_quip-base
+        dc.l actors-base, frames-base
+        dc.l map_data-base
+        dc.l t_save-base
+        dc.l 0            ; jingle (TUNE action)
+        dc.b 10,6
+        dc.w 0
+        dc.l speech-base                ; speech: message number -> sample (picture blob)
+rooms                                ; description, picture, exits N S E W U D
+        dc.l d1-base,PIC_PAD
+        dc.b 2,0,0,0,0,0,0,0      ; pad
+        dc.l d2-base,PIC_PLAZA
+        dc.b 5,1,4,3,0,0,0,0      ; plaza
+        dc.l d3-base,PIC_BAR
+        dc.b 0,0,2,0,0,0,0,0      ; bar
+        dc.l d4-base,PIC_STAN
+        dc.b 0,0,0,2,0,0,0,0      ; stan
+        dc.l d5-base,PIC_ALLEY
+        dc.b 0,2,0,0,0,0,0,0      ; alley
+        dc.l d6-base,PIC_BACKROOM
+        dc.b 0,5,0,0,0,0,0,0      ; backroom
+objects                              ; noun, place, flags, 0, name, examine text
+        dc.b 1,1,2,0
+        dc.l t0-base,t1-base
+        dc.b 2,1,2,0
+        dc.l t0-base,t2-base
+        dc.b 3,2,2,0
+        dc.l t0-base,t3-base
+        dc.b 4,2,1,0
+        dc.l t4-base,t5-base
+        dc.b 5,0,1,0
+        dc.l t6-base,t7-base
+        dc.b 6,0,1,0
+        dc.l t8-base,t9-base
+        dc.b 7,3,2,0
+        dc.l t0-base,t10-base
+        dc.b 8,3,2,0
+        dc.l t0-base,t11-base
+        dc.b 9,3,2,0
+        dc.l t0-base,t12-base
+        dc.b 10,3,2,0
+        dc.l t0-base,t13-base
+        dc.b 11,3,2,0
+        dc.l t0-base,t14-base
+        dc.b 12,3,2,0
+        dc.l t0-base,t15-base
+        dc.b 13,3,1,0
+        dc.l t16-base,t17-base
+        dc.b 3,4,2,0
+        dc.l t0-base,t18-base
+        dc.b 14,4,2,0
+        dc.l t0-base,t19-base
+        dc.b 15,0,1,0
+        dc.l t20-base,t21-base
+        dc.b 16,4,2,0
+        dc.l t0-base,t22-base
+        dc.b 17,0,1,0
+        dc.l t23-base,t24-base
+        dc.b 18,5,2,0
+        dc.l t0-base,t25-base
+        dc.b 19,5,2,0
+        dc.l t0-base,t26-base
+        dc.b 20,6,2,0
+        dc.l t0-base,t27-base
+nouns                                ; four letters + noun number, 0 = end
+        dc.b "SHIP",1
+        dc.b "STAR",1
+        dc.b "HATC",1
+        dc.b "GAUG",1
+        dc.b "TANK",1
+        dc.b "JANI",2
+        dc.b "ROGE",2
+        dc.b "MOP ",2
+        dc.b "STAN",3
+        dc.b "MONO",3
+        dc.b "KIOS",3
+        dc.b "BURG",4
+        dc.b "SAMP",4
+        dc.b "COIN",5
+        dc.b "BUCK",5
+        dc.b "CASH",6
+        dc.b "MONE",6
+        dc.b "GROG",7
+        dc.b "MUGS",7
+        dc.b "MUG ",7
+        dc.b "PIRA",8
+        dc.b "BAND",9
+        dc.b "GUYS",9
+        dc.b "STAG",9
+        dc.b "JUKE",10
+        dc.b "ARCA",11
+        dc.b "ASTR",11
+        dc.b "CABI",11
+        dc.b "GAME",11
+        dc.b "PHOT",12
+        dc.b "PICT",12
+        dc.b "FRAM",12
+        dc.b "WALL",12
+        dc.b "NAPK",13
+        dc.b "SALE",3
+        dc.b "JACK",3
+        dc.b "SHEL",14
+        dc.b "FUEL",15
+        dc.b "CELL",15
+        dc.b "BIN ",16
+        dc.b "BARG",16
+        dc.b "JUNK",16
+        dc.b "CHIC",17
+        dc.b "PULL",17
+        dc.b "MAN ",18
+        dc.b "LARR",18
+        dc.b "SUIT",18
+        dc.b "CHAI",18
+        dc.b "DOOR",19
+        dc.b "SLOT",20
+        dc.b "MACH",20
+        dc.b "REEL",20
+        dc.b "ARM ",20
+        dc.b "KEN ",21
+        dc.b "SENT",21
+        dc.b "SO  ",22
+        dc.b "LAMP",23
+        dc.b "FORC",24
+        dc.b 0
+actions                              ; verb, noun, length, conditions, actions, 0 ... $ff
+        dc.b $1a,$0d,$19,$04,$01,$02,$0d,$05,$00,$06,$38,$20,$01,$23,$0d,$00,$21,$38,$21,$08,$26,$05,$2b,$02,$00
+        dc.b $1a,$0d,$0a,$04,$01,$02,$0d,$20,$02,$00
+        dc.b $20,$02,$0c,$04,$01,$05,$00,$06,$38,$20,$03,$00
+        dc.b $2e,$0b,$14,$04,$03,$06,$01,$20,$04,$21,$01,$26,$05,$2b,$05,$2d,$02,$21,$39,$00
+        dc.b $1d,$0b,$14,$04,$03,$06,$01,$20,$04,$21,$01,$26,$05,$2b,$05,$2d,$02,$21,$39,$00
+        dc.b $2e,$0b,$08,$04,$03,$20,$05,$00
+        dc.b $0c,$0b,$0a,$04,$03,$05,$01,$20,$06,$00
+        dc.b $3d,$16,$06,$20,$07,$00
+        dc.b $0c,$0a,$0d,$04,$03,$06,$02,$20,$08,$21,$02,$2c,$00
+        dc.b $1c,$0a,$0d,$04,$03,$06,$02,$20,$08,$21,$02,$2c,$00
+        dc.b $08,$0a,$0d,$04,$03,$06,$02,$20,$08,$21,$02,$2c,$00
+        dc.b $20,$02,$0a,$04,$01,$06,$00,$20,$09,$00
+        dc.b $20,$02,$08,$04,$01,$20,$0a,$00
+        dc.b $20,$00,$08,$04,$01,$20,$0b,$00
+        dc.b $1a,$04,$16,$04,$01,$02,$04,$20,$0c,$23,$04,$00,$23,$05,$ff,$21,$00,$26,$0a,$2b,$02,$00
+        dc.b $1a,$00,$16,$04,$01,$02,$04,$20,$0c,$23,$04,$00,$23,$05,$ff,$21,$00,$26,$0a,$2b,$02,$00
+        dc.b $09,$02,$06,$20,$0d,$00
+        dc.b $26,$00,$09,$04,$01,$20,$0e,$29,$00
+        dc.b $0a,$0f,$13,$04,$01,$02,$10,$20,$0f,$23,$10,$00,$21,$03,$26,$0a,$2b,$0d,$00
+        dc.b $0f,$0f,$13,$04,$01,$02,$10,$20,$0f,$23,$10,$00,$21,$03,$26,$0a,$2b,$0d,$00
+        dc.b $29,$00,$13,$04,$01,$02,$10,$20,$0f,$23,$10,$00,$21,$03,$26,$0a,$2b,$0d,$00
+        dc.b $01,$01,$12,$04,$01,$05,$03,$02,$12,$20,$10,$26,$0a,$2b,$0a,$27,$07,$00
+        dc.b $34,$00,$12,$04,$01,$05,$03,$02,$12,$20,$10,$26,$0a,$2b,$0a,$27,$07,$00
+        dc.b $01,$01,$0a,$04,$01,$05,$03,$20,$11,$00
+        dc.b $34,$00,$0a,$04,$01,$05,$03,$20,$11,$00
+        dc.b $01,$01,$08,$04,$01,$20,$12,$00
+        dc.b $34,$00,$08,$04,$01,$20,$12,$00
+        dc.b $1e,$04,$08,$02,$04,$20,$13,$00
+        dc.b $09,$03,$06,$20,$14,$00
+        dc.b $1f,$07,$09,$04,$03,$20,$15,$29,$00
+        dc.b $09,$07,$08,$04,$03,$20,$16,$00
+        dc.b $20,$08,$08,$04,$03,$20,$17,$00
+        dc.b $20,$09,$08,$04,$03,$20,$18,$00
+        dc.b $30,$0b,$08,$04,$03,$20,$19,$00
+        dc.b $0f,$0b,$08,$04,$03,$20,$19,$00
+        dc.b $30,$0a,$08,$04,$03,$20,$1a,$00
+        dc.b $10,$0d,$0a,$02,$0d,$20,$1b,$21,$08,$00
+        dc.b $10,$0d,$0a,$01,$0d,$20,$1b,$21,$08,$00
+        dc.b $0c,$0d,$0a,$01,$0d,$20,$1b,$21,$08,$00
+        dc.b $09,$0c,$06,$20,$1c,$00
+        dc.b $20,$00,$08,$04,$04,$20,$1d,$00
+        dc.b $1a,$05,$0a,$04,$04,$02,$05,$20,$1e,$00
+        dc.b $1a,$00,$19,$04,$04,$02,$06,$20,$1f,$23,$06,$00,$23,$10,$ff,$23,$12,$ff,$21,$04,$26,$0a,$2b,$02,$00
+        dc.b $1a,$00,$0a,$04,$04,$06,$04,$20,$20,$00
+        dc.b $09,$0f,$0a,$04,$04,$06,$04,$20,$21,$00
+        dc.b $09,$11,$0a,$04,$04,$06,$04,$20,$22,$00
+        dc.b $1c,$10,$08,$04,$04,$20,$23,$00
+        dc.b $02,$00,$0a,$04,$05,$06,$05,$20,$24,$00
+        dc.b $2c,$15,$14,$04,$05,$06,$05,$20,$25,$21,$05,$25,$05,$00,$06,$26,$0a,$2b,$06,$00
+        dc.b $2c,$00,$0c,$04,$05,$06,$05,$20,$26,$2b,$04,$00
+        dc.b $20,$00,$0a,$04,$05,$06,$05,$20,$27,$00
+        dc.b $20,$00,$08,$04,$05,$20,$28,$00
+        dc.b $1a,$00,$08,$04,$05,$20,$29,$00
+        dc.b $2c,$00,$06,$20,$2a,$00
+        dc.b $0a,$05,$11,$04,$06,$02,$05,$20,$2b,$23,$05,$00,$21,$07,$2b,$04,$00
+        dc.b $30,$00,$11,$04,$06,$02,$05,$20,$2b,$23,$05,$00,$21,$07,$2b,$04,$00
+        dc.b $0f,$05,$11,$04,$06,$02,$05,$20,$2b,$23,$05,$00,$21,$07,$2b,$04,$00
+        dc.b $13,$00,$11,$04,$06,$02,$05,$20,$2b,$23,$05,$00,$21,$07,$2b,$04,$00
+        dc.b $2e,$14,$0d,$04,$06,$05,$06,$20,$2c,$2d,$06,$29,$00
+        dc.b $2e,$14,$15,$04,$06,$05,$07,$20,$2d,$23,$06,$ff,$21,$06,$26,$0a,$2b,$05,$2d,$04,$00
+        dc.b $1d,$14,$17,$04,$06,$05,$07,$06,$06,$20,$2d,$23,$06,$ff,$21,$06,$26,$0a,$2b,$05,$2d,$04,$00
+        dc.b $2e,$14,$08,$04,$06,$20,$2e,$00
+        dc.b $30,$00,$0a,$04,$06,$05,$06,$20,$2f,$00
+        dc.b $30,$00,$08,$04,$06,$20,$30,$00
+        dc.b $13,$00,$08,$04,$06,$20,$30,$00
+        dc.b $37,$00,$0a,$06,$00,$03,$04,$20,$31,$00
+        dc.b $37,$00,$08,$06,$00,$20,$32,$00
+        dc.b $37,$00,$0a,$06,$05,$06,$08,$20,$33,$00
+        dc.b $37,$00,$08,$06,$05,$20,$34,$00
+        dc.b $37,$00,$0a,$06,$07,$06,$06,$20,$35,$00
+        dc.b $37,$00,$08,$06,$06,$20,$36,$00
+        dc.b $37,$00,$08,$06,$04,$20,$37,$00
+        dc.b $37,$00,$08,$06,$03,$20,$38,$00
+        dc.b $37,$00,$06,$20,$39,$00
+        dc.b $45,$00,$06,$20,$3a,$00
+        dc.b $46,$00,$06,$20,$3b,$00
+        dc.b $47,$00,$06,$20,$3c,$00
+        dc.b $0f,$18,$06,$20,$3d,$00
+        dc.b $09,$17,$06,$20,$3e,$00
+        dc.b $22,$00,$06,$20,$3f,$00
+        dc.b $ff
+        even
+messages
+        dc.l m1-base
+        dc.l m2-base
+        dc.l m3-base
+        dc.l m4-base
+        dc.l m5-base
+        dc.l m6-base
+        dc.l m7-base
+        dc.l m8-base
+        dc.l m9-base
+        dc.l m10-base
+        dc.l m11-base
+        dc.l m12-base
+        dc.l m13-base
+        dc.l m14-base
+        dc.l m15-base
+        dc.l m16-base
+        dc.l m17-base
+        dc.l m18-base
+        dc.l m19-base
+        dc.l m20-base
+        dc.l m21-base
+        dc.l m22-base
+        dc.l m23-base
+        dc.l m24-base
+        dc.l m25-base
+        dc.l m26-base
+        dc.l m27-base
+        dc.l m28-base
+        dc.l m29-base
+        dc.l m30-base
+        dc.l m31-base
+        dc.l m32-base
+        dc.l m33-base
+        dc.l m34-base
+        dc.l m35-base
+        dc.l m36-base
+        dc.l m37-base
+        dc.l m38-base
+        dc.l m39-base
+        dc.l m40-base
+        dc.l m41-base
+        dc.l m42-base
+        dc.l m43-base
+        dc.l m44-base
+        dc.l m45-base
+        dc.l m46-base
+        dc.l m47-base
+        dc.l m48-base
+        dc.l m49-base
+        dc.l m50-base
+        dc.l m51-base
+        dc.l m52-base
+        dc.l m53-base
+        dc.l m54-base
+        dc.l m55-base
+        dc.l m56-base
+        dc.l m57-base
+        dc.l m58-base
+        dc.l m59-base
+        dc.l m60-base
+        dc.l m61-base
+        dc.l m62-base
+        dc.l m63-base
+m1
+        dc.b $11,"ROGER WIPES HIS FACE. 'A NAPKIN! NOBODY",$0d,"HAS EVER BEEN THIS NICE TO ME.' HE"
+        dc.b $0d,"READS IT: 'KEN SENT ME? WEIRD.' THEN HE",$0d,"GRINS: 'IF YOU EVER NEED A FAVOUR, PAL,"
+        dc.b $0d,"ROGER OWES YOU ONE!'",$0d,0
+m2
+        dc.b $11,"'A NAPKIN? I'D NEED SOMETHING TO EAT",$0d,"FIRST, PAL.'",$0d
+        dc.b 0
+m3
+        dc.b $11,"'THAT BURGER WAS A BIT MESSY,' ROGER",$0d,"SAYS, WIPING HIS CHIN. 'YOU WOULDN'T"
+        dc.b $0d,"HAVE A NAPKIN, WOULD YOU, PAL?'",$0d,0
+m4
+        dc.b $11,"YOU GIVE ASTRO CHICKEN A GOOD KICK. THE",$0d,"SCREEN FLICKERS, THE COUNTER SPINS..."
+        dc.b $0d,"NEW HIGH SCORE: 1000000! STRONKIE WILL",$0d,"BE FURIOUS.",$0d
+        dc.b 0
+m5
+        dc.b $11,"THE MACHINE BEEPS. YOU ALREADY BEAT",$0d,"STRONKIE. ONCE IS ENOUGH."
+        dc.b $0d,0
+m6
+        dc.b $11,"THE HIGH SCORE TABLE: 1. YOU 1000000.",$0d,"2. STRONKIE 999999. 3. ROGER 000042."
+        dc.b $0d,0
+m7
+        dc.b $11,"'MAKE IT SO!' YOU ORDER, IN YOUR BEST",$0d,"STARSHIP CAPTAIN VOICE. NOVA:"
+        dc.b $0d,"'ENGAGING... NOTHING, PILOT. I AM NOT",$0d,"THAT KIND OF STARSHIP.' YOU SHALL BE"
+        dc.b $0d,"MISSED, SIR PATRICK STEWART - OUR",$0d,"CAPTAIN JEAN-LUC PICARD OF STAR TREK."
+        dc.b $0d,"1940-2026.",$0d,0
+m8
+        dc.b $11,"BEHIND THE JUKEBOX SOMETHING",$0d,"GLITTERS... A TINY PIECE OF STARLIGHT!"
+        dc.b $0d,0
+m9
+        dc.b $11,"'NAME'S ROGER. JANITOR. I'VE SAVED THE",$0d,"UNIVERSE MORE TIMES THAN I CAN COUNT,"
+        dc.b $0d,"AND I STILL GET STUCK WITH THE MOP. AND",$0d,"I'M STARVING.'"
+        dc.b $0d,0
+m10
+        dc.b $11,"'THANKS FOR THE BURGER, PAL. GOOD LUCK",$0d,"OUT THERE!'",$0d
+        dc.b 0
+m11
+        dc.b $13,"NOVA: 'FIND US A FUEL CELL, PILOT. TRY",$0d,"THE SHOPS ON THE PLAZA.'"
+        dc.b $0d,0
+m12
+        dc.b $11,"ROGER WOLFS DOWN THE BURGER IN TWO",$0d,"BITES. 'THANKS, PAL! I HAVEN'T EATEN"
+        dc.b $0d,"SINCE THE SARIENS BLEW UP MY LAST SHIP.",$0d,"HERE, I FOUND THIS WHILE MOPPING.' HE"
+        dc.b $0d,"HANDS YOU A SHINY BUCKAZOID COIN. HE",$0d,"WIPES HIS CHIN ON HIS SLEEVE."
+        dc.b $0d,0
+m13
+        dc.b $11,"ROGER HUGS HIS MOP. 'GET YOUR OWN!'",$0d,0
+m14
+        dc.b $11,"THE GRAVITY ON ASTEROID 42 IS VERY LOW.",$0d,"YOU JUMP... AND KEEP GOING. AND GOING."
+        dc.b $0d,"THE LAST THING YOU HEAR IS ROGER: OOPS.",$0d,0
+m15
+        dc.b $11,"YOU PLUG THE FUEL CELL INTO THE",$0d,"STARRAVEN. THE GAUGE JUMPS TO FULL."
+        dc.b $0d,"NOVA: 'MMM, PREMIUM. THANK YOU, PILOT.",$0d,"READY WHEN YOU ARE.'"
+        dc.b $0d,0
+m16
+        dc.b $11,"YOU CLIMB ABOARD. NOVA: 'FUEL: FULL.",$0d,"CHICKEN: ON BOARD. COURSE: THE WORLD OF"
+        dc.b $0d,"STRONKIE.' THE STARRAVEN LIFTS OFF FROM",$0d,"ASTEROID 42. ON THE PAD, ROGER WAVES"
+        dc.b $0d,"HIS MOP GOODBYE...",$0d,0
+m17
+        dc.b $11,"STAN'S VOICE ECHOES ACROSS THE PAD:",$0d,"'HEY! DON'T FORGET YOUR FREE CHICKEN!'"
+        dc.b $0d,0
+m18
+        dc.b $13,"NOVA: 'THE TANK IS EMPTY, PILOT. WE",$0d,"WON'T GET OFF THIS ROCK WITHOUT A FUEL"
+        dc.b $0d,"CELL.'",$0d,0
+m19
+        dc.b $11,"YOU TAKE ONE TINY BITE. IT TASTES OF",$0d,"SPACE AND REGRET. MAYBE SOMEBODY"
+        dc.b $0d,"HUNGRIER WOULD LIKE IT.",$0d,0
+m20
+        dc.b $11,"IT IS BOLTED TO THE ASTEROID. TAKE A",$0d,"FREE SAMPLE INSTEAD."
+        dc.b $0d,0
+m21
+        dc.b $11,"YOU TAKE A BIG GULP OF GROG. IT MELTS",$0d,"THROUGH THE MUG, THROUGH YOUR TEETH,"
+        dc.b $0d,"AND THEN THROUGH THE REST OF YOU. NOW",$0d,"YOU KNOW WHY THE PIRATES ONLY SNIFF IT."
+        dc.b $0d,0
+m22
+        dc.b $11,"THE MUG IS MELTING IN YOUR HAND. YOU",$0d,"PUT IT BACK, QUICKLY."
+        dc.b $0d,0
+m23
+        dc.b $11,"ONE PIRATE LEANS OVER: 'GOING OUT INTO",$0d,"SPACE? WATCH OUT FOR CAPTAIN LECHUCKLE"
+        dc.b $0d,"AND HIS CREW. THEY DON'T FIGHT WITH",$0d,"SWORDS, THEY FIGHT WITH INSULTS. IF ONE"
+        dc.b $0d,"SAYS YOU FIGHT LIKE A DAIRY FARMER, YOU",$0d,"SAY: HOW APPROPRIATE, YOU FIGHT LIKE A"
+        dc.b $0d,"COW!'",$0d,0
+m24
+        dc.b $11,"'WE'RE THE TWO GUYS FROM ANDROMEDA! WE",$0d,"ALSO DO WEDDINGS, FUNERALS AND SPACE"
+        dc.b $0d,"QUESTS.'",$0d,0
+m25
+        dc.b $11,"YOU PLAY ASTRO CHICKEN. YOUR CHICKEN",$0d,"CRASHES AFTER THREE SECONDS. GAME OVER."
+        dc.b $0d,"THE HIGH SCORE STILL BELONGS TO",$0d,"STRONKIE: 999999. NOBODY KNOWS HOW HE"
+        dc.b $0d,"DID IT ON A C64. THE OLD MACHINE",$0d,"RATTLES. IT LOOKS AS IF IT COULD DO"
+        dc.b $0d,"WITH A GOOD KICK.",$0d,0
+m26
+        dc.b $11,"YOU PRESS A BUTTON. THE TWO GUYS FROM",$0d,"ANDROMEDA STOP PLAYING AND GLARE AT"
+        dc.b $0d,"YOU.",$0d,0
+m27
+        dc.b $11,"SCRIBBLED ON IT: 'LEFTY'S BACK ROOM.",$0d,"PASSWORD: KEN SENT ME. DON'T TELL"
+        dc.b $0d,"ANYONE. - L.'",$0d,0
+m28
+        dc.b $11,"THE BARMAN GROWLS. STRONKIE STAYS ON",$0d,"THE WALL UNTIL HE PAYS."
+        dc.b $0d,0
+m29
+        dc.b $11,"'WELCOME TO STAN'S PRE-OWNED STARSHIPS!",$0d,"EVERYTHING HERE WAS PRE-OWNED BY AT"
+        dc.b $0d,"LEAST SIX PIRATES! FUEL CELLS: 50",$0d,"BUCKAZOIDS. AND EVERY PURCHASE COMES"
+        dc.b $0d,"WITH A FREE GIFT!'",$0d,0
+m30
+        dc.b $11,"'ONE BUCKAZOID? THAT BUYS YOU... A",$0d,"HANDSHAKE.' STAN SHAKES YOUR HAND AND"
+        dc.b $0d,"GIVES THE COIN BACK.",$0d,0
+m31
+        dc.b $11,"STAN COUNTS THE BUCKAZOIDS TWICE. 'A",$0d,"PLEASURE DOING BUSINESS! ONE FUEL"
+        dc.b $0d,"CELL... AND BECAUSE I LIKE YOUR FACE, A",$0d,"FREE RUBBER CHICKEN WITH A PULLEY IN"
+        dc.b $0d,"THE MIDDLE! WHO KNOWS WHEN YOU'LL NEED",$0d,"ONE?'",$0d,0
+m32
+        dc.b $11,"'FIFTY BUCKAZOIDS, FRIEND. NOT A",$0d,"BUCKAZOID LESS!'",$0d
+        dc.b 0
+m33
+        dc.b $11,"STAN JUMPS IN FRONT OF THE SHELF. 'WHOA",$0d,"THERE! THAT'S 50 BUCKAZOIDS. NO MONEY,"
+        dc.b $0d,"NO FUEL. NO EXCEPTIONS!'",$0d,0
+m34
+        dc.b $11,"'THAT'S NOT FOR SALE! IT'S A FREE",$0d,"GIFT... WITH EVERY PURCHASE!'"
+        dc.b $0d,0
+m35
+        dc.b $11,"BROKEN DROIDS, ONE LEFT SPACE BOOT AND",$0d,"A RUBBER CHICKEN WITH A PULLEY IN THE"
+        dc.b $0d,"MIDDLE.",$0d,0
+m36
+        dc.b $11,"THE MAN IN THE LEISURE SUIT STEPS IN",$0d,"FRONT OF THE DOOR. 'NOT SO FAST. WHAT'S"
+        dc.b $0d,"THE PASSWORD?'",$0d,0
+m37
+        dc.b $11,"THE MAN IN THE LEISURE SUIT GRINS AND",$0d,"STRAIGHTENS HIS GOLD CHAIN. 'KEN SENT"
+        dc.b $0d,"YOU, EH? ANY FRIEND OF KEN'S IS A",$0d,"FRIEND OF LARRY'S.' HE OPENS THE DOOR"
+        dc.b $0d,"TO THE NORTH.",$0d,0
+m38
+        dc.b $11,"'WRONG PASSWORD, PAL. NOBODY GETS INTO",$0d,"LEFTY'S WITHOUT THE PASSWORD.'"
+        dc.b $0d,0
+m39
+        dc.b $11,"'NAME'S LARRY. LARRY LAFFER. I'M NOT A",$0d,"BOUNCER, I'M JUST... WAITING FOR"
+        dc.b $0d,"SOMEONE. ANYWAY. WHAT'S THE PASSWORD?'",$0d,0
+m40
+        dc.b $11,"'GOOD LUCK IN THERE. THAT MACHINE HAS",$0d,"EATEN MY LAST TWELVE BUCKAZOIDS.'"
+        dc.b $0d,0
+m41
+        dc.b $11,"LARRY SHAKES HIS HEAD. 'NO THANKS, I'M",$0d,"WATCHING MY FIGURE.'"
+        dc.b $0d,0
+m42
+        dc.b $11,"NOBODY PAYS ANY ATTENTION. THIS IS",$0d,"ASTEROID 42.",$0d,0
+m43
+        dc.b $11,"YOU DROP THE BUCKAZOID INTO SLOTS-O-",$0d,"DEATH AND PULL THE ARM. THE REELS"
+        dc.b $0d,"SPIN... SKULL. SKULL. CHERRY. THE",$0d,"MACHINE BURPS AND KEEPS YOUR COIN. FROM"
+        dc.b $0d,"THE ALLEY YOU HEAR LARRY SNIGGER.",$0d,0
+m44
+        dc.b $11,"SLOTS-O-DEATH KICKS BACK. HARD. IT",$0d,"LIVES UP TO ITS NAME."
+        dc.b $0d,0
+m45
+        dc.b $11,"YOU GIVE SLOTS-O-DEATH A GOOD KICK.",$0d,"CLANG! THE REELS SPIN: STAR, STAR,"
+        dc.b $0d,"STAR. JACKPOT! FIFTY BUCKAZOIDS RAIN",$0d,"INTO THE TRAY. YOU SCOOP THEM UP."
+        dc.b $0d,0
+m46
+        dc.b $11,"THE MACHINE GROWLS AT YOU. IT ONLY",$0d,"RESPECTS PAYING CUSTOMERS."
+        dc.b $0d,0
+m47
+        dc.b $11,"YOU'VE PUSHED YOUR LUCK ENOUGH. THE",$0d,"SKULLS ON THE REELS ARE WATCHING YOU."
+        dc.b $0d,0
+m48
+        dc.b $11,"YOU NEED A COIN TO PLAY.",$0d,0
+m49
+        dc.b $11,"ROGER THE JANITOR LOOKS HUNGRY. THE",$0d,"BURGER STAND ON THE PLAZA GIVES OUT"
+        dc.b $0d,"FREE SAMPLES.",$0d,0
+m50
+        dc.b $11,"GIVE THE BURGER TO ROGER ON THE LANDING",$0d,"PAD.",$0d,0
+m51
+        dc.b $11,"THE MAN IN THE ALLEY WANTS A PASSWORD.",$0d,"TAKE A GOOD LOOK AROUND THE SCUMM BAR."
+        dc.b $0d,0
+m52
+        dc.b $11,"GO TO THE ALLEY AND SAY THE PASSWORD:",$0d,"KEN SENT ME.",$0d
+        dc.b 0
+m53
+        dc.b $11,"PUT THE BUCKAZOID IN THE SLOT MACHINE",$0d,"IN LEFTY'S BACK ROOM."
+        dc.b $0d,0
+m54
+        dc.b $11,"THE SLOT MACHINE ATE YOUR COIN. OLD",$0d,"MACHINES LIKE THAT NEED A GOOD KICK."
+        dc.b $0d,0
+m55
+        dc.b $11,"BUY A FUEL CELL AT STAN'S.",$0d,0
+m56
+        dc.b $11,"PUT THE FUEL CELL INTO THE STARRAVEN ON",$0d,"THE LANDING PAD."
+        dc.b $0d,0
+m57
+        dc.b $11,"ENTER THE SHIP AND FLY ON TOWARDS",$0d,"STRONKIE.",$0d,0
+m58
+        dc.b $11,"A HOLLOW VOICE SAYS: WRONG GAME. THIS",$0d,"ISN'T COLOSSAL CAVE."
+        dc.b $0d,0
+m59
+        dc.b $11,"GOD MODE? NICE TRY. THIS IS A COMMODORE",$0d,"64, NOT A 486."
+        dc.b $0d,0
+m60
+        dc.b $11,"THAT'S THE ANSWER TO LIFE, THE UNIVERSE",$0d,"AND EVERYTHING. BUT WHAT WAS THE"
+        dc.b $0d,"QUESTION?",$0d,0
+m61
+        dc.b $11,"YOU WAVE YOUR HAND. THESE AREN'T THE",$0d,"COMMANDS YOU'RE LOOKING FOR."
+        dc.b $0d,0
+m62
+        dc.b $11,"THERE IS NO LAMP HERE. THIS ISN'T ZORK,",$0d,"YOU KNOW. BUT WATCH OUT FOR GRUES"
+        dc.b $0d,"ANYWAY.",$0d,0
+m63
+        dc.b $11,"TYPE COMMANDS LIKE TAKE KEY, OPEN DOOR,",$0d,"EXAMINE MAT, N S E W U D, L = LOOK,"
+        dc.b $0d,"I = INVENTORY, TAKE ALL, DROP ALL,",$0d,"G = AGAIN, SCORE, MAP, SAVE, LOAD, QUIT"
+        dc.b $0d,"F1 LOAD  F3 SAVE  F5 MUSIC  F7 QUIT",$0d,"THREE SAVE SLOTS: PRESS 1, 2 OR 3."
+        dc.b $0d,"HINT GIVES A CLUE BUT COSTS 3 POINTS.",$0d,"FIND THE 16 HIDDEN STAR FRAGMENTS!"
+        dc.b $0d,0
+t_intro
+        dc.b $11,"THE STARRAVEN RACES AWAY FROM KX-9...",$0d,"AND THEN THE ENGINES COUGH. NOVA: 'THAT"
+        dc.b $0d,"HYPERJUMP DRAINED OUR FUEL CELLS,",$0d,"PILOT. THE NEAREST FUEL IS ON ASTEROID"
+        dc.b $0d,"42, THE MOST WRETCHED HIVE OF SCUM AND",$0d,"VILLAINY THIS SIDE OF ANDROMEDA. DON'T"
+        dc.b $0d,"PANIC. AND HOLD ON TO YOUR TOWEL.'",$0d,$0d,0
+t_title
+        dc.b $17,$0d,"CHAPTER 3: ASTEROID 42",$0d,$0d,0
+t_short
+        dc.b "CHAPTER 3",0
+t_quip
+        dc.b $17,"ROGER THE JANITOR WILL MOP YOU UP",$0d,"LATER. THANK YOU FOR PLAYING!"
+        dc.b $0d,0
+d1
+        dc.b $1d,"YOU ARE ON LANDING PAD 42 OF A DUSTY",$0d,"ASTEROID SPACE PORT. THE STARRAVEN"
+        dc.b $0d,"STANDS HERE WITH ITS FUEL HATCH OPEN. A",$0d,"JANITOR IS MOPPING THE PAD. THE PORT"
+        dc.b $0d,"LIES NORTH.",$0d,0
+d2
+        dc.b $1d,"YOU ARE ON THE PLAZA OF SPACE PORT 42.",$0d,"THE SCUMM BAR IS WEST, STAN'S PRE-OWNED"
+        dc.b $0d,"STARSHIPS EAST, A DARK ALLEY NORTH. A",$0d,"MONOLITH BURGER STAND HANDS OUT FREE"
+        dc.b $0d,"SAMPLES.",$0d,0
+d3
+        dc.b $1d,"YOU ARE IN THE SCUMM BAR. PIRATES SWAP",$0d,"STORIES OVER MUGS OF BUBBLING GROG. ON"
+        dc.b $0d,"STAGE THE TWO GUYS FROM ANDROMEDA PLAY",$0d,"FOR NOBODY. THERE IS A JUKEBOX, AN"
+        dc.b $0d,"ASTRO CHICKEN ARCADE GAME AND A FRAMED",$0d,"PHOTO ON THE WALL."
+        dc.b $0d,0
+d4
+        dc.b $1d,"YOU ARE IN STAN'S PRE-OWNED STARSHIPS.",$0d,"STAN, IN A VERY LOUD JACKET, WAVES HIS"
+        dc.b $0d,"ARMS AT YOU. FUEL CELLS GLOW ON A",$0d,"SHELF. A BARGAIN BIN SAYS: SALE."
+        dc.b $0d,0
+d5
+        dc.b $1d,"YOU ARE IN A DARK BACK ALLEY. A MAN IN",$0d,"A WHITE POLYESTER LEISURE SUIT LEANS"
+        dc.b $0d,"AGAINST A DOOR MARKED LEFTY'S. HE",$0d,"SMELLS OF CHEAP AFTERSHAVE."
+        dc.b $0d,0
+d6
+        dc.b $1d,"YOU ARE IN LEFTY'S BACK ROOM. ONE BARE",$0d,"BULB LIGHTS AN OLD SLOT MACHINE: SLOTS-"
+        dc.b $0d,"O-DEATH. A SIGN SAYS: NO REFUNDS. NO",$0d,"SURVIVORS.",$0d,0
+t0
+        dc.b 0
+t1
+        dc.b $11,"THE FUEL HATCH IS OPEN. THE GAUGE",$0d,"READS: EMPTY. NOT EVEN FUMES."
+        dc.b $0d,0
+t2
+        dc.b $11,"HIS NAME TAG SAYS: ROGER W., JANITOR,",$0d,"2ND CLASS. HE LOOKS LIKE A MAN WHO HAS"
+        dc.b $0d,"SAVED THE GALAXY A FEW TIMES AND GOT A",$0d,"MOP FOR IT. HIS STOMACH RUMBLES."
+        dc.b $0d,0
+t3
+        dc.b $11,"MONOLITH BURGER - NOW WITH 2001 SECRET",$0d,"SAUCES! A SIGN SAYS: FREE SAMPLES. TAKE"
+        dc.b $0d,"ONE.",$0d,0
+t4
+        dc.b "A FREE SAMPLE BURGER",0
+t5
+        dc.b $11,"A SMALL GREY BURGER. IT IS STILL",$0d,"TWITCHING A LITTLE."
+        dc.b $0d,0
+t6
+        dc.b "A BUCKAZOID COIN",0
+t7
+        dc.b $11,"ONE SHINY BUCKAZOID. NOT ENOUGH FOR",$0d,"FUEL, BUT IT'S A START."
+        dc.b $0d,0
+t8
+        dc.b "FIFTY BUCKAZOIDS",0
+t9
+        dc.b $11,"FIFTY SHINY BUCKAZOIDS. ENOUGH FOR A",$0d,"FUEL CELL!",$0d,0
+t10
+        dc.b $11,"GROG: KEROSENE, RUM, BATTERY ACID AND A",$0d,"DASH OF PEPPERONI. IT IS SLOWLY EATING"
+        dc.b $0d,"THROUGH THE MUGS.",$0d,0
+t11
+        dc.b $11,"THREE IMPORTANT-LOOKING PIRATES. THEY",$0d,"ARE TOO BUSY WITH THEIR GROG TO PILLAGE"
+        dc.b $0d,"ANYTHING.",$0d,0
+t12
+        dc.b $11,"TWO GUYS IN HAWAIIAN SHIRTS. A BANNER",$0d,"SAYS: THE TWO GUYS FROM ANDROMEDA -"
+        dc.b $0d,"TONIGHT ONLY. AND EVERY OTHER NIGHT.",$0d,0
+t13
+        dc.b $11,"AN OLD JUKEBOX. EVERY BUTTON PLAYS THE",$0d,"SAME SONG.",$0d
+        dc.b 0
+t14
+        dc.b $11,"ASTRO CHICKEN! THE HIGH SCORE TABLE: 1.",$0d,"STRONKIE 999999. 2. ROGER 000042. 3."
+        dc.b $0d,"LARRY 000001.",$0d,0
+t15
+        dc.b $11,"A SIGNED PHOTO: 'TO THE SCUMM BAR -",$0d,"THANKS FOR ALL THE GROG! MARK STRONKS"
+        dc.b $0d,"AKA STRONKIE.' UNDER IT A NOTE:",$0d,"STRONKIE STILL OWES US 3 BUCKAZOIDS."
+        dc.b $0d,0
+t16
+        dc.b "A GREASY NAPKIN",0
+t17
+        dc.b $11,"SCRIBBLED ON IT: 'LEFTY'S BACK ROOM.",$0d,"PASSWORD: KEN SENT ME. DON'T TELL"
+        dc.b $0d,"ANYONE. - L.'",$0d,0
+t18
+        dc.b $11,"STAN NEVER STOPS WAVING HIS ARMS. HIS",$0d,"JACKET COULD BLIND A SARIEN AT FIFTY"
+        dc.b $0d,"PACES.",$0d,0
+t19
+        dc.b $11,"SIX GLOWING FUEL CELLS. A PRICE TAG",$0d,"SAYS: 50 BUCKAZOIDS EACH."
+        dc.b $0d,0
+t20
+        dc.b "A FUEL CELL",0
+t21
+        dc.b $11,"A GLOWING GREEN FUEL CELL. ENOUGH TO",$0d,"GET YOU TO STRONKIE."
+        dc.b $0d,0
+t22
+        dc.b $11,"A BIN FULL OF JUNK. ON TOP LIES A",$0d,"RUBBER CHICKEN WITH A PULLEY IN THE"
+        dc.b $0d,"MIDDLE.",$0d,0
+t23
+        dc.b "A RUBBER CHICKEN WITH A PULLEY IN THE MIDDLE",0
+t24
+        dc.b $11,"A RUBBER CHICKEN WITH A PULLEY IN THE",$0d,"MIDDLE. WHAT COULD IT POSSIBLY BE FOR?"
+        dc.b $0d,0
+t25
+        dc.b $11,"WHITE POLYESTER LEISURE SUIT, GOLD",$0d,"CHAIN, HOPEFUL SMILE. 'HEY THERE."
+        dc.b $0d,"WHAT'S THE PASSWORD?'",$0d,0
+t26
+        dc.b $11,"A DOOR MARKED LEFTY'S.",$0d,0
+t27
+        dc.b $11,"SLOTS-O-DEATH. THREE REELS FULL OF",$0d,"SKULLS AND ONE COIN SLOT. A STICKER"
+        dc.b $0d,"SAYS: KICKING THIS MACHINE IS STRICTLY",$0d,"FORBIDDEN.",$0d
+        dc.b 0
+t_save
+        dc.b "SAVE1-ASTEROID42",0
+map_data                             ; 1-8 / $81-$88 = room label, $0e = label end, $60/$62 lines
+        dc.b $17,$4d,$41,$50,$3a,$20,$41,$53,$54,$45,$52,$4f,$49,$44,$20,$34,$32,$0d,$1f,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$86,$42
+        dc.b $41,$43,$4b,$52,$4f,$4f,$4d,$0e,$0d,$1f,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$86,$62,$0e,$0d,$1f,$20,$20,$20
+        dc.b $20,$20,$20,$20,$20,$20,$20,$20,$20,$05,$41,$4c,$4c,$45,$59,$0e,$0d,$1f,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
+        dc.b $62,$0d,$1f,$20,$20,$20,$03,$42,$41,$52,$0e,$60,$60,$60,$60,$60,$60,$02,$50,$4c,$41,$5a,$41,$0e,$60,$60,$60,$60,$60,$04,$53,$54
+        dc.b $41,$4e,$27,$53,$0e,$0d,$1f,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$62,$0d,$1f,$20,$20,$20,$20,$20,$20,$20,$20
+        dc.b $20,$20,$20,$20,$01,$50,$41,$44,$20,$34,$32,$0e,$0d,$00
+        even
+song
+        dc.w 3                  ; voices
+        dc.b $40,$08,$00,$04     ; waveform, attack/decay, sustain/release, pulse
+        dc.b $40,$2a,$89,$02     ; waveform, attack/decay, sustain/release, pulse
+        dc.b $80,$00,$00,$00     ; waveform, attack/decay, sustain/release, pulse
+        dc.l song_v1-base
+        dc.l song_v2-base
+        dc.l song_v3-base
+song_v1
+        dc.b $19,$12,$19,$06,$00,$0c,$20,$0c,$23,$0c,$25,$0c,$20,$0c,$1c,$0c,$19,$12,$19,$06,$00,$0c,$20,$0c,$23,$0c,$25,$0c,$20,$0c,$1c,$0c
+        dc.b $1e,$12,$1e,$06,$00,$0c,$19,$0c,$1c,$0c,$2a,$0c,$19,$0c,$21,$0c,$1e,$12,$1e,$06,$00,$0c,$19,$0c,$1c,$0c,$2a,$0c,$19,$0c,$21,$0c
+        dc.b $21,$12,$21,$06,$00,$0c,$1c,$0c,$20,$0c,$2d,$0c,$1c,$0c,$19,$0c,$20,$12,$20,$06,$00,$0c,$1b,$0c,$1e,$0c,$2c,$0c,$1b,$0c,$24,$0c
+        dc.b $19,$12,$19,$06,$00,$0c,$20,$0c,$23,$0c,$25,$0c,$20,$0c,$1c,$0c,$20,$12,$20,$06,$00,$0c,$1b,$0c,$1e,$0c,$2c,$0c,$1b,$0c,$24,$0c
+        dc.b $ff
+song_v2
+        dc.b $38,$12,$3b,$06,$3d,$18,$40,$0c,$3d,$0c,$3b,$18,$38,$0c,$36,$0c,$34,$18,$31,$30,$36,$12,$39,$06,$3d,$18,$40,$0c,$42,$0c,$40,$18
+        dc.b $3d,$0c,$39,$0c,$36,$18,$00,$30,$40,$12,$3f,$06,$3d,$18,$39,$18,$3d,$18,$3c,$18,$3f,$18,$44,$24,$42,$0c,$40,$0c,$3f,$0c,$3d,$0c
+        dc.b $3b,$0c,$38,$18,$3d,$18,$3f,$18,$3c,$18,$38,$30,$ff
+song_v3
+        dc.b $55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06
+        dc.b $55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06
+        dc.b $55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06
+        dc.b $55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06
+        dc.b $55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06
+        dc.b $55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06
+        dc.b $55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06
+        dc.b $55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06,$55,$06,$00,$06,$5c,$06,$00,$06
+        dc.b $ff
+        even
+actors                               ; moving sprites per room
+;       room, sprites, first image, images, image delay, move delay, dx, dy
+;       x, y (C64 sprite coordinates), height in lines, colours 1-3
+        dc.b 1,2,0,1,8,2,1,0
+        dc.w 44,57,10,$445,$889,$ccd
+        dc.b 0
+        even
+frames                               ; offsets of the sprite images
+        dc.l fr0-base
+fr0                              ; "shuttle": 2 sprite(s), 10 lines
+        dc.w $0000,$0000,$0000,$003e,$003e,$007f,$107f,$08ff,$30ff,$0fff,$63ff,$1fff,$e3ff,$1fff,$63ff,$1fff
+        dc.w $3000,$0fff,$1000,$0820
+        dc.w $0000,$0000,$0000,$0000,$0000,$e000,$e000,$fe00,$ff00,$ffe0,$fff0,$1ffc,$fffc,$0ffe,$fff8,$fffc
+        dc.w $0000,$ffe0,$0000,$0800
+speech                               ; message number, 0, offset of the sample in the blob
+        dc.w 7,0
+        dc.l $01a522             ; NOVA: Engaging... nothing, pilot. i am not tha
+        dc.w 11,0
+        dc.l $01d55c             ; NOVA: Find us a fuel cell, pilot. try the shop
+        dc.w 15,0
+        dc.l $020360             ; NOVA: Mmm, premium. thank you, pilot. ready wh
+        dc.w 16,0
+        dc.l $023516             ; NOVA: Fuel: full. chicken: on board. course: t
+        dc.w 18,0
+        dc.l $024f7e             ; NOVA: The tank is empty, pilot. we won't get o
+        dc.w 0
+card                                 ; next part: kind, name, spoken title (in the blob)
+        dc.l card_k-base,card_n-base
+        dc.l $0265b6             ; "Chapter 4. Space Pirates"
+card_k
+        dc.b "CHAPTER 4",0
+card_n
+        dc.b "SPACE PIRATES",0
+        even
+        even
+part_end

@@ -56,7 +56,7 @@ video_on
         move.w  DMACONR(a5),old_dma
         move.w  #$8000|$0200|$0100|$0080|$0040|$0020,DMACON(a5)   ; bitplanes, copper, blitter, sprites
         bsr     clear_sprites
-        lea     cop_game,a0
+        move.l  p_cop_game,a0
         bra     set_copper
 
 video_off
@@ -128,7 +128,7 @@ vbl_off
         rts
 
 vbl_server
-        movem.l d2-d7/a2-a4,-(sp)
+        movem.l d2-d7/a2-a6,-(sp)
         addq.l  #1,frames
         bsr     sound_tick
         tst.b   cop_mode
@@ -146,7 +146,7 @@ vbl_server
 .fs     cmp.b   #2,cop_mode
         bne   .done
         bsr     menu_tick           ; title screen: bars, scroller, spaceship
-.done   movem.l (sp)+,d2-d7/a2-a4
+.done   movem.l (sp)+,d2-d7/a2-a6
         lea     CUSTOM,a0           ; (Kickstart 1.x wants a0 = custom chips here)
         moveq   #0,d0               ; Z=1: the next server runs too
         rts
@@ -273,7 +273,7 @@ CWAIT   macro                       ; line (0-255)
         endm
 
 make_game_copper
-        lea     cop_game,a0
+        move.l  p_cop_game,a0
         CMOVE   DIWSTRT,#$1a81
         CMOVE   DIWSTOP,#$2dc1
         CMOVE   DDFSTRT,#$0038
@@ -285,7 +285,7 @@ make_game_copper
         CMOVE   BPL2MOD,#120
         move.l  a0,cop_g_spr
         bsr     cop_sprites
-        move.l  #status_bm,d0       ; status bar: 4 bitplanes
+        move.l  p_status_bm,d0       ; status bar: 4 bitplanes
         moveq   #4,d1
         move.l  #40,d2
         bsr     cop_planes
@@ -313,7 +313,7 @@ make_game_copper
         CMOVE   COLOR00,#$000
         CMOVE   BPL1MOD,#160
         CMOVE   BPL2MOD,#160
-        move.l  #pic_bm,d0          ; the picture: 5 bitplanes
+        move.l  p_pic_bm,d0          ; the picture: 5 bitplanes
         moveq   #5,d1
         moveq   #40,d2
         bsr     cop_planes
@@ -350,7 +350,7 @@ make_game_copper
         CMOVE   COLOR00,#$000
         CMOVE   BPL1MOD,#120
         CMOVE   BPL2MOD,#120
-        move.l  #text_bm,d0
+        move.l  p_text_bm,d0
         moveq   #4,d1
         moveq   #40,d2
         bsr     cop_planes
@@ -361,7 +361,7 @@ make_game_copper
         rts
 
 cop_sprites                         ; a0 = copper: pointers of the 8 sprites
-        move.l  #spr_bufs,d0
+        move.l  p_spr_bufs,d0
         move.w  #SPR0PT,d1
         moveq   #7,d3
 .lp     move.w  d1,(a0)+
@@ -402,7 +402,7 @@ cop_textpal                         ; colours 1-15: the C64 colours
         rts
 
 clear_sprites
-        lea     spr_bufs,a0
+        move.l  p_spr_bufs,a0
         move.w  #8*SPR_BUF/4-1,d0
 .c      clr.l   (a0)+
         dbf     d0,.c
@@ -418,7 +418,7 @@ game_screen
         bsr     clear_pic_area
         bsr     clear_text
         clr.b   cop_mode
-        lea     cop_game,a0
+        move.l  p_cop_game,a0
         bra     set_copper
 
 clear_pic_area
@@ -426,7 +426,7 @@ clear_pic_area
         clr.w   ncyc
         clr.w   fade
         move.b  #1,pal_dirty
-        lea     pic_bm,a0
+        move.l  p_pic_bm,a0
         move.w  #PIC_BYTES/16-1,d0
 .c      clr.l   (a0)+
         clr.l   (a0)+
@@ -436,7 +436,7 @@ clear_pic_area
         rts
 
 clear_text
-        lea     text_bm,a0
+        move.l  p_text_bm,a0
         move.w  #72*160/4-1,d0
 .c      clr.l   (a0)+
         dbf     d0,.c
@@ -471,7 +471,8 @@ putchar                             ; d0 = character (preserves everything but d
 .chr    movem.l d2-d4,-(sp)
         moveq   #0,d1
         move.b  out_col,d1
-        lea     text_bm+7*8*160,a0  ; the last text row
+        move.l  p_text_bm,a0  ; the last text row
+        add.l   #7*8*160,a0
         add.w   d1,a0
         moveq   #0,d2
         move.b  cur_col,d2
@@ -512,10 +513,10 @@ scroll_text                         ; the window moves_cnt up 8 lines, smoothly
         move.l  #-1,BLTAFWM(a1)
         move.w  d2,d0
         mulu    #160,d0
-        lea     text_bm,a0
+        move.l  p_text_bm,a0
         add.l   d0,a0
         move.l  a0,BLTAPT(a1)
-        move.l  #text_bm,BLTDPT(a1)
+        move.l  p_text_bm,BLTDPT(a1)
         clr.l   BLTAMOD(a1)         ; A and D modulo 0
         move.w  #64,d0
         sub.w   d2,d0
@@ -528,7 +529,7 @@ scroll_text                         ; the window moves_cnt up 8 lines, smoothly
         move.w  #64,d0
         sub.w   d2,d0
         mulu    #160,d0
-        lea     text_bm,a0
+        move.l  p_text_bm,a0
         add.l   d0,a0
         move.l  a0,BLTDPT(a1)
         move.w  d2,d0
@@ -618,7 +619,8 @@ text_at                             ; a0 = bitmap position, a1 = text, d2 = colo
 
 input_char                          ; d0 = character, d1 = column, d2 = colour (input line)
         movem.l d2-d4,-(sp)
-        lea     text_bm+64*160,a0
+        move.l  p_text_bm,a0
+        add.l   #64*160,a0
         add.w   d1,a0
         moveq   #4,d3
         move.w  #160,d4
@@ -627,7 +629,8 @@ input_char                          ; d0 = character, d1 = column, d2 = colour (
         rts
 
 clear_input_row
-        lea     text_bm+64*160,a0
+        move.l  p_text_bm,a0
+        add.l   #64*160,a0
         move.w  #8*160/4-1,d0
 .c      clr.l   (a0)+
         dbf     d0,.c
@@ -636,7 +639,8 @@ clear_input_row
 more_prompt
         bsr     clear_input_row
         movem.l d2-d5,-(sp)
-        lea     text_bm+64*160,a0
+        move.l  p_text_bm,a0
+        add.l   #64*160,a0
         lea     m_more,a1
         moveq   #INCOL,d2
         moveq   #4,d3
@@ -650,7 +654,7 @@ more_prompt
 ; ---- status bar: part, star fragments, score, moves_cnt ---------------------
 draw_status
         movem.l d2-d7/a2,-(sp)
-        lea     status_bm,a0
+        move.l  p_status_bm,a0
         move.w  #9*160/4-1,d0
 .c      clr.l   (a0)+
         dbf     d0,.c
@@ -703,7 +707,7 @@ draw_status
         move.b  (a0)+,(a1)+
         move.b  (a0)+,(a1)+
         move.b  (a0)+,(a1)+
-        lea     status_bm,a0        ; draw them, white
+        move.l  p_status_bm,a0        ; draw them, white
         moveq   #39,d7
         moveq   #1,d2
         moveq   #4,d3
@@ -969,7 +973,7 @@ draw_picture                        ; a0 = picture block
         move.l  #$09f00000,BLTCON0(a1)
         move.l  #-1,BLTAFWM(a1)
         move.l  a3,BLTAPT(a1)
-        move.l  #pic_bm,BLTDPT(a1)
+        move.l  p_pic_bm,BLTDPT(a1)
         clr.l   BLTAMOD(a1)
         move.w  #(960<<6)|20,BLTSIZE(a1)
         move.l  a4,a0
@@ -1302,7 +1306,7 @@ actor_sprites                       ; a2 = actor: image -> its sprite buffers
         moveq   #0,d5
         move.b  AC_SLOT(a2),d5
         mulu    #SPR_BUF,d5
-        lea     spr_bufs,a1
+        move.l  p_spr_bufs,a1
         add.l   d5,a1
         moveq   #0,d6
         move.b  AC_NCOL(a2),d6
@@ -1409,7 +1413,7 @@ fs_line                             ; d0 = line 0-255 -> a0 = its copper entry (
 .x      rts
 
 fs_clear                            ; clear the full screen bitmap
-        lea     fs_bm,a0
+        move.l  p_fs_bm,a0
         move.w  #FS_LINES*40/16-1,d0
 .c      clr.l   (a0)+
         clr.l   (a0)+
@@ -1444,7 +1448,7 @@ show_menu
         ; the picture: 4 bitplanes into planes 0-3 of the 5 plane bitmap
         move.l  4(a2),a0
         add.l   a2,a0
-        lea     fs_bm,a1
+        move.l  p_fs_bm,a1
         move.w  #MENU_PIC_LINES-1,d0
 .pl     moveq   #160/4-1,d1
 .pc     move.l  (a0)+,(a1)+
@@ -1457,7 +1461,8 @@ show_menu
         bmi   .txd
         move.w  (a2)+,d1            ; column
         mulu    #200,d0
-        lea     fs_bm+160,a0
+        move.l  p_fs_bm,a0
+        add.l   #160,a0
         add.l   d0,a0
         add.w   d1,a0
         move.l  a2,a1
@@ -1492,8 +1497,8 @@ show_menu
         moveq   #7,d0
 .z      clr.w   (a1)+
         dbf     d0,.z
-        lea     cop_fs,a0
-        move.l  #fs_bm,d0
+        move.l  p_cop_fs,a0
+        move.l  p_fs_bm,d0
         moveq   #5,d1
         move.w  #200,d2
         lea     fs_pal,a1
@@ -1502,7 +1507,7 @@ show_menu
         bsr     make_fs_copper
         ; the scroller: 1 bitplane from line SCR_Y on
         bsr     scroller_init
-        lea     cop_fs,a0
+        move.l  p_cop_fs,a0
         bsr     set_copper
         move.b  #1,menu_on
         move.b  #2,cop_mode
@@ -1518,15 +1523,15 @@ show_menu
 
 blank_screen                        ; an empty display while loading
         bsr     fs_clear
-        lea     cop_fs,a0
-        move.l  #fs_bm,d0
+        move.l  p_cop_fs,a0
+        move.l  p_fs_bm,d0
         moveq   #1,d1
         moveq   #40,d2
         lea     zero_pal,a1
         move.w  #COLOR00,d3
         move.w  #COLOR00,d4
         bsr     make_fs_copper
-        lea     cop_fs,a0
+        move.l  p_cop_fs,a0
         bra     set_copper
 
 menu_wait                           ; -> d0 = 'N', 'L' or ESC
@@ -1556,7 +1561,7 @@ menu_wait                           ; -> d0 = 'N', 'L' or ESC
 SCR_Y   = 230                       ; scroller line
 
 scroller_init
-        lea     scroll_bm,a0
+        move.l  p_scroll_bm,a0
         move.w  #16*48/4-1,d0
 .c      clr.l   (a0)+
         dbf     d0,.c
@@ -1578,7 +1583,7 @@ scroller_init
         move.w  #8,10(a0)
         move.w  #SCR_Y,d0           ; its bitmap
         bsr     fs_line
-        move.l  #scroll_bm,d0
+        move.l  p_scroll_bm,d0
         move.w  #BPL1PT,4(a0)
         swap    d0
         move.w  d0,6(a0)
@@ -1658,7 +1663,8 @@ menu_tick                           ; interrupt: bars, scroller, spaceship
         bne   .tc
         ; ---- the scroller: 2 pixels a frame (by the CPU: the disk
         ;      driver may own the blitter while part 1 loads)
-        lea     scroll_bm+16*48,a0
+        move.l  p_scroll_bm,a0
+        add.l   #16*48,a0
         moveq   #15,d6
 .srow   moveq   #0,d1
         moveq   #23,d5
@@ -1682,7 +1688,8 @@ menu_tick                           ; interrupt: bars, scroller, spaceship
         move.l  scroll_start,a0
         move.b  (a0)+,d0
 .ch     move.l  a0,scroll_ptr
-        lea     scroll_bm+42,a0
+        move.l  p_scroll_bm,a0
+        add.l   #42,a0
         moveq   #1,d2
         moveq   #1,d3
         moveq   #48,d4
@@ -1717,7 +1724,7 @@ ship_tick
         move.w  #FS_TOP+142,d3
         move.w  d3,d4
         add.w   22(a2),d4           ; height
-        lea     spr_bufs,a1
+        move.l  p_spr_bufs,a1
         moveq   #2,d6               ; three sprites wide
 .col    move.l  a1,a3
         bsr     spr_ctl
@@ -1754,7 +1761,8 @@ show_card
         moveq   #1,d2               ; white
         bsr     .centre
         lea     m_cardload,a1
-        lea     fs_bm+242*200+15,a0
+        move.l  p_fs_bm,a0
+        add.l   #242*200+15,a0
         moveq   #15,d2
         moveq   #5,d3
         move.w  #200,d4
@@ -1772,8 +1780,8 @@ show_card
 .z      clr.w   (a1)+
         dbf     d0,.z
         clr.b   vbl_lock
-        lea     cop_fs,a0
-        move.l  #fs_bm,d0
+        move.l  p_cop_fs,a0
+        move.l  p_fs_bm,d0
         moveq   #5,d1
         move.w  #200,d2
         lea     pic_pal,a1
@@ -1805,7 +1813,7 @@ show_card
         cmp.w   #256,d7
         bne   .bg
         move.b  #1,cop_mode
-        lea     cop_fs,a0
+        move.l  p_cop_fs,a0
         bsr     set_copper
         move.b  #1,menu_on
         move.l  frames,card_t0
@@ -1824,7 +1832,7 @@ show_card
         neg.w   d1
         add.w   #20,d1              ; (20-len) bytes from the left
         mulu    #200,d0
-        lea     fs_bm,a0
+        move.l  p_fs_bm,a0
         add.l   d0,a0
         add.w   d1,a0
         moveq   #5,d3
@@ -1836,7 +1844,7 @@ show_card
         lsr.w   #1,d1
         addq.w  #4,d0
         mulu    #200,d0
-        lea     fs_bm,a0
+        move.l  p_fs_bm,a0
         add.l   d0,a0
         add.w   d1,a0
         moveq   #5,d3
@@ -1857,7 +1865,8 @@ card_hold                           ; keep the card up for at least 3 seconds
 
 loading_screen                      ; LOADING PART nn in the text window
         bsr     game_screen
-        lea     text_bm+3*8*160+13,a0
+        move.l  p_text_bm,a0
+        add.l   #3*8*160+13,a0
         lea     m_loading,a1
         moveq   #1,d2
         moveq   #4,d3
@@ -1870,14 +1879,16 @@ disk_error_screen
         add.b   #'0',d0
         move.b  d0,m_disknum
         bsr     game_screen
-        lea     text_bm+2*8*160+1,a0
+        move.l  p_text_bm,a0
+        add.l   #2*8*160+1,a0
         lea     m_diskerr,a1
         moveq   #10,d2
         moveq   #4,d3
         move.w  #160,d4
         moveq   #0,d5
         bsr     text_at
-        lea     text_bm+4*8*160+1,a0
+        move.l  p_text_bm,a0
+        add.l   #4*8*160+1,a0
         lea     m_diskerr2,a1
         moveq   #1,d2
         bra     text_at
@@ -1909,7 +1920,7 @@ credits
         add.w   #20,d1
         move.w  d6,d0
         mulu    #40,d0
-        lea     fs_bm,a0
+        move.l  p_fs_bm,a0
         add.l   d0,a0
         add.w   d1,a0
         move.l  a2,a1
@@ -1923,8 +1934,8 @@ credits
         add.w   #CRED_PITCH,d6
         bra   .ln
 .done   move.w  d6,cred_end
-        lea     cop_fs,a0
-        move.l  #fs_bm,d0
+        move.l  p_cop_fs,a0
+        move.l  p_fs_bm,d0
         moveq   #1,d1
         moveq   #40,d2
         lea     zero_pal,a1
@@ -1953,14 +1964,14 @@ credits
         cmp.w   #256,d7
         bne   .cl
         move.b  #1,cop_mode
-        lea     cop_fs,a0
+        move.l  p_cop_fs,a0
         bsr     set_copper
         bsr     flush_keys
         moveq   #0,d7               ; scroll: one line a frame
 .sc     bsr     wait_frame
         move.w  d7,d0
         mulu    #40,d0
-        add.l   #fs_bm,d0
+        add.l  p_fs_bm,d0
         move.l  fs_planes,a0
         swap    d0
         move.w  d0,2(a0)

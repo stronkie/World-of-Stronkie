@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.1 (Amiga) - title screen file "MENU"
+;  THE WORLD OF STRONKIE V2.2 (Amiga) - title screen file "MENU"
 ;  Created By Mark Stronks
 ;  vasm -Fbin -o menu.bin menu.s, packed with zxpack on the disk
 ;======================================================================

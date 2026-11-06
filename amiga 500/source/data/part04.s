@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.1 (Amiga) - CHAPTER 1: INTO SPACE
+;  THE WORLD OF STRONKIE V2.2 (Amiga) - CHAPTER 1: INTO SPACE
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART04": vasm -Fbin -o part04.bin part04.s

@@ -1,0 +1,486 @@
+;======================================================================
+;  THE WORLD OF STRONKIE V2.1 (Amiga) - CHAPTER 1: INTO SPACE
+;  Created By Mark Stronks
+;
+;  Part file "PART04": vasm -Fbin -o part04.bin part04.s
+;  On the disk it is packed (zxpack); the engine unpacks it into its part buffer.
+;  All pointers are offsets from the start of the file.
+;======================================================================
+PIC_COCKPIT     = $000000      ; picture "cockpit" in the blob
+PIC_SHIPCORR    = $003504      ; picture "shipcorr" in the blob
+PIC_GALLEY      = $0090a4      ; picture "galley" in the blob
+PIC_ENGINE      = $00e6ae      ; picture "engine" in the blob
+PIC_CARGO       = $0148b4      ; picture "cargo" in the blob
+PIC_AIRLOCK     = $01944e      ; picture "airlock" in the blob
+
+base
+        dc.b "CHAP"
+        dc.b 4,1,6,18       ; part, start room, rooms, objects
+        dc.l rooms-base
+        dc.l objects-base
+        dc.l nouns-base
+        dc.l actions-base
+        dc.l messages-base
+        dc.l t_intro-base
+        dc.l song-base            ; music
+        dc.l t_title-base
+        dc.l t_short-base
+        dc.l card-base            ; title card of the next part
+        dc.l t_quip-base
+        dc.l actors-base, frames-base
+        dc.l map_data-base
+        dc.l t_save-base
+        dc.l 0            ; jingle (TUNE action)
+        dc.b 14,6
+        dc.w 0
+        dc.l speech-base                ; speech: message number -> sample (picture blob)
+rooms                                ; description, picture, exits N S E W U D
+        dc.l d1-base,PIC_COCKPIT
+        dc.b 0,2,0,0,0,0,0,0      ; cockpit
+        dc.l d2-base,PIC_SHIPCORR
+        dc.b 1,5,4,3,0,6,0,0      ; corridor
+        dc.l d3-base,PIC_GALLEY
+        dc.b 0,0,2,0,0,0,0,0      ; galley
+        dc.l d4-base,PIC_ENGINE
+        dc.b 0,0,0,2,0,0,0,0      ; engine
+        dc.l d5-base,PIC_CARGO
+        dc.b 2,0,0,0,0,0,0,0      ; cargo
+        dc.l d6-base,PIC_AIRLOCK
+        dc.b 0,0,0,0,2,0,0,0      ; airlock
+objects                              ; noun, place, flags, 0, name, examine text
+        dc.b 1,1,2,0
+        dc.l t0-base,t1-base
+        dc.b 2,1,2,0
+        dc.l t0-base,t2-base
+        dc.b 3,1,2,0
+        dc.l t0-base,t3-base
+        dc.b 4,1,2,0
+        dc.l t0-base,t4-base
+        dc.b 5,1,2,0
+        dc.l t0-base,t5-base
+        dc.b 6,3,2,0
+        dc.l t0-base,t6-base
+        dc.b 7,3,2,0
+        dc.l t0-base,t7-base
+        dc.b 8,0,1,0
+        dc.l t8-base,t9-base
+        dc.b 9,4,2,0
+        dc.l t0-base,t10-base
+        dc.b 10,4,2,0
+        dc.l t0-base,t11-base
+        dc.b 11,4,1,0
+        dc.l t12-base,t13-base
+        dc.b 12,5,2,0
+        dc.l t0-base,t14-base
+        dc.b 13,0,1,0
+        dc.l t15-base,t16-base
+        dc.b 14,6,1,0
+        dc.l t17-base,t18-base
+        dc.b 14,0,1,0
+        dc.l t19-base,t20-base
+        dc.b 15,6,2,0
+        dc.l t0-base,t21-base
+        dc.b 10,6,2,0
+        dc.l t0-base,t22-base
+        dc.b 16,3,2,0
+        dc.l t0-base,t23-base
+nouns                                ; four letters + noun number, 0 = end
+        dc.b "WIND",1
+        dc.b "EART",1
+        dc.b "STAR",1
+        dc.b "SCRE",2
+        dc.b "NAVI",2
+        dc.b "CONS",2
+        dc.b "ERRO",2
+        dc.b "AMUL",3
+        dc.b "THRO",4
+        dc.b "LEVE",4
+        dc.b "BUTT",4
+        dc.b "HYPE",4
+        dc.b "NOVA",5
+        dc.b "COMP",5
+        dc.b "DISP",6
+        dc.b "MACH",6
+        dc.b "PORT",7
+        dc.b "RATI",8
+        dc.b "FOOD",8
+        dc.b "REAC",9
+        dc.b "CORE",9
+        dc.b "GLAS",9
+        dc.b "RACK",10
+        dc.b "TOOL",10
+        dc.b "CROW",11
+        dc.b "BAR ",11
+        dc.b "CRAT",12
+        dc.b "PART",12
+        dc.b "LID ",12
+        dc.b "CRYS",13
+        dc.b "BOOT",14
+        dc.b "DOOR",15
+        dc.b "HATC",15
+        dc.b "AIRL",15
+        dc.b "TABL",16
+        dc.b "CARG",17
+        dc.b "HOLD",17
+        dc.b "COCK",18
+        dc.b "GALL",19
+        dc.b "SO  ",20
+        dc.b "LAMP",21
+        dc.b "FORC",22
+        dc.b 0
+actions                              ; verb, noun, length, conditions, actions, 0 ... $ff
+        dc.b $3d,$14,$06,$20,$01,$00
+        dc.b $0c,$10,$0d,$04,$03,$06,$00,$20,$02,$21,$00,$2c,$00
+        dc.b $1c,$10,$0d,$04,$03,$06,$00,$20,$02,$21,$00,$2c,$00
+        dc.b $08,$10,$0d,$04,$03,$06,$00,$20,$02,$21,$00,$2c,$00
+        dc.b $20,$00,$08,$06,$01,$20,$03,$00
+        dc.b $20,$00,$06,$20,$04,$00
+        dc.b $03,$00,$0a,$04,$02,$03,$0f,$20,$05,$00
+        dc.b $01,$11,$0a,$04,$02,$03,$0f,$20,$05,$00
+        dc.b $01,$11,$08,$04,$02,$24,$05,$00
+        dc.b $2b,$0e,$08,$02,$0f,$20,$06,$00
+        dc.b $2b,$0e,$10,$02,$0e,$20,$07,$23,$0e,$00,$23,$0f,$ff,$26,$05,$00
+        dc.b $2b,$0e,$08,$01,$0e,$20,$08,$00
+        dc.b $0a,$0e,$0a,$04,$05,$02,$0f,$20,$09,$00
+        dc.b $0d,$0c,$0a,$04,$05,$05,$02,$20,$0a,$00
+        dc.b $0d,$0c,$13,$04,$05,$02,$0b,$20,$0b,$23,$0d,$05,$21,$02,$26,$0a,$2b,$06,$00
+        dc.b $28,$0c,$15,$04,$05,$02,$0b,$06,$02,$20,$0b,$23,$0d,$05,$21,$02,$26,$0a,$2b,$06,$00
+        dc.b $0f,$0b,$15,$04,$05,$02,$0b,$06,$02,$20,$0b,$23,$0d,$05,$21,$02,$26,$0a,$2b,$06,$00
+        dc.b $0d,$0c,$08,$04,$05,$20,$0c,$00
+        dc.b $0a,$0d,$13,$04,$01,$02,$0d,$20,$0d,$23,$0d,$00,$21,$01,$26,$0a,$2b,$0d,$00
+        dc.b $0f,$0d,$13,$04,$01,$02,$0d,$20,$0d,$23,$0d,$00,$21,$01,$26,$0a,$2b,$0d,$00
+        dc.b $0f,$0d,$08,$02,$0d,$20,$0e,$00
+        dc.b $33,$00,$12,$04,$01,$05,$01,$20,$0f,$26,$0a,$2b,$0a,$2d,$0c,$27,$05,$00
+        dc.b $14,$04,$12,$04,$01,$05,$01,$20,$0f,$26,$0a,$2b,$0a,$2d,$0c,$27,$05,$00
+        dc.b $13,$04,$12,$04,$01,$05,$01,$20,$0f,$26,$0a,$2b,$0a,$2d,$0c,$27,$05,$00
+        dc.b $0f,$04,$12,$04,$01,$05,$01,$20,$0f,$26,$0a,$2b,$0a,$2d,$0c,$27,$05,$00
+        dc.b $34,$00,$12,$04,$01,$05,$01,$20,$0f,$26,$0a,$2b,$0a,$2d,$0c,$27,$05,$00
+        dc.b $33,$00,$0a,$04,$01,$20,$10,$2b,$04,$00
+        dc.b $14,$04,$0a,$04,$01,$20,$10,$2b,$04,$00
+        dc.b $13,$04,$0a,$04,$01,$20,$10,$2b,$04,$00
+        dc.b $0f,$04,$0a,$04,$01,$20,$10,$2b,$04,$00
+        dc.b $34,$00,$0a,$04,$01,$20,$10,$2b,$04,$00
+        dc.b $33,$00,$06,$20,$11,$00
+        dc.b $14,$06,$11,$04,$03,$06,$03,$20,$12,$23,$08,$03,$21,$03,$2b,$0d,$00
+        dc.b $0f,$06,$11,$04,$03,$06,$03,$20,$12,$23,$08,$03,$21,$03,$2b,$0d,$00
+        dc.b $14,$06,$08,$04,$03,$20,$13,$00
+        dc.b $0f,$06,$08,$04,$03,$20,$13,$00
+        dc.b $1e,$08,$0d,$02,$08,$20,$14,$23,$08,$00,$26,$05,$00
+        dc.b $1e,$08,$08,$01,$08,$20,$15,$00
+        dc.b $36,$09,$08,$04,$04,$20,$16,$00
+        dc.b $0d,$0f,$09,$04,$06,$20,$17,$29,$00
+        dc.b $37,$00,$0a,$03,$0f,$03,$0e,$20,$18,$00
+        dc.b $37,$00,$08,$03,$0f,$20,$19,$00
+        dc.b $37,$00,$0a,$06,$02,$03,$0b,$20,$1a,$00
+        dc.b $37,$00,$08,$06,$02,$20,$1b,$00
+        dc.b $37,$00,$0a,$06,$01,$03,$0d,$20,$1c,$00
+        dc.b $37,$00,$08,$06,$01,$20,$1d,$00
+        dc.b $37,$00,$06,$20,$1e,$00
+        dc.b $45,$00,$06,$20,$1f,$00
+        dc.b $46,$00,$06,$20,$20,$00
+        dc.b $47,$00,$06,$20,$21,$00
+        dc.b $0f,$16,$06,$20,$22,$00
+        dc.b $09,$15,$06,$20,$23,$00
+        dc.b $22,$00,$06,$20,$24,$00
+        dc.b $ff
+        even
+messages
+        dc.l m1-base
+        dc.l m2-base
+        dc.l m3-base
+        dc.l m4-base
+        dc.l m5-base
+        dc.l m6-base
+        dc.l m7-base
+        dc.l m8-base
+        dc.l m9-base
+        dc.l m10-base
+        dc.l m11-base
+        dc.l m12-base
+        dc.l m13-base
+        dc.l m14-base
+        dc.l m15-base
+        dc.l m16-base
+        dc.l m17-base
+        dc.l m18-base
+        dc.l m19-base
+        dc.l m20-base
+        dc.l m21-base
+        dc.l m22-base
+        dc.l m23-base
+        dc.l m24-base
+        dc.l m25-base
+        dc.l m26-base
+        dc.l m27-base
+        dc.l m28-base
+        dc.l m29-base
+        dc.l m30-base
+        dc.l m31-base
+        dc.l m32-base
+        dc.l m33-base
+        dc.l m34-base
+        dc.l m35-base
+        dc.l m36-base
+m1
+        dc.b $11,"'MAKE IT SO!' YOU ORDER, IN YOUR BEST",$0d,"STARSHIP CAPTAIN VOICE. NOVA:"
+        dc.b $0d,"'ENGAGING... NOTHING, PILOT. I AM NOT",$0d,"THAT KIND OF STARSHIP.' YOU SHALL BE"
+        dc.b $0d,"MISSED, SIR PATRICK STEWART - OUR",$0d,"CAPTAIN JEAN-LUC PICARD OF STAR TREK."
+        dc.b $0d,"1940-2026.",$0d,0
+m2
+        dc.b $11,"UNDER THE TABLE, STUCK TO THE FLOOR",$0d,"SOMETHING GLITTERS... A TINY PIECE OF"
+        dc.b $0d,"STARLIGHT!",$0d,0
+m3
+        dc.b $13,"NOVA: 'THE NAVIGATION CRYSTAL CRACKED",$0d,"DURING THE LAUNCH. THERE SHOULD BE A"
+        dc.b $0d,"SPARE IN THE CARGO HOLD.'",$0d,0
+m4
+        dc.b $13,"NOVA: 'ALL SYSTEMS READY. ENGAGE THE",$0d,"HYPERDRIVE IN THE COCKPIT.'"
+        dc.b $0d,0
+m5
+        dc.b $11,"THE GRAVITY IS OFF IN THE CARGO HOLD.",$0d,"YOU FLOAT HELPLESSLY BACK INTO THE"
+        dc.b $0d,"CORRIDOR.",$0d,0
+m6
+        dc.b $11,"YOU ARE ALREADY WEARING THEM.",$0d,0
+m7
+        dc.b $11,"YOU PULL ON THE MAGNETIC BOOTS. CLANK!",$0d,"THEY STICK TO THE FLOOR."
+        dc.b $0d,0
+m8
+        dc.b $11,"PICK THEM UP FIRST.",$0d,0
+m9
+        dc.b $11,"THEN YOU WOULD FLOAT AWAY!",$0d,0
+m10
+        dc.b $11,"IT IS ALREADY OPEN.",$0d,0
+m11
+        dc.b $11,"YOU WEDGE THE CROWBAR UNDER THE LID AND",$0d,"HEAVE. THE CRATE POPS OPEN. AMONG THE"
+        dc.b $0d,"SPARE PARTS LIES A BLUE NAVIGATION",$0d,"CRYSTAL!",$0d,0
+m12
+        dc.b $11,"THE LID IS SEALED SHUT. YOU NEED",$0d,"SOMETHING TO PRY IT OPEN."
+        dc.b $0d,0
+m13
+        dc.b $11,"YOU SLOT THE CRYSTAL INTO THE CONSOLE.",$0d,"THE NAVIGATION SCREEN LIGHTS UP! NOVA:"
+        dc.b $0d,"'COURSE FOUND. THE STAR CHART TO",$0d,"STRONKIE IS KEPT ON THE OLD STATION"
+        dc.b $0d,"KX-9. READY FOR HYPERDRIVE, PILOT.'",$0d,0
+m14
+        dc.b $11,"IT BELONGS IN THE COCKPIT CONSOLE.",$0d,0
+m15
+        dc.b $11,"YOU PUSH THE THROTTLE FORWARD. THE",$0d,"STARS STRETCH INTO LINES OF LIGHT..."
+        dc.b $0d,"AND THE STARRAVEN LEAPS INTO",$0d,"HYPERSPACE!",$0d,0
+m16
+        dc.b $13,"NOVA: 'WITHOUT NAVIGATION WE COULD END",$0d,"UP INSIDE A SUN, PILOT.'"
+        dc.b $0d,0
+m17
+        dc.b $11,"THE HYPERDRIVE IS CONTROLLED FROM THE",$0d,"COCKPIT.",$0d,0
+m18
+        dc.b $11,"THE MACHINE BEEPS AND DROPS A SPACE",$0d,"RATION INTO THE TRAY."
+        dc.b $0d,0
+m19
+        dc.b $11,"THE MACHINE SAYS: ONE RATION PER PILOT.",$0d,0
+m20
+        dc.b $11,"IT TASTES LIKE CARDBOARD, BUT YOU FEEL",$0d,"READY FOR ANYTHING."
+        dc.b $0d,0
+m21
+        dc.b $11,"PICK IT UP FIRST.",$0d,0
+m22
+        dc.b $11,"OUCH! THE GLASS IS HOT. YOU PULL YOUR",$0d,"HAND BACK.",$0d,0
+m23
+        dc.b $11,"YOU OPEN THE OUTER DOOR. WHOOSH! THE",$0d,"AIR RUSHES OUT INTO SPACE, AND YOU WITH"
+        dc.b $0d,"IT...",$0d,0
+m24
+        dc.b $11,"THERE IS NO GRAVITY IN THE CARGO HOLD.",$0d,"LOOK IN THE AIRLOCK FOR SOMETHING THAT"
+        dc.b $0d,"HELPS.",$0d,0
+m25
+        dc.b $11,"WEAR THE MAGNETIC BOOTS.",$0d,0
+m26
+        dc.b $11,"TO PRY OPEN A CRATE YOU NEED A TOOL.",$0d,"TRY THE ENGINE ROOM."
+        dc.b $0d,0
+m27
+        dc.b $11,"OPEN THE CRATE IN THE CARGO HOLD.",$0d,0
+m28
+        dc.b $11,"TAKE THE NAVIGATION CRYSTAL.",$0d,0
+m29
+        dc.b $11,"INSERT THE CRYSTAL INTO THE CONSOLE IN",$0d,"THE COCKPIT.",$0d
+        dc.b 0
+m30
+        dc.b $11,"ENGAGE THE HYPERDRIVE IN THE COCKPIT.",$0d,0
+m31
+        dc.b $11,"A HOLLOW VOICE SAYS: WRONG GAME. THIS",$0d,"ISN'T COLOSSAL CAVE."
+        dc.b $0d,0
+m32
+        dc.b $11,"GOD MODE? NICE TRY. THIS IS A COMMODORE",$0d,"64, NOT A 486."
+        dc.b $0d,0
+m33
+        dc.b $11,"THAT'S THE ANSWER TO LIFE, THE UNIVERSE",$0d,"AND EVERYTHING. BUT WHAT WAS THE"
+        dc.b $0d,"QUESTION?",$0d,0
+m34
+        dc.b $11,"YOU WAVE YOUR HAND. THESE AREN'T THE",$0d,"COMMANDS YOU'RE LOOKING FOR."
+        dc.b $0d,0
+m35
+        dc.b $11,"THERE IS NO LAMP HERE. THIS ISN'T ZORK,",$0d,"YOU KNOW. BUT WATCH OUT FOR GRUES"
+        dc.b $0d,"ANYWAY.",$0d,0
+m36
+        dc.b $11,"TYPE COMMANDS LIKE TAKE KEY, OPEN DOOR,",$0d,"EXAMINE MAT, N S E W U D, L = LOOK,"
+        dc.b $0d,"I = INVENTORY, TAKE ALL, DROP ALL,",$0d,"G = AGAIN, SCORE, MAP, SAVE, LOAD, QUIT"
+        dc.b $0d,"F1 LOAD  F3 SAVE  F5 MUSIC  F7 QUIT",$0d,"THREE SAVE SLOTS: PRESS 1, 2 OR 3."
+        dc.b $0d,"HINT GIVES A CLUE BUT COSTS 3 POINTS.",$0d,"FIND THE 16 HIDDEN STAR FRAGMENTS!"
+        dc.b $0d,0
+t_intro
+        dc.b $11,"THE STARRAVEN BREAKS FREE OF THE EARTH.",$0d,"A CALM VOICE FILLS THE CABIN: 'HELLO,"
+        dc.b $0d,"PILOT. I AM NOVA, THE SHIP'S COMPUTER.",$0d,"THE AMULET HAS WOKEN ME. TOGETHER WE"
+        dc.b $0d,"MUST FIND THE LOST WORLD OF STRONKIE.'",$0d,$0d,0
+t_title
+        dc.b $17,$0d,"CHAPTER 1: INTO SPACE",$0d,$0d,0
+t_short
+        dc.b "CHAPTER 1",0
+t_quip
+        dc.b $17,"IN SPACE, NOBODY CAN HEAR YOU TYPE THE",$0d,"WRONG COMMAND."
+        dc.b $0d,0
+d1
+        dc.b $1d,"YOU ARE IN THE COCKPIT OF THE",$0d,"STARRAVEN. THROUGH THE WINDOW THE EARTH"
+        dc.b $0d,"GLOWS BLUE. THE NAVIGATION SCREEN",$0d,"FLASHES AN ERROR.",$0d
+        dc.b 0
+d2
+        dc.b $1d,"YOU ARE IN THE SHIP'S MAIN CORRIDOR.",$0d,"THE COCKPIT IS NORTH, THE GALLEY WEST,"
+        dc.b $0d,"THE ENGINE ROOM EAST AND THE CARGO HOLD",$0d,"SOUTH. A LADDER LEADS DOWN TO THE"
+        dc.b $0d,"AIRLOCK.",$0d,0
+d3
+        dc.b $1d,"YOU ARE IN THE GALLEY. A FOOD DISPENSER",$0d,"HUMS IN THE CORNER. STARS DRIFT PAST A"
+        dc.b $0d,"ROUND PORTHOLE.",$0d,0
+d4
+        dc.b $1d,"YOU ARE IN THE ENGINE ROOM. THE REACTOR",$0d,"GLOWS BEHIND THICK GLASS. A TOOL RACK"
+        dc.b $0d,"HANGS ON THE WALL.",$0d,0
+d5
+        dc.b $1d,"YOU ARE IN THE CARGO HOLD. YOUR",$0d,"MAGNETIC BOOTS KEEP YOU ON THE FLOOR"
+        dc.b $0d,"WHILE CRATES FLOAT AROUND YOU. ONE BIG",$0d,"CRATE IS MARKED PARTS."
+        dc.b $0d,0
+d6
+        dc.b $1d,"YOU ARE IN THE AIRLOCK. A ROUND OUTER",$0d,"DOOR LEADS INTO SPACE AND A RED LIGHT"
+        dc.b $0d,"BLINKS ABOVE IT. THERE IS A RACK ON THE",$0d,"WALL.",$0d,0
+t0
+        dc.b 0
+t1
+        dc.b $11,"THE EARTH, ALREADY FAR AWAY. SOMEWHERE",$0d,"DOWN THERE IS RAVENMOOR."
+        dc.b $0d,0
+t2
+        dc.b $11,"IT READS: NAVIGATION CRYSTAL CRACKED.",$0d,"INSERT SPARE CRYSTAL."
+        dc.b $0d,0
+t3
+        dc.b $11,"THE AMULET SITS IN THE CONSOLE, GLOWING",$0d,"SOFTLY. IT POWERS THE WHOLE SHIP."
+        dc.b $0d,0
+t4
+        dc.b $11,"THE HYPERDRIVE THROTTLE. ONLY USE IT",$0d,"WHEN NAVIGATION WORKS."
+        dc.b $0d,0
+t5
+        dc.b $11,"NOVA HAS NO BODY, JUST A CALM VOICE",$0d,"THAT IS EVERYWHERE ON THE SHIP."
+        dc.b $0d,0
+t6
+        dc.b $11,"A FOOD DISPENSER WITH ONE BUTTON. THE",$0d,"LABEL SAYS: PRESS FOR FOOD."
+        dc.b $0d,0
+t7
+        dc.b $11,"OUTSIDE, A PURPLE MOON DRIFTS SLOWLY",$0d,"PAST.",$0d,0
+t8
+        dc.b "A SPACE RATION",0
+t9
+        dc.b $11,"A GREY BAR WRAPPED IN FOIL. IT SMELLS",$0d,"LIKE NOTHING AT ALL."
+        dc.b $0d,0
+t10
+        dc.b $11,"THE REACTOR CORE BURNS LIKE A LITTLE",$0d,"SUN. BETTER NOT TOUCH THE GLASS."
+        dc.b $0d,0
+t11
+        dc.b $11,"A RACK OF TOOLS. MOST ARE BOLTED DOWN.",$0d,0
+t12
+        dc.b "A CROWBAR",0
+t13
+        dc.b $11,"A HEAVY RED CROWBAR.",$0d,0
+t14
+        dc.b $11,"A BIG CRATE MARKED SPARE PARTS. ITS LID",$0d,"IS SEALED SHUT."
+        dc.b $0d,0
+t15
+        dc.b "A NAVIGATION CRYSTAL",0
+t16
+        dc.b $11,"A BLUE CRYSTAL THAT HUMS QUIETLY.",$0d,0
+t17
+        dc.b "A PAIR OF MAGNETIC BOOTS",0
+t18
+        dc.b $11,"HEAVY BOOTS WITH MAGNETS IN THE SOLES.",$0d,"FOR WALKING WITHOUT GRAVITY."
+        dc.b $0d,0
+t19
+        dc.b "MAGNETIC BOOTS (WORN)",0
+t20
+        dc.b $11,"THEY CLANK ON THE FLOOR WITH EVERY",$0d,"STEP.",$0d,0
+t21
+        dc.b $11,"THE OUTER DOOR. A SIGN SAYS: DANGER!",$0d,"NEVER OPEN WITHOUT A SPACESUIT."
+        dc.b $0d,0
+t22
+        dc.b $11,"A RACK FOR BOOTS.",$0d,0
+t23
+        dc.b $11,"A WHITE TABLE BOLTED TO THE FLOOR.",$0d,0
+t_save
+        dc.b "SAVE1-INTOSPACE",0
+map_data                             ; 1-8 / $81-$88 = room label, $0e = label end, $60/$62 lines
+        dc.b $17,$4d,$41,$50,$3a,$20,$49,$4e,$54,$4f,$20,$53,$50,$41,$43,$45,$0d,$1f,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$01,$43,$4f
+        dc.b $43,$4b,$50,$49,$54,$0e,$0d,$1f,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$62,$0d,$1f,$20,$20,$03,$47,$41,$4c,$4c
+        dc.b $45,$59,$0e,$60,$60,$60,$02,$43,$4f,$52,$52,$49,$44,$4f,$52,$0e,$60,$60,$60,$04,$45,$4e,$47,$49,$4e,$45,$0e,$20,$20,$20,$06,$41
+        dc.b $49,$52,$4c,$4f,$43,$4b,$0e,$0d,$1f,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$62,$0d,$1f,$20,$20,$20,$20,$20,$20
+        dc.b $20,$20,$20,$20,$20,$20,$05,$43,$41,$52,$47,$4f,$0e,$0d,$00
+        even
+song
+        dc.w 3                  ; voices
+        dc.b $10,$68,$a8,$00     ; waveform, attack/decay, sustain/release, pulse
+        dc.b $40,$48,$89,$08     ; waveform, attack/decay, sustain/release, pulse
+        dc.b $10,$00,$50,$00     ; waveform, attack/decay, sustain/release, pulse
+        dc.l song_v1-base
+        dc.l song_v2-base
+        dc.l song_v3-base
+song_v1
+        dc.b $19,$80,$16,$80,$12,$80,$14,$80,$19,$80,$16,$80,$12,$80,$14,$80,$ff
+song_v2
+        dc.b $38,$40,$35,$40,$3d,$60,$3a,$20,$36,$40,$3a,$40,$38,$80,$41,$40,$3f,$40,$3d,$40,$3a,$40,$36,$20,$38,$20,$3a,$20,$3d,$20,$3c,$80
+        dc.b $ff
+song_v3
+        dc.b $3d,$08,$41,$08,$44,$08,$41,$08,$3d,$08,$41,$08,$44,$08,$41,$08,$3d,$08,$41,$08,$44,$08,$41,$08,$3d,$08,$41,$08,$44,$08,$41,$08
+        dc.b $3a,$08,$3d,$08,$41,$08,$3d,$08,$3a,$08,$3d,$08,$41,$08,$3d,$08,$3a,$08,$3d,$08,$41,$08,$3d,$08,$3a,$08,$3d,$08,$41,$08,$3d,$08
+        dc.b $36,$08,$3a,$08,$3d,$08,$3a,$08,$36,$08,$3a,$08,$3d,$08,$3a,$08,$36,$08,$3a,$08,$3d,$08,$3a,$08,$36,$08,$3a,$08,$3d,$08,$3a,$08
+        dc.b $38,$08,$3c,$08,$3f,$08,$3c,$08,$38,$08,$3c,$08,$3f,$08,$3c,$08,$38,$08,$3c,$08,$3f,$08,$3c,$08,$38,$08,$3c,$08,$3f,$08,$3c,$08
+        dc.b $3d,$08,$41,$08,$44,$08,$41,$08,$3d,$08,$41,$08,$44,$08,$41,$08,$3d,$08,$41,$08,$44,$08,$41,$08,$3d,$08,$41,$08,$44,$08,$41,$08
+        dc.b $3a,$08,$3d,$08,$41,$08,$3d,$08,$3a,$08,$3d,$08,$41,$08,$3d,$08,$3a,$08,$3d,$08,$41,$08,$3d,$08,$3a,$08,$3d,$08,$41,$08,$3d,$08
+        dc.b $36,$08,$3a,$08,$3d,$08,$3a,$08,$36,$08,$3a,$08,$3d,$08,$3a,$08,$36,$08,$3a,$08,$3d,$08,$3a,$08,$36,$08,$3a,$08,$3d,$08,$3a,$08
+        dc.b $38,$08,$3c,$08,$3f,$08,$3c,$08,$38,$08,$3c,$08,$3f,$08,$3c,$08,$38,$08,$3c,$08,$3f,$08,$3c,$08,$38,$08,$3c,$08,$3f,$08,$3c,$08
+        dc.b $ff
+        even
+actors                               ; moving sprites per room
+;       room, sprites, first image, images, image delay, move delay, dx, dy
+;       x, y (C64 sprite coordinates), height in lines, colours 1-3
+        dc.b 1,2,0,2,6,1,-1,0
+        dc.w 304,69,8,$fa4,$fe8,$fff
+        dc.b 0
+        even
+frames                               ; offsets of the sprite images
+        dc.l fr0-base
+        dc.l fr1-base
+fr0                              ; "comet1": 2 sprite(s), 8 lines
+        dc.w $0000,$0000,$0000,$0000,$0000,$001e,$001f,$07ff,$e7ff,$1fff,$001f,$07ff,$0000,$001e,$0000,$0000
+        dc.w $0000,$0000,$0000,$0400,$0300,$8f00,$ef80,$ffc0,$ffe0,$fff0,$ef80,$ffc0,$0300,$8f00,$0000,$0400
+fr1                              ; "comet2": 2 sprite(s), 8 lines
+        dc.w $0000,$0000,$0000,$0004,$0000,$01ef,$003f,$1fff,$e3ff,$1fff,$003f,$1fff,$0000,$01ef,$0000,$0004
+        dc.w $0000,$0000,$0000,$1000,$0600,$0e00,$ef80,$ff80,$fff0,$fff8,$ef80,$ff80,$0600,$0e00,$0000,$1000
+speech                               ; message number, 0, offset of the sample in the blob
+        dc.w 1,0
+        dc.l $01f802             ; NOVA: Engaging... nothing, pilot. i am not tha
+        dc.w 3,0
+        dc.l $02283c             ; NOVA: The navigation crystal cracked during th
+        dc.w 4,0
+        dc.l $024a4c             ; NOVA: All systems ready. engage the hyperdrive
+        dc.w 13,0
+        dc.l $0274ec             ; NOVA: Course found. the star chart to stronkie
+        dc.w 16,0
+        dc.l $027e5a             ; NOVA: Without navigation we could end up insid
+        dc.w 0
+card                                 ; next part: kind, name, spoken title (in the blob)
+        dc.l card_k-base,card_n-base
+        dc.l $02a38a             ; "Chapter 2. The Derelict Station"
+card_k
+        dc.b "CHAPTER 2",0
+card_n
+        dc.b "THE DERELICT STATION",0
+        even
+        even
+part_end

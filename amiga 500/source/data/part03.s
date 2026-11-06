@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.1 (Amiga) - PROLOGUE, PART 3: THE LAUNCH PAD
+;  THE WORLD OF STRONKIE V2.2 (Amiga) - PROLOGUE, PART 3: THE LAUNCH PAD
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART03": vasm -Fbin -o part03.bin part03.s

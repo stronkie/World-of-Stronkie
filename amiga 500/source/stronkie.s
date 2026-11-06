@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE  V2.1  -  Amiga 500 version
+;  THE WORLD OF STRONKIE  V2.2  -  Amiga 500 version
 ;  Text & graphics adventure, ported from the Commodore 64 original
 ;  Created By Mark Stronks
 ;
@@ -202,6 +202,11 @@ GETP    macro               ; \1 = header field, \2 = address register
         section code,code
 ;======================================================================
 start
+        lea     bss_start,a1        ; clear all variables (Kickstart 1.x may not do it)
+        move.l  #(bss_end-bss_start)/4-1,d1
+.clr    clr.l   (a1)+
+        subq.l  #1,d1
+        bpl     .clr
         move.l  sp,stack_save
         move.l  4.w,a6
         move.l  a6,execbase
@@ -281,6 +286,18 @@ exit_wb
 ; ---- memory -------------------------------------------------------------
 alloc_memory                        ; -> d0 = 0 if there is not enough memory
         move.l  execbase,a6
+        move.l  #CHIP_SIZE,d0       ; copper lists, bitmaps, sprites, waveforms: chip memory
+        move.l  #MEMF_CHIP|MEMF_CLEAR,d1
+        jsr     _LVOAllocMem(a6)
+        move.l  d0,p_chip
+        beq   .fail
+        lea     chip_offs,a0
+        lea     p_cop_game,a1
+        moveq   #11-1,d1
+.po     move.l  p_chip,d0
+        add.l   (a0)+,d0
+        move.l  d0,(a1)+
+        dbf     d1,.po
         move.l  #PART_MAX,d0
         move.l  #MEMF_CLEAR,d1
         jsr     _LVOAllocMem(a6)
@@ -331,6 +348,10 @@ say_nomem                           ; "not enough memory": in the CLI, or in a w
 .x      movem.l (sp)+,d2-d4/a6
         rts
 
+chip_offs                           ; where every buffer is in the chip memory block
+        dc.l    C_COP_GAME,C_COP_FS,C_PIC_BM,C_STATUS_BM,C_TEXT_BM,C_FS_BM
+        dc.l    C_SPR_BUFS,C_SCROLL_BM,C_WAVES,C_NOISE_WAVE,C_SILENCE
+
 CHIP_RESERVE = 40960                ; chip memory left free for AmigaDOS and the system
 
 alloc_cache                         ; last of all: the picture cache, as many pictures as the
@@ -358,6 +379,12 @@ alloc_cache                         ; last of all: the picture cache, as many pi
 
 free_memory
         move.l  execbase,a6
+        move.l  p_chip,d0
+        beq     .nc
+        move.l  d0,a1
+        move.l  #CHIP_SIZE,d0
+        jsr     _LVOFreeMem(a6)
+.nc
         lea     cache_mem,a2
         move.w  ncache,d7
         bra   .cf

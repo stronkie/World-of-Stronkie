@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.1 (Amiga) - CHAPTER 3: ASTEROID 42
+;  THE WORLD OF STRONKIE V2.2 (Amiga) - CHAPTER 3: ASTEROID 42
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART06": vasm -Fbin -o part06.bin part06.s

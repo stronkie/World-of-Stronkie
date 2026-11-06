@@ -3,9 +3,11 @@ Adventure Game made for the Commodore Amiga 500
 
 Created By Mark Stronks
 
-**Current version: V2.1**. The game comes on three disks: download `The_World_of_Stronkie_Amiga_V2.1_Disk1.adf`, `The_World_of_Stronkie_Amiga_V2.1_Disk2.adf` and `The_World_of_Stronkie_Amiga_V2.1_Disk3.adf`, or all three at once in `The_World_of_Stronkie_Amiga_V2.1.zip`.
+**Current version: V2.2**. The game comes on three disks: download `The_World_of_Stronkie_Amiga_V2.2_Disk1.adf`, `The_World_of_Stronkie_Amiga_V2.2_Disk2.adf` and `The_World_of_Stronkie_Amiga_V2.2_Disk3.adf`, or all three at once in `The_World_of_Stronkie_Amiga_V2.2.zip`.
 
-New in V2.1: the game now has Workbench icons, so you can also start it from the Workbench (1.3 up to 3.1), it uses less chip memory, and it tells you when there isn't enough memory.
+New in V2.2: a fix for real Amigas. On a real A500 (Kickstart 1.3, with trapdoor or accelerator RAM) the game could freeze a few seconds after the title music started, with no picture and the monitor losing its signal. The game now puts its screens, copper lists and sound buffers in chip memory itself.
+
+New in V2.1: the game has Workbench icons, so you can also start it from the Workbench (1.3 up to 3.1), it uses less chip memory, and it tells you when there isn't enough memory.
 
 New in V2.0: every picture in the game is new. All 81 pictures were painted again for the Amiga, in 320x192 pixels and 32 colours, each with its own palette, copper sky and colour cycling. The game also has **sampled sound effects** and **speech**: the title screen welcomes you, every title card speaks the name of the next part, and NOVA, the ship's computer, talks to you.
 
@@ -69,7 +71,7 @@ You can also play it in an emulator: WinUAE, FS-UAE or vAmiga, set up as an A500
 
 ### How to play
 
-1. Write the three ADF files to floppy disks, or insert `The_World_of_Stronkie_Amiga_V2.1_Disk1.adf` in DF0: of your emulator. Keep disks 2 and 3 ready.
+1. Write the three ADF files to floppy disks, or insert `The_World_of_Stronkie_Amiga_V2.2_Disk1.adf` in DF0: of your emulator. Keep disks 2 and 3 ready.
 2. Switch on the Amiga with disk 1 in the drive. The game boots by itself.
 3. The title screen appears with music, copper bars, a scroller and a spaceship, and a voice says *"Welcome to the World of Stronkie!"*. Part 1 loads in the background.
 4. Press `N` to start a new game, or `L` to continue a saved game (then press the slot number, 1 to 3). If there is no saved game in that slot, a new game starts. `ESC` takes you back to the Workbench or CLI.
@@ -194,7 +196,7 @@ Memory use (1 MB chip RAM):
 | Buffer | Size | Use |
 |---|---|---|
 | program | 26 KB | the engine, texts, tables and the font |
-| screen | about 140 KB (chip) | copper lists, the picture, the text window, the status bar, the full-screen bitmap for the title screen, cards and credits, sprites and waveforms |
+| screen | about 140 KB (chip) | allocated in chip memory when the game starts: copper lists, the picture, the text window, the status bar, the full-screen bitmap for the title screen, cards and credits, sprites and waveforms |
 | part file | 192 KB | the part file as loaded from the disk: its pictures and speech stay here while you play the part |
 | part | 32 KB | the unpacked part: texts, puzzles, music, sprites, map |
 | pixels | 60 KB | one unpacked picture, before it is converted to bitplanes |
@@ -242,11 +244,19 @@ You need [vasm](http://sun.hasenbraten.de/vasm/) (`vasmm68k_mot`), Python 3 with
 
 | Version | Date | Notes |
 |---|---|---|
+| V2.2 | 6 Nov 2026 | Fix for the freeze on real Amigas with trapdoor, slow or fast RAM |
 | V2.1 | 6 Nov 2026 | Workbench icons, less chip memory, a message when memory runs out |
 | V2.0 | 6 Nov 2026 | All 81 pictures painted again for the Amiga, sampled sound effects, speech, three disks |
 | V1.0 | 6 Nov 2026 | First Amiga 500 version: the complete C64 adventure (V1.7) on one bootable disk |
 
 ## Change log
+
+### V2.2
+- Fix: on a real Amiga 500 the game could freeze a few seconds after the title music started: no title picture, and then the monitor lost its signal. This happened on a stock A500 with Kickstart 1.3 and trapdoor RAM, and with an ACA500plus. The copper lists, screens, sprites and sound waveforms were in a part of the program that should be loaded into chip memory; when it ended up in other memory, the display and sound chips read the wrong memory. The game now allocates all of this in chip memory itself when it starts, which works on every Kickstart.
+- The game clears all its own variables when it starts, instead of relying on the loader
+- When there isn't enough chip memory, the game says so and returns to the CLI or Workbench
+- The interrupt routine now keeps all registers that Kickstart 1.3 expects to be kept
+- The game plays exactly the same: same pictures, same puzzles, same 1070 points
 
 ### V2.1
 - Workbench icons: the game can be started by double-clicking the `Stronkie` icon on disk 1, from Workbench 1.3 up to 3.1, and every disk has its own disk icon

@@ -11,6 +11,22 @@ CY_IDX   = 8
 CY_COLS  = 10
 CY_SIZE  = 14
 
+
+; ---- chip memory: one block, allocated at the start (AllocMem MEMF_CHIP),
+;      so it works on every Kickstart. Offsets of the buffers in it:
+C_COP_GAME    = 0
+C_COP_FS      = C_COP_GAME+(4096)
+C_PIC_BM      = C_COP_FS+(4096)
+C_STATUS_BM   = C_PIC_BM+(PIC_BYTES)
+C_TEXT_BM     = C_STATUS_BM+(9*160)
+C_FS_BM       = C_TEXT_BM+(72*160)
+C_SPR_BUFS    = C_FS_BM+(FS_LINES*40)
+C_SCROLL_BM   = C_SPR_BUFS+(8*SPR_BUF)
+C_WAVES       = C_SCROLL_BM+(16*48)
+C_NOISE_WAVE  = C_WAVES+(18*WAVE_SET)
+C_SILENCE     = C_NOISE_WAVE+(NOISE_LEN)
+CHIP_SIZE   = C_SILENCE+(1)*4
+
         section data,data
 
 dosname   dc.b "dos.library",0
@@ -26,7 +42,7 @@ dirnames  dc.b "NSEWUD"
         even
 
 ; ---- messages (as on the C64; $10-$1F = colour, 13 = new line) ---------
-m_banner  dc.b $17,"THE WORLD OF STRONKIE  V2.1",13
+m_banner  dc.b $17,"THE WORLD OF STRONKIE  V2.2",13
           dc.b $1f,"AMIGA 500 VERSION",13
           dc.b "CREATED BY MARK STRONKS",13
           dc.b "TYPE HELP FOR INSTRUCTIONS.",13,13,0
@@ -120,7 +136,7 @@ menu_texts
           dc.b "PRESS ESC TO RETURN TO WORKBENCH",0
           even
           dc.w 220,11
-          dc.b "AMIGA 500  V2.1",0
+          dc.b "AMIGA 500  V2.2",0
           even
           dc.w -1
 
@@ -139,6 +155,7 @@ zero_pal  dcb.w 32,0
 ;======================================================================
         section vars,bss
 ;======================================================================
+bss_start                           ; (cleared by the program itself at the start)
 execbase  ds.l 1
 dosbase   ds.l 1
 gfxbase   ds.l 1
@@ -273,18 +290,17 @@ want_disk ds.b 1
 floppy    ds.b 1
         even
 menu_buf  ds.b 40000
-
-;======================================================================
-        section chip,bss_c
-;======================================================================
-cop_game  ds.b 4096
-cop_fs    ds.b 4096
-pic_bm    ds.b PIC_BYTES
-status_bm ds.b 9*160
-text_bm   ds.b 72*160
-fs_bm     ds.b FS_LINES*40
-spr_bufs  ds.b 8*SPR_BUF
-scroll_bm ds.b 16*48
-waves     ds.b 18*WAVE_SET
-noise_wave ds.b NOISE_LEN
-silence   ds.l 1
+p_chip       ds.l 1
+p_cop_game   ds.l 1
+p_cop_fs     ds.l 1
+p_pic_bm     ds.l 1
+p_status_bm  ds.l 1
+p_text_bm    ds.l 1
+p_fs_bm      ds.l 1
+p_spr_bufs   ds.l 1
+p_scroll_bm  ds.l 1
+p_waves      ds.l 1
+p_noise_wave ds.l 1
+p_silence    ds.l 1
+        cnop    0,4
+bss_end

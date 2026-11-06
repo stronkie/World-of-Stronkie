@@ -34,7 +34,7 @@ import zxpack       # noqa: E402
 from story import CHAPTERS  # noqa: E402
 os.chdir(_cwd)
 
-VERSION = 'V2.1'
+VERSION = 'V2.2'
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, 'out')
 VASM = '/home/claude/amiga/tools/vasm/vasmm68k_mot'

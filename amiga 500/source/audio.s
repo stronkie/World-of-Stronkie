@@ -33,7 +33,7 @@ audio_init
         move.w  #$00ff,$09e(a5)     ; ADKCON: no modulation
         lea     AUD0LC(a5),a0
         moveq   #3,d0
-.ch     move.l  #silence,(a0)
+.ch     move.l  p_silence,(a0)
         move.w  #2,4(a0)
         move.w  #400,6(a0)
         clr.w   8(a0)
@@ -56,7 +56,7 @@ audio_off
         rts
 
 make_waves                          ; triangle, saw, 16 pulse_cols widths, noise
-        lea     waves,a0
+        move.l  p_waves,a0
         moveq   #0,d7               ; waveform 0-17
 .wv     moveq   #0,d6               ; length index 0-5 (256 ... 8)
 .ln     moveq   #0,d5
@@ -102,7 +102,7 @@ make_waves                          ; triangle, saw, 16 pulse_cols widths, noise
         addq.w  #1,d7
         cmp.w   #18,d7
         bne   .wv
-        lea     noise_wave,a0       ; noise: a 16 bit LFSR
+        move.l  p_noise_wave,a0       ; noise: a 16 bit LFSR
         move.w  #NOISE_LEN-1,d0
         move.w  #$ace1,d1
 .nz     move.w  d1,d2
@@ -256,7 +256,7 @@ set_wave                            ; d1 = waveform, d2 = pulse_cols, d3 = perio
         add.w   d4,d4
         lea     wave_off,a0
         add.w   (a0,d4.w),d0
-        lea     waves,a0
+        move.l  p_waves,a0
         add.l   d0,a0
         move.l  a0,(a4)             ; AUDxLC
         lea     wave_len,a0
@@ -268,7 +268,7 @@ st_noise
         lsr.w   #1,d0
         move.w  (a0,d0.w),d3
 set_noise
-        move.l  #noise_wave,(a4)
+        move.l  p_noise_wave,(a4)
         move.w  #NOISE_LEN/2,4(a4)
         move.w  d3,6(a4)
         rts
@@ -496,7 +496,7 @@ sample_tick                         ; interrupt: after the start, loop on silenc
         lea     CUSTOM,a5
         cmp.b   #2,smp_state
         bne     .c
-        move.l  #silence,AUD0LC+$30(a5)
+        move.l  p_silence,AUD0LC+$30(a5)
         move.w  #1,AUD0LEN+$30(a5)
         move.b  #1,smp_state
 .c      subq.w  #1,smp_frames

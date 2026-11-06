@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.1 (Amiga) - CHAPTER 7: THE CRYSTAL MOUNTAINS
+;  THE WORLD OF STRONKIE V2.2 (Amiga) - CHAPTER 7: THE CRYSTAL MOUNTAINS
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART10": vasm -Fbin -o part10.bin part10.s

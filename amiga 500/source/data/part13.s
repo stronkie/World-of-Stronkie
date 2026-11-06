@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.1 (Amiga) - CHAPTER 10: REPAIRS
+;  THE WORLD OF STRONKIE V2.2 (Amiga) - CHAPTER 10: REPAIRS
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART13": vasm -Fbin -o part13.bin part13.s

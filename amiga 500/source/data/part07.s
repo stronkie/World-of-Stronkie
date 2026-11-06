@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.1 (Amiga) - CHAPTER 4: SPACE PIRATES
+;  THE WORLD OF STRONKIE V2.2 (Amiga) - CHAPTER 4: SPACE PIRATES
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART07": vasm -Fbin -o part07.bin part07.s

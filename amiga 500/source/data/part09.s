@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.1 (Amiga) - CHAPTER 6: THE VILLAGE
+;  THE WORLD OF STRONKIE V2.2 (Amiga) - CHAPTER 6: THE VILLAGE
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART09": vasm -Fbin -o part09.bin part09.s

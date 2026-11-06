@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.1 (Amiga) - CHAPTER 11: VEX'S FLAGSHIP
+;  THE WORLD OF STRONKIE V2.2 (Amiga) - CHAPTER 11: VEX'S FLAGSHIP
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART14": vasm -Fbin -o part14.bin part14.s
