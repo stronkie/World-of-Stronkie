@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.0 (Amiga) - EPILOGUE: HOME AGAIN
+;  THE WORLD OF STRONKIE V2.1 (Amiga) - EPILOGUE: HOME AGAIN
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART17": vasm -Fbin -o part17.bin part17.s

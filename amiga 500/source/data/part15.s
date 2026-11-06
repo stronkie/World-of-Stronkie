@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.0 (Amiga) - CHAPTER 12: THE PRISON DECK
+;  THE WORLD OF STRONKIE V2.1 (Amiga) - CHAPTER 12: THE PRISON DECK
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART15": vasm -Fbin -o part15.bin part15.s

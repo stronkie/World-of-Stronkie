@@ -3,7 +3,9 @@ Adventure Game made for the Commodore Amiga 500
 
 Created By Mark Stronks
 
-**Current version: V2.0**. The game comes on three disks: download `The_World_of_Stronkie_Amiga_V2.0_Disk1.adf`, `The_World_of_Stronkie_Amiga_V2.0_Disk2.adf` and `The_World_of_Stronkie_Amiga_V2.0_Disk3.adf`, or all three at once in `The_World_of_Stronkie_Amiga_V2.0.zip`.
+**Current version: V2.1**. The game comes on three disks: download `The_World_of_Stronkie_Amiga_V2.1_Disk1.adf`, `The_World_of_Stronkie_Amiga_V2.1_Disk2.adf` and `The_World_of_Stronkie_Amiga_V2.1_Disk3.adf`, or all three at once in `The_World_of_Stronkie_Amiga_V2.1.zip`.
+
+New in V2.1: the game now has Workbench icons, so you can also start it from the Workbench (1.3 up to 3.1), it uses less chip memory, and it tells you when there isn't enough memory.
 
 New in V2.0: every picture in the game is new. All 81 pictures were painted again for the Amiga, in 320x192 pixels and 32 colours, each with its own palette, copper sky and colour cycling. The game also has **sampled sound effects** and **speech**: the title screen welcomes you, every title card speaks the name of the next part, and NOVA, the ship's computer, talks to you.
 
@@ -67,11 +69,12 @@ You can also play it in an emulator: WinUAE, FS-UAE or vAmiga, set up as an A500
 
 ### How to play
 
-1. Write the three ADF files to floppy disks, or insert `The_World_of_Stronkie_Amiga_V2.0_Disk1.adf` in DF0: of your emulator. Keep disks 2 and 3 ready.
+1. Write the three ADF files to floppy disks, or insert `The_World_of_Stronkie_Amiga_V2.1_Disk1.adf` in DF0: of your emulator. Keep disks 2 and 3 ready.
 2. Switch on the Amiga with disk 1 in the drive. The game boots by itself.
 3. The title screen appears with music, copper bars, a scroller and a spaceship, and a voice says *"Welcome to the World of Stronkie!"*. Part 1 loads in the background.
 4. Press `N` to start a new game, or `L` to continue a saved game (then press the slot number, 1 to 3). If there is no saved game in that slot, a new game starts. `ESC` takes you back to the Workbench or CLI.
-5. When the game needs a part that is on another disk, it says **PLEASE INSERT DISK 2 AND PRESS A KEY** (or disk 1 or 3). Insert that disk and press a key.
+5. **From the Workbench:** if your Amiga is already running (for example Workbench 3.1 from a hard disk), insert disk 1, open the `Stronkie` disk icon and double-click the `Stronkie` icon. Close other programs first: the game needs about 650 KB of chip memory.
+6. When the game needs a part that is on another disk, it says **PLEASE INSERT DISK 2 AND PRESS A KEY** (or disk 1 or 3). Insert that disk and press a key.
 
 Type two-word commands and press RETURN, for example:
 
@@ -121,7 +124,7 @@ Stuck? [walkthrough.txt](../walkthrough.txt) is a complete walkthrough that take
 - `SAVE` (or `F3`) asks for a slot: press `1`, `2` or `3` (any other key cancels). The game is written under the slot number and the name of the part you are in, for example `SAVE1-LANDFALL` or `SAVE3-SKYTEMPLE`, so the disk directory shows how far you got in every slot. A new save replaces the old one in that slot. `LOAD`, `RESTORE` or `F1` asks if you are sure and which slot, then brings you back to the exact same spot, with all your items, score, moves and the map. You can type `LOAD` right after starting a new game.
 - A save is written to the disk that holds the part you are in (disk 1 for parts 1 to 5, disk 2 for parts 6 to 11, disk 3 for parts 12 to 17), so that disk must not be write-protected. To continue a game, start from disk 1 as usual, insert the disk with your save before you press `L` on the title screen (or put it in DF1:), and the game finds it.
 - If you die, the game says *"You have died."* and asks **TRY THIS PART AGAIN?** Press `Y` to restart the current part with the score you had when you entered it, or `N` to go back to the title screen.
-- Disk 1 holds the program, the title screen, the sounds and parts 1 to 5 (the prologue up to chapter 2). Disk 2 holds parts 6 to 11 (chapters 3 to 8) and disk 3 parts 12 to 17 (chapter 9 to the epilogue). The game knows the disks by their names, `Stronkie`, `Stronkie2` and `Stronkie3`, so it doesn't matter which drive they are in.
+- Disk 1 holds the program and its icon, the title screen, the sounds and parts 1 to 5 (the prologue up to chapter 2). Disk 2 holds parts 6 to 11 (chapters 3 to 8) and disk 3 parts 12 to 17 (chapter 9 to the epilogue). The game knows the disks by their names, `Stronkie`, `Stronkie2` and `Stronkie3`, so it doesn't matter which drive they are in.
 - **Playing from a hard disk:** copy all files from the three disks into one directory, remove the game disks from the drives, then `CD` to that directory in a CLI and type `Stronkie`. The game then loads every part and saves every game in that directory, without asking for disks.
 
 ### Features
@@ -146,7 +149,8 @@ Stuck? [walkthrough.txt](../walkthrough.txt) is a complete walkthrough that take
 
 | File | Disk | Contents |
 |---|---|---|
-| `Stronkie` | 1 | the game program (started by `s/startup-sequence`) |
+| `Stronkie` | 1 | the game program (started by `s/startup-sequence`, or from its icon `Stronkie.info`) |
+| `disk.info` | 1, 2, 3 | the disk icon for the Workbench |
 | `MENU` | 1 | the title screen: picture, title music, scroller and spaceship |
 | `SOUNDS` | 1 | the sampled sound effects and the spoken lines of the engine (welcome, died, congratulations) |
 | `PART01` | 1 | Prologue, part 1: The Grounds (texts, objects, puzzles, music, sprites, pictures and speech) |
@@ -194,9 +198,9 @@ Memory use (1 MB chip RAM):
 | part file | 192 KB | the part file as loaded from the disk: its pictures and speech stay here while you play the part |
 | part | 32 KB | the unpacked part: texts, puzzles, music, sprites, map |
 | pixels | 60 KB | one unpacked picture, before it is converted to bitplanes |
-| sounds | about 110 KB (chip) | the sound effects, unpacked |
-| speech | 28 KB (chip) | the spoken line that plays now |
-| picture cache | 38 KB a picture (chip) | up to 8 pictures in bitplanes, as many as the free chip memory allows |
+| sounds | 54 KB | the sound effects, packed: each one is unpacked into the speech buffer when it plays |
+| speech | 28 KB (chip) | the spoken line or sound effect that plays now |
+| picture cache | 38 KB a picture (chip) | up to 8 pictures in bitplanes, allocated last: as many as the free chip memory allows, keeping 40 KB free for AmigaDOS |
 | title screen | 40 KB | the title picture, music and scroller, kept after the first time |
 
 ### Credits
@@ -238,10 +242,17 @@ You need [vasm](http://sun.hasenbraten.de/vasm/) (`vasmm68k_mot`), Python 3 with
 
 | Version | Date | Notes |
 |---|---|---|
+| V2.1 | 6 Nov 2026 | Workbench icons, less chip memory, a message when memory runs out |
 | V2.0 | 6 Nov 2026 | All 81 pictures painted again for the Amiga, sampled sound effects, speech, three disks |
 | V1.0 | 6 Nov 2026 | First Amiga 500 version: the complete C64 adventure (V1.7) on one bootable disk |
 
 ## Change log
+
+### V2.1
+- Workbench icons: the game can be started by double-clicking the `Stronkie` icon on disk 1, from Workbench 1.3 up to 3.1, and every disk has its own disk icon
+- Less chip memory: the sound effects stay packed (in any memory) and are unpacked one at a time when they play, which saves about 110 KB of chip memory. The picture cache now gets its memory last, so the sound and speech always fit.
+- When there isn't enough memory, the game now says so (in the CLI, or in a window when it was started from the Workbench) instead of quitting without a word
+- The game plays exactly the same: same pictures, same puzzles, same 1070 points
 
 ### V2.0
 - New graphics: all 81 pictures are new paintings made for the Amiga, in 320x192 pixels and 32 colours, instead of the C64 pictures scaled up. Every picture has its own palette, a copper sky with a colour on every line, and up to 16 cycling colours.

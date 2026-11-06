@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.0 (Amiga) - CHAPTER 8: THE SKY TEMPLE
+;  THE WORLD OF STRONKIE V2.1 (Amiga) - CHAPTER 8: THE SKY TEMPLE
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART11": vasm -Fbin -o part11.bin part11.s

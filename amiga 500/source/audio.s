@@ -341,7 +341,7 @@ SND_DIED  = 14
 SND_CONGRATS = 15
 SND_TITLE = 16
 
-load_sounds                         ; SOUNDS -> chip memory (Fibonacci delta unpacked)
+load_sounds                         ; SOUNDS -> memory, packed (unpacked when one plays)
         movem.l d2-d7/a2-a6,-(sp)
         lea     soundsname,a0
         move.l  filebuf,a1
@@ -349,52 +349,33 @@ load_sounds                         ; SOUNDS -> chip memory (Fibonacci delta unp
         bsr     disk_load
         tst.l   d0
         bmi     .x
-        move.l  filebuf,a2
+        move.l  d0,snd_mem_len
+        move.l  execbase,a6
+        moveq   #0,d1               ; any memory: it is unpacked into chip memory later
+        jsr     _LVOAllocMem(a6)
+        move.l  d0,snd_mem
+        beq     .x
+        move.l  filebuf,a0          ; copy it
+        move.l  d0,a1
+        move.l  snd_mem_len,d0
+.cp     move.b  (a0)+,(a1)+
+        subq.l  #1,d0
+        bne     .cp
+        move.l  snd_mem,a2
         move.w  (a2),d7             ; sounds
         cmp.w   #SND_COUNT,d7
         bls     .n
         moveq   #SND_COUNT,d7
 .n      move.w  d7,snd_count
-        moveq   #0,d6               ; total samples
-        lea     2(a2),a3
-        move.w  d7,d5
-        subq.w  #1,d5
-.t      moveq   #0,d0
-        move.w  6(a3),d0
-        add.l   d0,d6
-        addq.l  #8,a3
-        dbf     d5,.t
-        move.l  d6,snd_mem_len
-        move.l  execbase,a6
-        move.l  d6,d0
-        move.l  #MEMF_CHIP,d1
-        jsr     _LVOAllocMem(a6)
-        move.l  d0,snd_mem
-        beq     .x
-        move.l  d0,a1               ; unpack every sound
-        lea     2(a2),a3
+        lea     2(a2),a3            ; per sound: .l offset, .w period, .w samples
         lea     snd_tab,a4
-        move.w  d7,d5
-        subq.w  #1,d5
-.u      move.l  (a3),a0
+        bra     .f
+.t      move.l  (a3)+,a0
         add.l   a2,a0
-        move.l  a1,(a4)             ; SN_PTR
-        move.w  6(a3),d0
-        lsr.w   #1,d0
-        move.w  d0,4(a4)            ; SN_WORDS
-        move.w  4(a3),6(a4)         ; SN_PER
-        moveq   #0,d0
-        move.w  6(a3),d0            ; frames = samples * period / 70938
-        mulu    4(a3),d0
-        divu    #35469,d0
-        lsr.w   #1,d0
-        addq.w  #2,d0
-        move.w  d0,8(a4)            ; SN_FRAMES
-        move.w  6(a3),d0
-        bsr     fib_decode          ; a0 -> a1 (a1 moves on)
-        addq.l  #8,a3
-        lea     10(a4),a4
-        dbf     d5,.u
+        move.l  a0,(a4)+            ; packed data
+        move.l  (a3)+,(a4)+         ; period, samples
+        addq.l  #2,a4
+.f      dbf     d7,.t
 .x      movem.l (sp)+,d2-d7/a2-a6
         rts
 
@@ -440,11 +421,10 @@ play_sound                          ; d0 = sound 1-16
         mulu    #10,d0
         lea     snd_tab,a1
         add.w   d0,a1
-        move.l  (a1),a0
-        move.w  4(a1),d0
-        move.w  6(a1),d1
-        move.w  8(a1),d2
-        bsr     play_sample
+        move.l  (a1),a0             ; packed data
+        move.w  4(a1),d4            ; period
+        move.w  6(a1),d0            ; samples
+        bsr     decode_play
 .x      movem.l (sp)+,d0-d4/a0-a1/a5
 snd_rts rts
 
@@ -457,9 +437,18 @@ speak_sound                         ; d0 = sound 14-16: speech (has priority)
 .x      rts
 
 speak_clip                          ; a0 = clip: .w period, .w samples, Fibonacci data
-        movem.l d0-d4/a0-a1,-(sp)
+        movem.l d0-d4/a0-a1/a5,-(sp)
         move.w  (a0)+,d4            ; period
         move.w  (a0)+,d0            ; samples
+        move.b  #1,speech_on
+        bsr     decode_play
+        movem.l (sp)+,d0-d4/a0-a1/a5
+        rts
+
+decode_play                         ; a0 = packed samples, d0 = samples, d4 = period
+        lea     CUSTOM,a5           ; (uses d0-d4/a0-a1/a5)
+        move.w  #$0008,DMACON(a5)   ; channel 3 off: its buffer is overwritten now
+        clr.b   smp_state
         cmp.w   #SPEECH_MAX,d0
         bls     .ok
         move.w  #SPEECH_MAX,d0
@@ -467,7 +456,7 @@ speak_clip                          ; a0 = clip: .w period, .w samples, Fibonacc
         move.l  speech_buf,a1
         bsr     fib_decode
         move.l  speech_buf,a0
-        moveq   #0,d2
+        moveq   #0,d2               ; frames = samples * period / 70938
         move.w  d3,d2
         mulu    d4,d2
         divu    #35469,d2
@@ -476,10 +465,7 @@ speak_clip                          ; a0 = clip: .w period, .w samples, Fibonacc
         move.w  d3,d0
         lsr.w   #1,d0
         move.w  d4,d1
-        move.b  #1,speech_on
-        bsr     play_sample
-        movem.l (sp)+,d0-d4/a0-a1
-        rts
+        bra     play_sample
 
 play_sample                         ; a0 = samples (chip), d0 = words, d1 = period, d2 = frames
         lea     CUSTOM,a5

@@ -1,0 +1,418 @@
+;======================================================================
+;  THE WORLD OF STRONKIE V2.0 (Amiga) - CHAPTER 13: THE BRIDGE
+;  Created By Mark Stronks
+;
+;  Part file "PART16": vasm -Fbin -o part16.bin part16.s
+;  On the disk it is packed (zxpack); the engine unpacks it into its part buffer.
+;  All pointers are offsets from the start of the file.
+;======================================================================
+PIC_FBRIDGE     = $000000      ; picture "fbridge" in the blob
+PIC_MAPROOM     = $004eb8      ; picture "maproom" in the blob
+PIC_CANNON      = $008db4      ; picture "cannon" in the blob
+PIC_VEXROOM     = $00d904      ; picture "vexroom" in the blob
+PIC_AIRLOCK     = $011eb4      ; picture "airlock" in the blob
+
+base
+        dc.b "CHAP"
+        dc.b 16,1,5,11       ; part, start room, rooms, objects
+        dc.l rooms-base
+        dc.l objects-base
+        dc.l nouns-base
+        dc.l actions-base
+        dc.l messages-base
+        dc.l t_intro-base
+        dc.l song-base            ; music
+        dc.l t_title-base
+        dc.l t_short-base
+        dc.l card-base            ; title card of the next part
+        dc.l t_quip-base
+        dc.l actors-base, frames-base
+        dc.l map_data-base
+        dc.l t_save-base
+        dc.l 0            ; jingle (TUNE action)
+        dc.b 2,9
+        dc.w 0
+        dc.l speech-base                ; speech: message number -> sample (picture blob)
+rooms                                ; description, picture, exits N S E W U D
+        dc.l d1-base,PIC_FBRIDGE
+        dc.b 0,4,3,2,0,5,0,0      ; fbridge
+        dc.l d2-base,PIC_MAPROOM
+        dc.b 0,0,1,0,0,0,0,0      ; comms
+        dc.l d3-base,PIC_CANNON
+        dc.b 0,0,0,1,0,0,0,0      ; cannon
+        dc.l d4-base,PIC_VEXROOM
+        dc.b 1,0,0,0,0,0,0,0      ; vexroom
+        dc.l d5-base,PIC_AIRLOCK
+        dc.b 0,0,0,0,1,0,0,0      ; podbay
+objects                              ; noun, place, flags, 0, name, examine text
+        dc.b 1,1,2,0
+        dc.l t0-base,t1-base
+        dc.b 2,1,2,0
+        dc.l t0-base,t2-base
+        dc.b 3,1,2,0
+        dc.l t0-base,t3-base
+        dc.b 4,0,0,0
+        dc.l t4-base,t5-base
+        dc.b 5,2,2,0
+        dc.l t0-base,t6-base
+        dc.b 6,3,2,0
+        dc.l t0-base,t7-base
+        dc.b 7,4,1,0
+        dc.l t8-base,t9-base
+        dc.b 8,4,2,0
+        dc.l t0-base,t10-base
+        dc.b 9,5,2,0
+        dc.l t0-base,t11-base
+        dc.b 10,5,2,0
+        dc.l t0-base,t12-base
+        dc.b 11,0,1,0
+        dc.l t13-base,t14-base
+nouns                                ; four letters + noun number, 0 = end
+        dc.b "VEX ",1
+        dc.b "VICT",1
+        dc.b "WEAP",1
+        dc.b "EDMU",2
+        dc.b "UNCL",2
+        dc.b "WIND",3
+        dc.b "PLAN",3
+        dc.b "PIRA",4
+        dc.b "RADI",5
+        dc.b "TABL",5
+        dc.b "CANN",6
+        dc.b "CONT",6
+        dc.b "PHOT",7
+        dc.b "FRAM",7
+        dc.b "PICT",7
+        dc.b "BED ",8
+        dc.b "PILL",8
+        dc.b "PODS",9
+        dc.b "POD ",9
+        dc.b "TOOL",10
+        dc.b "BOX ",10
+        dc.b "SPAN",11
+        dc.b "WREN",11
+        dc.b "MONK",12
+        dc.b "THRE",12
+        dc.b "LOOK",12
+        dc.b "SO  ",13
+        dc.b "LAMP",14
+        dc.b "FORC",15
+        dc.b 0
+actions                              ; verb, noun, length, conditions, actions, 0 ... $ff
+        dc.b $3d,$0d,$06,$20,$01,$00
+        dc.b $0c,$08,$0d,$04,$04,$06,$00,$20,$02,$21,$00,$2c,$00
+        dc.b $1c,$08,$0d,$04,$04,$06,$00,$20,$02,$21,$00,$2c,$00
+        dc.b $08,$08,$0d,$04,$04,$06,$00,$20,$02,$21,$00,$2c,$00
+        dc.b $04,$00,$0a,$04,$01,$06,$01,$20,$03,$00
+        dc.b $2c,$0c,$13,$04,$02,$06,$01,$20,$04,$21,$01,$23,$04,$00,$26,$0a,$2b,$05,$00
+        dc.b $0f,$05,$0a,$04,$02,$06,$01,$20,$05,$00
+        dc.b $20,$04,$0a,$04,$01,$06,$01,$20,$06,$00
+        dc.b $1d,$04,$0a,$04,$01,$06,$01,$20,$07,$00
+        dc.b $0d,$0a,$11,$04,$05,$06,$02,$20,$08,$23,$0b,$05,$21,$02,$26,$0a,$00
+        dc.b $1c,$0a,$11,$04,$05,$06,$02,$20,$08,$23,$0b,$05,$21,$02,$26,$0a,$00
+        dc.b $01,$09,$09,$04,$05,$20,$09,$29,$00
+        dc.b $14,$00,$09,$04,$05,$20,$09,$29,$00
+        dc.b $0f,$0b,$15,$04,$03,$02,$0b,$20,$0a,$23,$0b,$00,$21,$03,$26,$0a,$2b,$08,$2d,$06,$00
+        dc.b $28,$06,$15,$04,$03,$02,$0b,$20,$0a,$23,$0b,$00,$21,$03,$26,$0a,$2b,$08,$2d,$06,$00
+        dc.b $0a,$0b,$15,$04,$03,$02,$0b,$20,$0a,$23,$0b,$00,$21,$03,$26,$0a,$2b,$08,$2d,$06,$00
+        dc.b $28,$06,$08,$04,$03,$20,$0b,$00
+        dc.b $36,$06,$08,$04,$03,$20,$0c,$00
+        dc.b $40,$07,$16,$04,$01,$02,$07,$05,$03,$20,$0d,$26,$14,$2b,$0c,$2d,$08,$20,$0e,$27,$11,$00
+        dc.b $1a,$07,$16,$04,$01,$02,$07,$05,$03,$20,$0d,$26,$14,$2b,$0c,$2d,$08,$20,$0e,$27,$11,$00
+        dc.b $40,$07,$0a,$04,$01,$02,$07,$20,$0f,$00
+        dc.b $20,$01,$0a,$04,$01,$06,$03,$20,$10,$00
+        dc.b $20,$01,$08,$04,$01,$20,$11,$00
+        dc.b $20,$02,$08,$04,$01,$20,$12,$00
+        dc.b $1d,$01,$0b,$04,$01,$20,$13,$2d,$06,$29,$00
+        dc.b $37,$00,$08,$06,$01,$20,$14,$00
+        dc.b $37,$00,$08,$06,$02,$20,$15,$00
+        dc.b $37,$00,$08,$06,$03,$20,$16,$00
+        dc.b $37,$00,$08,$03,$07,$20,$17,$00
+        dc.b $37,$00,$06,$20,$18,$00
+        dc.b $45,$00,$06,$20,$19,$00
+        dc.b $46,$00,$06,$20,$1a,$00
+        dc.b $47,$00,$06,$20,$1b,$00
+        dc.b $0f,$0f,$06,$20,$1c,$00
+        dc.b $09,$0e,$06,$20,$1d,$00
+        dc.b $22,$00,$06,$20,$1e,$00
+        dc.b $00,$00,$0a,$06,$04,$20,$1f,$21,$04,$00
+        dc.b $00,$00,$10,$05,$04,$05,$3b,$06,$01,$20,$20,$21,$01,$26,$0a,$00
+        dc.b $00,$00,$11,$05,$04,$06,$3b,$06,$05,$20,$21,$21,$05,$23,$04,$01,$00
+        dc.b $00,$00,$17,$04,$05,$05,$3a,$06,$06,$20,$22,$23,$0b,$ff,$21,$02,$26,$0a,$2b,$06,$21,$06,$00
+        dc.b $ff
+        even
+messages
+        dc.l m1-base
+        dc.l m2-base
+        dc.l m3-base
+        dc.l m4-base
+        dc.l m5-base
+        dc.l m6-base
+        dc.l m7-base
+        dc.l m8-base
+        dc.l m9-base
+        dc.l m10-base
+        dc.l m11-base
+        dc.l m12-base
+        dc.l m13-base
+        dc.l m14-base
+        dc.l m15-base
+        dc.l m16-base
+        dc.l m17-base
+        dc.l m18-base
+        dc.l m19-base
+        dc.l m20-base
+        dc.l m21-base
+        dc.l m22-base
+        dc.l m23-base
+        dc.l m24-base
+        dc.l m25-base
+        dc.l m26-base
+        dc.l m27-base
+        dc.l m28-base
+        dc.l m29-base
+        dc.l m30-base
+        dc.l m31-base
+        dc.l m32-base
+        dc.l m33-base
+        dc.l m34-base
+m1
+        dc.b $11,"'MAKE IT SO!' YOU ORDER, IN YOUR BEST",$0d,"STARSHIP CAPTAIN VOICE. NOVA:"
+        dc.b $0d,"'ENGAGING... NOTHING, PILOT. I AM NOT",$0d,"THAT KIND OF STARSHIP.' YOU SHALL BE"
+        dc.b $0d,"MISSED, SIR PATRICK STEWART - OUR",$0d,"CAPTAIN JEAN-LUC PICARD OF STAR TREK."
+        dc.b $0d,"1940-2026.",$0d,0
+m2
+        dc.b $11,"UNDER THE PILLOW SOMETHING GLITTERS...",$0d,"A TINY PIECE OF STARLIGHT!"
+        dc.b $0d,0
+m3
+        dc.b $11,"THREE PIRATES BLOCK THE WAY TO THE",$0d,"CANNON ROOM, WAVING THEIR CUTLASSES."
+        dc.b $0d,0
+m4
+        dc.b $11,"YOU GRAB THE RADIO. 'LECHUCKLE! LOOK",$0d,"BEHIND YOU, A THREE-HEADED MONKEY!'"
+        dc.b $0d,"'WHERE?!' OUT OF THE WINDOW YOU SEE THE",$0d,"SPACE MONKEY SPIN AROUND... AND"
+        dc.b $0d,"AROUND... AND TUMBLE OFF INTO SPACE.",$0d,"HIS PIRATES RUN BACK TO THEIR SHIP."
+        dc.b $0d,0
+m5
+        dc.b $11,"THE RADIO IS SET TO THE SPACE MONKEY.",$0d,"WHAT WOULD MAKE LECHUCKLE LOOK THE"
+        dc.b $0d,"OTHER WAY?",$0d,0
+m6
+        dc.b $11,"'ARRR! NOBODY PASSES!'",$0d,0
+m7
+        dc.b $11,"THREE AGAINST ONE? NOT A GOOD IDEA.",$0d,0
+m8
+        dc.b $11,"YOU OPEN THE TOOLBOX. AMONG THE RUSTY",$0d,"TOOLS LIES A PLASMA SPANNER."
+        dc.b $0d,0
+m9
+        dc.b $11,"YOU CLIMB INTO A POD AND PRESS THE BIG",$0d,"RED BUTTON. WHOOSH! YOU SHOOT OFF INTO"
+        dc.b $0d,"SPACE, ALONE, WITH NO WAY TO STEER.",$0d,"BYE!",$0d,0
+m10
+        dc.b $11,"YOU JAM THE PLASMA SPANNER INTO THE",$0d,"CANNON'S CONTROLS. SPARKS FLY! THE STAR"
+        dc.b $0d,"CANNON POWERS DOWN WITH A SAD WHINE.",$0d,0
+m11
+        dc.b $11,"WITH YOUR BARE HANDS? YOU NEED A TOOL.",$0d,0
+m12
+        dc.b $11,"THE CONTROLS ARE LOCKED. YOU NEED TO",$0d,"JAM THEM WITH SOMETHING."
+        dc.b $0d,0
+m13
+        dc.b $11,"YOU HOLD UP THE OLD PHOTO. VEX STARES",$0d,"AT IT FOR A LONG TIME. HIS HAND SHAKES."
+        dc.b $0d,"'BROTHERS FOREVER,' HE WHISPERS. 'I...",$0d,"I HAD FORGOTTEN.' HE DROPS HIS WEAPON."
+        dc.b $0d,"UNCLE EDMUND PUTS AN ARM AROUND HIM.",$0d,"'COME HOME, VICTOR.'"
+        dc.b $0d,0
+m14
+        dc.b $11,"THE CREW OF THE IRON RAVEN THROWS DOWN",$0d,"THEIR WEAPONS. IT IS OVER."
+        dc.b $0d,0
+m15
+        dc.b $11,"VEX SNARLS: 'SENTIMENTAL NONSENSE! MY",$0d,"CANNON IS STILL READY TO FIRE!'"
+        dc.b $0d,0
+m16
+        dc.b $11,"'YOU HAVE NO IDEA, KID. EDMUND GOT",$0d,"EVERYTHING: THE MANOR, THE STARRAVEN,"
+        dc.b $0d,"THE GLORY. NOW IT'S MY TURN.'",$0d,0
+m17
+        dc.b $11,"VEX STARES AT HIS DEAD CANNON. 'SO WHAT",$0d,"NOW, KID? WHAT COULD YOU POSSIBLY SAY"
+        dc.b $0d,"TO ME?'",$0d,0
+m18
+        dc.b $11,"UNCLE EDMUND WHISPERS: 'WHEN WE WERE",$0d,"BOYS, VICTOR KEPT A PHOTO OF US TWO"
+        dc.b $0d,"EVERYWHERE HE WENT. I WONDER IF HE",$0d,"STILL DOES.'",$0d,0
+m19
+        dc.b $11,"VEX SIDESTEPS AND HIS GUARDS DO THE",$0d,"REST. UNCLE EDMUND SHOUTS YOUR NAME..."
+        dc.b $0d,0
+m20
+        dc.b $11,"IN THE RADIO ROOM, GIVE LECHUCKLE",$0d,"SOMETHING TO LOOK AT: SAY MONKEY."
+        dc.b $0d,0
+m21
+        dc.b $11,"OPEN THE TOOLBOX IN THE POD BAY.",$0d,0
+m22
+        dc.b $11,"USE THE SPANNER ON THE CANNON IN THE",$0d,"CANNON ROOM.",$0d
+        dc.b 0
+m23
+        dc.b $11,"TAKE THE PHOTO IN VEX'S QUARTERS.",$0d,0
+m24
+        dc.b $11,"SHOW THE PHOTO TO VEX ON THE BRIDGE.",$0d,0
+m25
+        dc.b $11,"A HOLLOW VOICE SAYS: WRONG GAME. THIS",$0d,"ISN'T COLOSSAL CAVE."
+        dc.b $0d,0
+m26
+        dc.b $11,"GOD MODE? NICE TRY. THIS IS A COMMODORE",$0d,"64, NOT A 486."
+        dc.b $0d,0
+m27
+        dc.b $11,"THAT'S THE ANSWER TO LIFE, THE UNIVERSE",$0d,"AND EVERYTHING. BUT WHAT WAS THE"
+        dc.b $0d,"QUESTION?",$0d,0
+m28
+        dc.b $11,"YOU WAVE YOUR HAND. THESE AREN'T THE",$0d,"COMMANDS YOU'RE LOOKING FOR."
+        dc.b $0d,0
+m29
+        dc.b $11,"THERE IS NO LAMP HERE. THIS ISN'T ZORK,",$0d,"YOU KNOW. BUT WATCH OUT FOR GRUES"
+        dc.b $0d,"ANYWAY.",$0d,0
+m30
+        dc.b $11,"TYPE COMMANDS LIKE TAKE KEY, OPEN DOOR,",$0d,"EXAMINE MAT, N S E W U D, L = LOOK,"
+        dc.b $0d,"I = INVENTORY, TAKE ALL, DROP ALL,",$0d,"G = AGAIN, SCORE, MAP, SAVE, LOAD, QUIT"
+        dc.b $0d,"F1 LOAD  F3 SAVE  F5 MUSIC  F7 QUIT",$0d,"THREE SAVE SLOTS: PRESS 1, 2 OR 3."
+        dc.b $0d,"HINT GIVES A CLUE BUT COSTS 3 POINTS.",$0d,"FIND THE 16 HIDDEN STAR FRAGMENTS!"
+        dc.b $0d,0
+m31
+        dc.b $11,"VEX GRABS HIS RADIO. 'LECHUCKLE! GET",$0d,"OVER HERE AND DEAL WITH THESE PESTS!'"
+        dc.b $0d,0
+m32
+        dc.b $11,"THE RADIO CRACKLES. LECHUCKLE: 'SORRY,",$0d,"VEX. THAT KID OUT-INSULTED ME FAIR AND"
+        dc.b $0d,"SQUARE. WE'RE STAYING OUT OF THIS.",$0d,"ARRR!' VEX THROWS HIS RADIO ACROSS THE"
+        dc.b $0d,"BRIDGE.",$0d,0
+m33
+        dc.b $11,"THE RADIO CRACKLES. LECHUCKLE: 'ARRR,",$0d,"VEX, WE'RE COMING!' THE SPACE MONKEY"
+        dc.b $0d,"DOCKS AND THREE PIRATES BURST ONTO THE",$0d,"BRIDGE. THEY BLOCK THE WAY TO THE"
+        dc.b $0d,"CANNON ROOM!",$0d,0
+m34
+        dc.b $11,"AN ESCAPE POD DOCKS WITH A CLANG. OUT",$0d,"CLIMBS... ENSIGN RICKY, STILL IN HIS"
+        dc.b $0d,"RED SHIRT! 'TOLD YOU I'D BE THERE!",$0d,"HERE, A PLASMA SPANNER. IT CAN JAM"
+        dc.b $0d,"ANYTHING.' HE HANDS IT TO YOU.",$0d,0
+t_intro
+        dc.b $11,"THE LIFT DOORS OPEN ON THE BRIDGE OF",$0d,"THE IRON RAVEN. VEX STANDS AT THE GREAT"
+        dc.b $0d,"WINDOW, WHERE THE WORLD OF STRONKIE",$0d,"GLOWS BELOW. HE TURNS. 'HELLO,"
+        dc.b $0d,"BROTHER,' HE SAYS TO UNCLE EDMUND. 'AND",$0d,"HELLO, KID. MY STAR CANNON IS CHARGED."
+        dc.b $0d,"ONE SHOT, AND THE STAR HEART IS MINE.'",$0d,$0d,0
+t_title
+        dc.b $17,$0d,"CHAPTER 13: THE BRIDGE",$0d,$0d,0
+t_short
+        dc.b "CHAPTER 13",0
+t_quip
+        dc.b $17,"VICTOR RAVENMOOR WINS. UNCLE EDMUND",$0d,"WILL NEVER FORGIVE YOU. OR HIM."
+        dc.b $0d,0
+d1
+        dc.b $1d,"YOU ARE ON THE BRIDGE OF THE IRON",$0d,"RAVEN. VEX STANDS AT THE GREAT WINDOW."
+        dc.b $0d,"UNCLE EDMUND STAYS CLOSE BEHIND YOU.",$0d,"THE RADIO ROOM IS WEST, THE CANNON ROOM"
+        dc.b $0d,"EAST, VEX'S QUARTERS SOUTH. A LADDER",$0d,"LEADS DOWN TO THE POD BAY."
+        dc.b $0d,0
+d2
+        dc.b $1d,"YOU ARE IN THE RADIO ROOM. A BIG RADIO",$0d,"CRACKLES ON THE TABLE."
+        dc.b $0d,0
+d3
+        dc.b $1d,"YOU ARE IN THE CANNON ROOM. THE STAR",$0d,"CANNON HUMS, AIMED AT THE WORLD OF"
+        dc.b $0d,"STRONKIE. ITS CONTROLS GLOW RED.",$0d,0
+d4
+        dc.b $1d,"YOU ARE IN VEX'S QUARTERS. A HARD BED,",$0d,"A BLACK DESK... AND ON THE DESK, AN OLD"
+        dc.b $0d,"PHOTO IN A SILVER FRAME.",$0d,0
+d5
+        dc.b $1d,"YOU ARE IN THE POD BAY. ROUND ESCAPE",$0d,"PODS LINE THE WALL. A RUSTY TOOLBOX"
+        dc.b $0d,"STANDS IN THE CORNER.",$0d,0
+t0
+        dc.b 0
+t1
+        dc.b $11,"YOUR OTHER UNCLE, VICTOR RAVENMOOR. HE",$0d,"HAS EDMUND'S EYES, BUT NOT HIS SMILE."
+        dc.b $0d,0
+t2
+        dc.b $11,"UNCLE EDMUND LOOKS AT HIS BROTHER WITH",$0d,"SAD EYES.",$0d,0
+t3
+        dc.b $11,"THE WORLD OF STRONKIE, BLUE AND GREEN",$0d,"AND BEAUTIFUL. AND RIGHT IN THE"
+        dc.b $0d,"CANNON'S SIGHTS.",$0d,0
+t4
+        dc.b "THREE SPACE PIRATES",0
+t5
+        dc.b $11,"LECHUCKLE'S PIRATES, BLOCKING THE WAY",$0d,"TO THE CANNON ROOM."
+        dc.b $0d,0
+t6
+        dc.b $11,"A BIG RADIO. A LABEL SAYS: CHANNEL 1 -",$0d,"THE SPACE MONKEY."
+        dc.b $0d,0
+t7
+        dc.b $11,"THE STAR CANNON'S CONTROLS. ONE GOOD",$0d,"JAM IN THE RIGHT PLACE..."
+        dc.b $0d,0
+t8
+        dc.b "AN OLD PHOTO",0
+t9
+        dc.b $11,"TWO BOYS IN FRONT OF RAVENMOOR MANOR,",$0d,"ARM IN ARM. ON THE BACK: EDMUND AND"
+        dc.b $0d,"VICTOR, BROTHERS FOREVER.",$0d,0
+t10
+        dc.b $11,"A HARD, NARROW BED. VERY NEAT.",$0d,0
+t11
+        dc.b $11,"ROUND ESCAPE PODS WITH A BIG RED LAUNCH",$0d,"BUTTON INSIDE."
+        dc.b $0d,0
+t12
+        dc.b $11,"A RUSTY TOOLBOX. IT ISN'T LOCKED.",$0d,0
+t13
+        dc.b "A PLASMA SPANNER",0
+t14
+        dc.b $11,"A PLASMA SPANNER. IT CAN JAM ANYTHING.",$0d,0
+t_save
+        dc.b "SAVE1-BRIDGE",0
+map_data                             ; 1-8 / $81-$88 = room label, $0e = label end, $60/$62 lines
+        dc.b $17,$4d,$41,$50,$3a,$20,$54,$48,$45,$20,$42,$52,$49,$44,$47,$45,$0d,$1f,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$05,$50,$4f
+        dc.b $44,$20,$42,$41,$59,$0e,$0d,$1f,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$62,$0d,$1f,$20,$20,$02,$43,$4f,$4d,$4d
+        dc.b $53,$0e,$60,$60,$60,$60,$60,$01,$42,$52,$49,$44,$47,$45,$0e,$60,$60,$60,$60,$03,$43,$41,$4e,$4e,$4f,$4e,$0e,$0d,$1f,$20,$20,$20
+        dc.b $20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$62,$0d,$1f,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$04,$56,$45,$58,$27,$53
+        dc.b $0e,$0d,$00
+        even
+song
+        dc.w 3                  ; voices
+        dc.b $20,$06,$00,$00     ; waveform, attack/decay, sustain/release, pulse
+        dc.b $40,$0a,$a9,$08     ; waveform, attack/decay, sustain/release, pulse
+        dc.b $80,$00,$00,$00     ; waveform, attack/decay, sustain/release, pulse
+        dc.l song_v1-base
+        dc.l song_v2-base
+        dc.l song_v3-base
+song_v1
+        dc.b $11,$0a,$1d,$0a,$11,$0a,$1d,$0a,$11,$0a,$1d,$0a,$11,$0a,$1d,$0a,$11,$0a,$1d,$0a,$11,$0a,$1d,$0a,$11,$0a,$1d,$0a,$11,$0a,$1d,$0a
+        dc.b $0d,$0a,$19,$0a,$0d,$0a,$19,$0a,$0d,$0a,$19,$0a,$0d,$0a,$19,$0a,$0d,$0a,$19,$0a,$0d,$0a,$19,$0a,$0d,$0a,$19,$0a,$0d,$0a,$19,$0a
+        dc.b $0f,$0a,$1b,$0a,$0f,$0a,$1b,$0a,$0f,$0a,$1b,$0a,$0f,$0a,$1b,$0a,$0f,$0a,$1b,$0a,$0f,$0a,$1b,$0a,$0f,$0a,$1b,$0a,$0f,$0a,$1b,$0a
+        dc.b $18,$0a,$24,$0a,$18,$0a,$24,$0a,$18,$0a,$24,$0a,$18,$0a,$24,$0a,$18,$0a,$24,$0a,$18,$0a,$24,$0a,$18,$0a,$24,$0a,$18,$0a,$24,$0a
+        dc.b $ff
+song_v2
+        dc.b $41,$14,$44,$14,$48,$1e,$46,$0a,$44,$14,$43,$14,$41,$28,$3d,$14,$41,$14,$44,$1e,$43,$0a,$41,$14,$3f,$14,$3d,$28,$3f,$14,$43,$14
+        dc.b $46,$1e,$44,$0a,$43,$14,$41,$14,$3f,$28,$3c,$14,$40,$14,$43,$14,$48,$14,$46,$14,$44,$14,$43,$28,$ff
+song_v3
+        dc.b $55,$05,$00,$05,$55,$05,$00,$05,$5c,$0a,$55,$05,$00,$05,$55,$05,$00,$05,$55,$05,$00,$05,$5c,$0a,$55,$05,$00,$05,$55,$05,$00,$05
+        dc.b $55,$05,$00,$05,$5c,$0a,$55,$05,$00,$05,$55,$05,$00,$05,$55,$05,$00,$05,$5c,$0a,$55,$05,$00,$05,$55,$05,$00,$05,$55,$05,$00,$05
+        dc.b $5c,$0a,$55,$05,$00,$05,$55,$05,$00,$05,$55,$05,$00,$05,$5c,$0a,$55,$05,$00,$05,$55,$05,$00,$05,$55,$05,$00,$05,$5c,$0a,$55,$05
+        dc.b $00,$05,$55,$05,$00,$05,$55,$05,$00,$05,$5c,$0a,$55,$05,$00,$05,$55,$05,$00,$05,$55,$05,$00,$05,$5c,$0a,$55,$05,$00,$05,$55,$05
+        dc.b $00,$05,$55,$05,$00,$05,$5c,$0a,$55,$05,$00,$05,$55,$05,$00,$05,$55,$05,$00,$05,$5c,$0a,$55,$05,$00,$05,$55,$05,$00,$05,$55,$05
+        dc.b $00,$05,$5c,$0a,$55,$05,$00,$05,$55,$05,$00,$05,$55,$05,$00,$05,$5c,$0a,$55,$05,$00,$05,$55,$05,$00,$05,$55,$05,$00,$05,$5c,$0a
+        dc.b $55,$05,$00,$05,$55,$05,$00,$05,$55,$05,$00,$05,$5c,$0a,$55,$05,$00,$05,$55,$05,$00,$05,$55,$05,$00,$05,$5c,$0a,$55,$05,$00,$05
+        dc.b $ff
+        even
+actors                               ; moving sprites per room
+;       room, sprites, first image, images, image delay, move delay, dx, dy
+;       x, y (C64 sprite coordinates), height in lines, colours 1-3
+        dc.b 1,2,0,2,6,1,-1,0
+        dc.w 304,63,8,$fa4,$fe8,$fff
+        dc.b 0
+        even
+frames                               ; offsets of the sprite images
+        dc.l fr0-base
+        dc.l fr1-base
+fr0                              ; "comet1": 2 sprite(s), 8 lines
+        dc.w $0000,$0000,$0000,$0000,$0000,$001e,$001f,$07ff,$e7ff,$1fff,$001f,$07ff,$0000,$001e,$0000,$0000
+        dc.w $0000,$0000,$0000,$0400,$0300,$8f00,$ef80,$ffc0,$ffe0,$fff0,$ef80,$ffc0,$0300,$8f00,$0000,$0400
+fr1                              ; "comet2": 2 sprite(s), 8 lines
+        dc.w $0000,$0000,$0000,$0004,$0000,$01ef,$003f,$1fff,$e3ff,$1fff,$003f,$1fff,$0000,$01ef,$0000,$0004
+        dc.w $0000,$0000,$0000,$1000,$0600,$0e00,$ef80,$ff80,$fff0,$fff8,$ef80,$ff80,$0600,$0e00,$0000,$1000
+speech                               ; message number, 0, offset of the sample in the blob
+        dc.w 1,0
+        dc.l $018268             ; NOVA: Engaging... nothing, pilot. i am not tha
+        dc.w 0
+card                                 ; next part: kind, name, spoken title (in the blob)
+        dc.l card_k-base,card_n-base
+        dc.l $01b2a2             ; "Epilogue. Home Again"
+card_k
+        dc.b "EPILOGUE",0
+card_n
+        dc.b "HOME AGAIN",0
+        even
+        even
+part_end

@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.0 (Amiga) - CHAPTER 2: THE DERELICT STATION
+;  THE WORLD OF STRONKIE V2.1 (Amiga) - CHAPTER 2: THE DERELICT STATION
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART05": vasm -Fbin -o part05.bin part05.s

@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.0 (Amiga) - CHAPTER 5: LANDFALL
+;  THE WORLD OF STRONKIE V2.1 (Amiga) - CHAPTER 5: LANDFALL
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART08": vasm -Fbin -o part08.bin part08.s

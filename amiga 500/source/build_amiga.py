@@ -34,7 +34,7 @@ import zxpack       # noqa: E402
 from story import CHAPTERS  # noqa: E402
 os.chdir(_cwd)
 
-VERSION = 'V2.0'
+VERSION = 'V2.1'
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, 'out')
 VASM = '/home/claude/amiga/tools/vasm/vasmm68k_mot'
@@ -949,6 +949,7 @@ def build_sounds(cache):
     for name, x in SND.make_sfx().items():
         if len(x) % 2:
             x = x[:-1]
+        assert len(x) <= 28000, f'sound {name}: longer than SPEECH_MAX'
         entries.append((SND.period(SND.RATE), len(x), SND.fib_encode(x)))
     for text, voice, robot in SPEECH_LINES:
         b = speech_clip(text.capitalize(), cache, voice=voice, robot=robot)
@@ -964,6 +965,80 @@ def build_sounds(cache):
     open(os.path.join(OUT, 'SOUNDS'), 'wb').write(f)
     print(f'sounds: {len(f)} bytes, {sum(n for _, n, _ in entries)} samples when unpacked')
     return f
+
+
+# ---------------------------------------------------------------------------
+# Workbench icons (classic DiskObject, 2 bitplanes: works on Workbench 1.3 to 3.1)
+# ---------------------------------------------------------------------------
+ROCKET = """
+..............2...............
+.............222..............
+............22322.............
+............23332.............
+...........2333332............
+...........2311132............
+...........2313132............
+...........2311132............
+...........2333332............
+...........2333332............
+...........2222222............
+...........2333332............
+..........223333322...........
+.........22233333222..........
+........2232333332322.........
+........2232222222322.........
+........222.21112.222.........
+............11111.............
+.............111..............
+..............1...............
+"""
+DISK = """
+2222222222222222222222222222..
+2333333233333333332333333332..
+2333333233333333332311333332..
+2333333233333333332311333332..
+2333333233333333332333333332..
+2333333222222222222333333332..
+2333333333333333333333333332..
+2331111111111111111111111332..
+2331222222222222222222221332..
+2331211111111111111111121332..
+2331222222222222222222221332..
+2331211111111111111111121332..
+2331222222222222222222221332..
+2331111111111111111111111332..
+2222222222222222222222222222..
+"""
+
+
+def icon_file(kind, art, default_tool=None, stack=8192):
+    """kind 1 = disk, 3 = tool"""
+    import struct
+    rows = [r for r in art.strip('\n').split('\n')]
+    h, w = len(rows), len(rows[0])
+    wpr = (w + 15) // 16
+    planes = []
+    for p in range(2):
+        data = b''
+        for r in rows:
+            bits = ''.join('1' if c in '123' and (int(c) >> p) & 1 else '0' for c in r).ljust(wpr * 16, '0')
+            data += int(bits, 2).to_bytes(wpr * 2, 'big')
+        planes.append(data)
+    gadget = struct.pack('>LhhhhHHHLLLlLHL', 0, 0, 0, w, h + 1, 0x0004, 0x0003, 0x0001, 1, 0, 0, 0, 0, 0, 0)
+    assert len(gadget) == 44
+    head = struct.pack('>HH', 0xE310, 1) + gadget + struct.pack('>BB', kind, 0)
+    head += struct.pack('>LLllLLl', 1 if default_tool else 0, 0, -0x80000000, -0x80000000,
+                        1 if kind == 1 else 0, 0, stack if kind == 3 else 0)
+    assert len(head) == 78
+    out = head
+    if kind == 1:                       # DrawerData: the window of the disk
+        out += struct.pack('>hhhhBBLLLLLLLhhHHH', 50, 30, 360, 120, 255, 255, 0, 0, 0, 0, 0, 0, 0, 90, 40, 640, 256, 1)
+        out += struct.pack('>ll', 0, 0)
+    out += struct.pack('>hhhhhLBBL', 0, 0, w, h, 2, 1, 3, 0, 0) + b''.join(planes)
+    if default_tool:
+        t = default_tool.encode() + b'\0'
+        out += struct.pack('>L', len(t)) + t
+    return out
 
 
 def make_adf(files, label, path):
@@ -1001,19 +1076,24 @@ def build_all():
         n = (os.path.getsize(path) + 487) // 488
         return n + 1 + (max(n - 1, 0)) // 72
     disks = [[('MENU', os.path.join(OUT, 'MENU')), ('SOUNDS', os.path.join(OUT, 'SOUNDS'))]]
-    used = sum(blocks(f) for _, f in disks[0]) + 60 + 6     # the program, s/, startup-sequence
+    used = sum(blocks(f) for _, f in disks[0]) + 60 + 6 + 4  # the program, s/, startup-sequence, icons
     for ch in CHAPTERS:
         n = ch['number']
         f = os.path.join(OUT, f'PART{n:02d}')
         if used + blocks(f) > DISK_BLOCKS:
             disks.append([])
-            used = 0
+            used = 2               # disk.info
         disks[-1].append((f'PART{n:02d}', f))
         used += blocks(f)
         PART_DISK[n] = len(disks)
     assert len(disks) <= 3, 'more than three disks'
     build_engine()
-    disks[0] = [('Stronkie', os.path.join(OUT, 'Stronkie')), ('s/startup-sequence', ss)] + disks[0]
+    open(os.path.join(OUT, 'Stronkie.info'), 'wb').write(icon_file(3, ROCKET))
+    open(os.path.join(OUT, 'disk.info'), 'wb').write(icon_file(1, DISK, 'SYS:System/DiskCopy'))
+    disks[0] = [('Stronkie', os.path.join(OUT, 'Stronkie')), ('Stronkie.info', os.path.join(OUT, 'Stronkie.info')),
+                ('s/startup-sequence', ss)] + disks[0]
+    for d in disks:
+        d.append(('disk.info', os.path.join(OUT, 'disk.info')))
     out = []
     for i, files in enumerate(disks):
         label = 'Stronkie' if i == 0 else f'Stronkie{i + 1}'

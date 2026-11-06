@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE  V2.0  -  Amiga 500 version
+;  THE WORLD OF STRONKIE  V2.1  -  Amiga 500 version
 ;  Text & graphics adventure, ported from the Commodore 64 original
 ;  Created By Mark Stronks
 ;
@@ -44,6 +44,8 @@ _LVOOpen          = -30
 _LVOClose         = -36
 _LVORead          = -42
 _LVOWrite         = -48
+_LVOOutput        = -60
+_LVODelay         = -198
 _LVODeleteFile    = -72
 _LVOLoadView      = -222
 _LVOWaitBlit      = -228
@@ -224,7 +226,10 @@ start
         beq     exit_dos
         bsr     alloc_memory
         tst.l   d0
-        beq     exit_gfx
+        bne     .mem
+        bsr     say_nomem           ; not enough memory: say so in the CLI
+        bra     exit_mem
+.mem
         bsr     input_on            ; all keys come to the game from now on
         tst.l   d0
         beq     exit_mem
@@ -234,6 +239,9 @@ start
         sne     floppy
         bsr     video_on            ; copper lists, our own display (owns the blitter)
         bsr     load_sounds         ; sampled effects and speech (dos_begin/dos_end)
+        bsr     alloc_cache         ; the picture cache gets the chip memory that is left
+        tst.l   d0
+        beq     no_cache
         bsr     vbl_on              ; music, sprites, colour cycling (vertical blank)
 
         bsr     game                ; returns when ESC is pressed on the title screen
@@ -242,6 +250,12 @@ start
         bsr     audio_off
         bsr     video_off
         bsr     input_off
+        bra     exit_mem
+no_cache                            ; not enough chip memory: back to the CLI with a message
+        bsr     audio_off
+        bsr     video_off
+        bsr     input_off
+        bsr     say_nomem
 exit_mem
         bsr     free_sounds
         bsr     free_memory
@@ -287,14 +301,47 @@ alloc_memory                        ; -> d0 = 0 if there is not enough memory
         jsr     _LVOAllocMem(a6)
         move.l  d0,chunky
         beq   .fail
-        ; picture cache: every picture of a part, ready in bitplanes
+        moveq   #1,d0
+        rts
+.fail   moveq   #0,d0
+        rts
+
+say_nomem                           ; "not enough memory": in the CLI, or in a window of its own
+        movem.l d2-d4/a6,-(sp)      ; (started from the Workbench)
+        move.l  dosbase,a6
+        moveq   #0,d4
+        jsr     _LVOOutput(a6)
+        move.l  d0,d1
+        bne     .w
+        move.l  #con_name,d1
+        move.l  #MODE_NEWFILE,d2
+        jsr     _LVOOpen(a6)
+        move.l  d0,d4
+        beq     .x
+        move.l  d0,d1
+.w      move.l  #m_nomem,d2
+        move.l  #m_nomem_end-m_nomem,d3
+        jsr     _LVOWrite(a6)
+        move.l  d4,d1
+        beq     .x
+        move.l  #400,d1             ; 8 seconds to read it
+        jsr     _LVODelay(a6)
+        move.l  d4,d1
+        jsr     _LVOClose(a6)
+.x      movem.l (sp)+,d2-d4/a6
+        rts
+
+CHIP_RESERVE = 40960                ; chip memory left free for AmigaDOS and the system
+
+alloc_cache                         ; last of all: the picture cache, as many pictures as the
+        move.l  execbase,a6         ; free chip memory allows -> d0 = 0: not even one
         moveq   #0,d7
         lea     cache_mem,a2
-.cache  tst.w   d7                  ; keep some memory for AmigaDOS (one slot is a must)
+.cache  tst.w   d7                  ; (one picture is a must)
         beq     .must
         move.l  #MEMF_CHIP,d1
         jsr     _LVOAvailMem(a6)
-        cmp.l   #PIC_BYTES+65536,d0
+        cmp.l   #PIC_BYTES+CHIP_RESERVE,d0
         blo     .cend
 .must   move.l  #PIC_BYTES,d0
         move.l  #MEMF_CHIP,d1
@@ -305,10 +352,8 @@ alloc_memory                        ; -> d0 = 0 if there is not enough memory
         cmp.w   #CACHE_SLOTS,d7
         bne   .cache
 .cend   move.w  d7,ncache
-        beq   .fail
-        moveq   #1,d0
-        rts
-.fail   moveq   #0,d0
+        moveq   #0,d0
+        move.w  d7,d0
         rts
 
 free_memory

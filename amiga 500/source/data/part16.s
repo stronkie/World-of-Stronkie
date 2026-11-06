@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V2.0 (Amiga) - CHAPTER 13: THE BRIDGE
+;  THE WORLD OF STRONKIE V2.1 (Amiga) - CHAPTER 13: THE BRIDGE
 ;  Created By Mark Stronks
 ;
 ;  Part file "PART16": vasm -Fbin -o part16.bin part16.s

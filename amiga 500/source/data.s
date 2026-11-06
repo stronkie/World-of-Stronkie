@@ -26,10 +26,14 @@ dirnames  dc.b "NSEWUD"
         even
 
 ; ---- messages (as on the C64; $10-$1F = colour, 13 = new line) ---------
-m_banner  dc.b $17,"THE WORLD OF STRONKIE  V2.0",13
+m_banner  dc.b $17,"THE WORLD OF STRONKIE  V2.1",13
           dc.b $1f,"AMIGA 500 VERSION",13
           dc.b "CREATED BY MARK STRONKS",13
           dc.b "TYPE HELP FOR INSTRUCTIONS.",13,13,0
+con_name  dc.b "CON:20/40/600/50/The World of Stronkie",0
+m_nomem   dc.b "The World of Stronkie: not enough free memory.",10
+          dc.b "It needs an Amiga with 1 MB of chip memory.",10
+m_nomem_end
 m_loading dc.b "LOADING... PLEASE WAIT",0
 m_cardload dc.b "LOADING...",0
 m_diskerr dc.b "CANNOT FIND THE NEXT PART OF THE GAME.",0
@@ -116,7 +120,7 @@ menu_texts
           dc.b "PRESS ESC TO RETURN TO WORKBENCH",0
           even
           dc.w 220,11
-          dc.b "AMIGA 500  V2.0",0
+          dc.b "AMIGA 500  V2.1",0
           even
           dc.w -1
 
