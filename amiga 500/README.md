@@ -5,7 +5,7 @@ Created By Mark Stronks
 
 **Current version: V2.2**. The game comes on three disks: download `The_World_of_Stronkie_Amiga_V2.2_Disk1.adf`, `The_World_of_Stronkie_Amiga_V2.2_Disk2.adf` and `The_World_of_Stronkie_Amiga_V2.2_Disk3.adf`, or all three at once in `The_World_of_Stronkie_Amiga_V2.2.zip`.
 
-New in V2.2: a fix for real Amigas. On a real A500 (Kickstart 1.3, with trapdoor or accelerator RAM) the game could freeze a few seconds after the title music started, with no picture and the monitor losing its signal. The game now puts its screens, copper lists and sound buffers in chip memory itself.
+New in V2.2: an attempt to fix a freeze on real Amigas. On a real A500 the game could freeze a few seconds after the title music started, with no picture and the monitor losing its signal, while it worked in WinUAE. The game now clears all its own memory and variables when it starts (in a real Amiga memory holds random values after switching on, in an emulator it is empty), and allocates its screens, copper lists and sound buffers in chip memory itself.
 
 New in V2.1: the game has Workbench icons, so you can also start it from the Workbench (1.3 up to 3.1), it uses less chip memory, and it tells you when there isn't enough memory.
 
@@ -244,7 +244,7 @@ You need [vasm](http://sun.hasenbraten.de/vasm/) (`vasmm68k_mot`), Python 3 with
 
 | Version | Date | Notes |
 |---|---|---|
-| V2.2 | 6 Nov 2026 | Fix for the freeze on real Amigas with trapdoor, slow or fast RAM |
+| V2.2 | 6 Nov 2026 | Fix attempt for the freeze on real Amigas: all memory is cleared at the start |
 | V2.1 | 6 Nov 2026 | Workbench icons, less chip memory, a message when memory runs out |
 | V2.0 | 6 Nov 2026 | All 81 pictures painted again for the Amiga, sampled sound effects, speech, three disks |
 | V1.0 | 6 Nov 2026 | First Amiga 500 version: the complete C64 adventure (V1.7) on one bootable disk |
@@ -252,8 +252,8 @@ You need [vasm](http://sun.hasenbraten.de/vasm/) (`vasmm68k_mot`), Python 3 with
 ## Change log
 
 ### V2.2
-- Fix: on a real Amiga 500 the game could freeze a few seconds after the title music started: no title picture, and then the monitor lost its signal. This happened on a stock A500 with Kickstart 1.3 and trapdoor RAM, and with an ACA500plus. The copper lists, screens, sprites and sound waveforms were in a part of the program that should be loaded into chip memory; when it ended up in other memory, the display and sound chips read the wrong memory. The game now allocates all of this in chip memory itself when it starts, which works on every Kickstart.
-- The game clears all its own variables when it starts, instead of relying on the loader
+- Fix attempt: on a real Amiga 500 the game could freeze a few seconds after the title music started: no title picture, and then the monitor lost its signal. In WinUAE it worked. The likely cause: in a real Amiga, memory holds random values after it is switched on, while the game expected its variables to start at zero. The game now clears all its variables and buffers itself.
+- The copper lists, screens, sprites and sound waveforms are now allocated in chip memory by the game itself when it starts, instead of by the program loader
 - When there isn't enough chip memory, the game says so and returns to the CLI or Workbench
 - The interrupt routine now keeps all registers that Kickstart 1.3 expects to be kept
 - The game plays exactly the same: same pictures, same puzzles, same 1070 points
