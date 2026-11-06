@@ -1,13 +1,13 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE V1.0 (Amiga) - title screen file "MENU"
+;  THE WORLD OF STRONKIE V2.0 (Amiga) - title screen file "MENU"
 ;  Created By Mark Stronks
 ;  vasm -Fbin -o menu.bin menu.s, packed with zxpack on the disk
 ;======================================================================
 base
         dc.b "MENU"
         dc.l pic-base,pal-base,song-base
-        dc.w $000,$999,$bc7   ; spaceship colours
-        dc.w 18                     ; its height
+        dc.w $f84,$99a,$dde   ; spaceship colours
+        dc.w 14                     ; its height
         dc.l scroll-base,ship0-base,ship1-base
 pal
         dc.w $0002,$0002,$0003,$0003,$0003,$0003,$0003,$0004,$0014,$0005,$0005,$0237,$056b,$06ad,$06ef,$0aef
@@ -65,28 +65,22 @@ song_v4
         dc.b $0d,$0c,$55,$0c,$33,$0c,$55,$0c,$0d,$0c,$55,$0c,$33,$0c,$55,$0c,$0d,$0c,$55,$0c,$33,$0c,$55,$0c,$0d,$0c,$55,$0c,$33,$0c,$55,$0c
         dc.b $ff
         even
-ship0                             ; "ship1": 3 sprites, 18 lines
-        dc.w $00ff,$0000,$00ff,$0000,$00f0,$000f,$00f0,$000f,$00f0,$000f,$00f0,$000f,$fff0,$ff0f,$fff0,$ff0f
-        dc.w $fff0,$ff0f,$fff0,$ff0f,$fff0,$ff0f,$fff0,$ff0f,$00f0,$000f,$00f0,$000f,$00f0,$000f,$00f0,$000f
-        dc.w $00ff,$0000,$00ff,$0000
-        dc.w $0000,$0000,$0000,$0000,$0f00,$f000,$0f00,$f000,$000f,$fff0,$000f,$fff0,$0000,$ffff,$0000,$ffff
-        dc.w $00ff,$ffff,$00ff,$ffff,$0000,$ffff,$0000,$ffff,$000f,$fff0,$000f,$fff0,$0f00,$f000,$0f00,$f000
-        dc.w $0000,$0000,$0000,$0000
-        dc.w $0000,$0000,$0000,$0000,$0000,$0000,$0000,$0000,$f000,$0000,$f000,$0000,$00f0,$ff00,$00f0,$ff00
-        dc.w $000f,$fff0,$000f,$fff0,$00f0,$ff00,$00f0,$ff00,$f000,$0000,$f000,$0000,$0000,$0000,$0000,$0000
-        dc.w $0000,$0000,$0000,$0000
-ship1                             ; "ship2": 3 sprites, 18 lines
-        dc.w $00ff,$0000,$00ff,$0000,$00f0,$000f,$00f0,$000f,$00f0,$000f,$00f0,$000f,$0ff0,$0f0f,$0ff0,$0f0f
-        dc.w $fff0,$ff0f,$fff0,$ff0f,$0ff0,$0f0f,$0ff0,$0f0f,$00f0,$000f,$00f0,$000f,$00f0,$000f,$00f0,$000f
-        dc.w $00ff,$0000,$00ff,$0000
-        dc.w $0000,$0000,$0000,$0000,$0f00,$f000,$0f00,$f000,$000f,$fff0,$000f,$fff0,$0000,$ffff,$0000,$ffff
-        dc.w $00ff,$ffff,$00ff,$ffff,$0000,$ffff,$0000,$ffff,$000f,$fff0,$000f,$fff0,$0f00,$f000,$0f00,$f000
-        dc.w $0000,$0000,$0000,$0000
-        dc.w $0000,$0000,$0000,$0000,$0000,$0000,$0000,$0000,$f000,$0000,$f000,$0000,$00f0,$ff00,$00f0,$ff00
-        dc.w $000f,$fff0,$000f,$fff0,$00f0,$ff00,$00f0,$ff00,$f000,$0000,$f000,$0000,$0000,$0000,$0000,$0000
-        dc.w $0000,$0000,$0000,$0000
+ship0                             ; "ship1": 3 sprites, 14 lines
+        dc.w $0000,$0000,$0000,$0001,$0001,$0003,$0001,$0003,$007b,$0007,$0ff7,$000f,$7ff7,$000f,$fff7,$000f
+        dc.w $7ff7,$000f,$0ff7,$000f,$007b,$0007,$0001,$0003,$0001,$0003,$0000,$0001
+        dc.w $0000,$0000,$0000,$e000,$e000,$fe00,$fe00,$ffe0,$fff0,$ffff,$ffff,$ffff,$ffff,$c1ff,$ffff,$c03f
+        dc.w $ffff,$c1ff,$ffff,$ffff,$fff0,$ffff,$fe00,$ffe0,$e000,$fe00,$0000,$e000
+        dc.w $0000,$0000,$0000,$0000,$0000,$0000,$0000,$0000,$0000,$0000,$8000,$f800,$f800,$ffc0,$ffe0,$fffc
+        dc.w $f800,$ffc0,$8000,$f800,$0000,$0000,$0000,$0000,$0000,$0000,$0000,$0000
+ship1                             ; "ship2": 3 sprites, 14 lines
+        dc.w $0000,$0000,$0000,$0001,$0001,$0003,$0001,$0003,$001b,$0007,$03f7,$000f,$1ffb,$0007,$7ff7,$000f
+        dc.w $1ffb,$0007,$03f7,$000f,$001b,$0007,$0001,$0003,$0001,$0003,$0000,$0001
+        dc.w $0000,$0000,$0000,$e000,$e000,$fe00,$fe00,$ffe0,$fff0,$ffff,$ffff,$ffff,$ffff,$e0ff,$ffff,$c03f
+        dc.w $ffff,$e0ff,$ffff,$ffff,$fff0,$ffff,$fe00,$ffe0,$e000,$fe00,$0000,$e000
+        dc.w $0000,$0000,$0000,$0000,$0000,$0000,$0000,$0000,$0000,$0000,$8000,$f800,$fc00,$ffe0,$ffe0,$fffc
+        dc.w $fc00,$ffe0,$8000,$f800,$0000,$0000,$0000,$0000,$0000,$0000,$0000,$0000
 scroll
-        dc.b "WELCOME TO THE WORLD OF STRONKIE!     CREATED BY MARK STRONKS AKA STRONKIE  (C) 2026     NOW ON THE AMIGA 500: COPPER SKIES, BLITTER MAGIC AND FOUR CHANNELS OF PAULA MUSIC     PRESS N FOR A NEW GAME, L TO LOAD A SAVED GAME     17 PARTS, 92 LOCATIONS AND 16 STAR FRAGMENTS...  FIND THEM ALL FOR THE TRUE ENDING!     WATCH OUT FOR WOODEN MONKEYS, GHOST PIRATES AND COMMANDER VEX...     GREETINGS TO ALL AMIGA AND C64 FANS AND TO EVERY ADVENTURER WHO EVER TYPED  GET LAMP     ......     "
+        dc.b "WELCOME TO THE WORLD OF STRONKIE!     CREATED BY MARK STRONKS AKA STRONKIE  (C) 2026     NOW ON THE AMIGA 500: 81 PAINTED PICTURES IN 32 COLOURS, COPPER SKIES, SAMPLED SOUND AND SPEECH     PRESS N FOR A NEW GAME, L TO LOAD A SAVED GAME     17 PARTS, 92 LOCATIONS AND 16 STAR FRAGMENTS...  FIND THEM ALL FOR THE TRUE ENDING!     WATCH OUT FOR WOODEN MONKEYS, GHOST PIRATES AND COMMANDER VEX...     GREETINGS TO ALL AMIGA AND C64 FANS AND TO EVERY ADVENTURER WHO EVER TYPED  GET LAMP     ......     "
         dc.b 0
         even
 pic                                  ; 320x168, 4 bitplanes, interleaved lines

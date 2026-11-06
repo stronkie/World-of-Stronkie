@@ -59,6 +59,7 @@ unsigned custom_read(unsigned r)
     switch (r) {
     case 0x002: return custom[0x096 / 2] & 0x03FF;      /* DMACONR: the blitter is never busy */
     case 0x004: return 0x8000;
+    case 0x006: { static unsigned beam; beam += 0x100; return beam & 0xFF00; }   /* VHPOSR: the beam moves */
     default: return 0;
     }
 }

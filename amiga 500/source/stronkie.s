@@ -1,5 +1,5 @@
 ;======================================================================
-;  THE WORLD OF STRONKIE  V1.0  -  Amiga 500 version
+;  THE WORLD OF STRONKIE  V2.0  -  Amiga 500 version
 ;  Text & graphics adventure, ported from the Commodore 64 original
 ;  Created By Mark Stronks
 ;
@@ -119,6 +119,7 @@ H_MAP    = 60
 H_SAVEN  = 64
 H_TUNE   = 68
 H_STATC  = 72
+H_SPEECH = 76               ; V1.1: message number -> speech sample in the picture blob
 
 ROOM_SIZE = 16              ; .l description, .l picture, 6 exits, 2 spare
 OBJ_SIZE  = 12              ; noun, place, flags, 0, .l name, .l examine
@@ -228,7 +229,11 @@ start
         tst.l   d0
         beq     exit_mem
         bsr     audio_init          ; waveforms, Paula
-        bsr     video_on            ; copper lists, our own display
+        moveq   #1,d1               ; started from the floppy "Stronkie"? (else: a hard disk)
+        bsr     vol_present
+        sne     floppy
+        bsr     video_on            ; copper lists, our own display (owns the blitter)
+        bsr     load_sounds         ; sampled effects and speech (dos_begin/dos_end)
         bsr     vbl_on              ; music, sprites, colour cycling (vertical blank)
 
         bsr     game                ; returns when ESC is pressed on the title screen
@@ -238,6 +243,7 @@ start
         bsr     video_off
         bsr     input_off
 exit_mem
+        bsr     free_sounds
         bsr     free_memory
 exit_gfx
         move.l  execbase,a6
@@ -265,6 +271,11 @@ alloc_memory                        ; -> d0 = 0 if there is not enough memory
         move.l  #MEMF_CLEAR,d1
         jsr     _LVOAllocMem(a6)
         move.l  d0,part
+        beq   .fail
+        move.l  #SPEECH_MAX,d0      ; speech is unpacked here (chip memory: Paula plays it)
+        move.l  #MEMF_CHIP,d1
+        jsr     _LVOAllocMem(a6)
+        move.l  d0,speech_buf
         beq   .fail
         move.l  #FILE_MAX,d0
         moveq   #0,d1
@@ -314,7 +325,12 @@ free_memory
         move.l  d0,a1
         move.l  #320*192,d0
         jsr     _LVOFreeMem(a6)
-.f1     move.l  filebuf,d0
+.f1     move.l  speech_buf,d0
+        beq   .f1b
+        move.l  d0,a1
+        move.l  #SPEECH_MAX,d0
+        jsr     _LVOFreeMem(a6)
+.f1b    move.l  filebuf,d0
         beq   .f2
         move.l  d0,a1
         move.l  #FILE_MAX,d0
@@ -392,8 +408,8 @@ game_over
         move.b  game_state,d0
         cmp.b   #2,d0
         bne   .notdead
-        moveq   #SFX_DEATH,d0
-        bsr     play_sfx
+        moveq   #SND_DIED,d0        ; "You have died."
+        bsr     speak_sound
         lea     m_dead,a0
         bsr     print
         GETP    H_QUIP,a0           ; a Sierra-style joke about your death
@@ -413,8 +429,8 @@ game_over
 .notdead
         cmp.b   #1,d0
         bne     restart             ; QUIT / F7: straight back to the title screen
-        moveq   #SFX_WIN,d0
-        bsr     play_sfx
+        moveq   #SND_CONGRATS,d0    ; "Congratulations!"
+        bsr     speak_sound
         lea     m_end,a0
         bsr     print
         bsr     show_score
@@ -459,17 +475,41 @@ begin_chapter
 load_chapter                        ; d0 = part 1-17 -> file PARTnn, unpacked, pictures ready
         move.b  d0,packed_part
         and.l   #$ff,d0
+        lea     part_disk-1,a0
+        moveq   #0,d1
+        move.b  (a0,d0.w),d1
+        move.b  d1,want_disk
+        lea     fname,a1
+        bsr     vol_prefix          ; "Stronkie:" or "Stronkie2:"
+        move.l  a1,fname_plain      ; (without it: from a hard disk, the current directory)
+        move.l  #'PART',d1
+        rol.l   #8,d1
+        move.b  d1,(a1)+
+        rol.l   #8,d1
+        move.b  d1,(a1)+
+        rol.l   #8,d1
+        move.b  d1,(a1)+
+        rol.l   #8,d1
+        move.b  d1,(a1)+
         divu    #10,d0
         add.b   #'0',d0
-        move.b  d0,fname+4
+        move.b  d0,(a1)+
         swap    d0
         add.b   #'0',d0
-        move.b  d0,fname+5
+        move.b  d0,(a1)+
+        clr.b   (a1)
 .retry  tst.b   menu_on
         bne   .load               ; title screen or card on: load quietly behind it
         bsr     loading_screen
-.load   lea     fname,a0
-        move.l  filebuf,a1
+.load   move.l  fname_plain,a0      ; from a hard disk: the current directory
+        tst.b   floppy
+        beq     .open
+        moveq   #0,d1               ; from floppies: is the disk in a drive?
+        move.b  want_disk,d1
+        bsr     vol_present
+        beq     .err                ; no: PLEASE INSERT DISK n
+        lea     fname,a0            ; "Stronkie2:PART06"
+.open   move.l  filebuf,a1
         move.l  #FILE_MAX,d0
         bsr     disk_load           ; -> d0 = length, -1 = error
         tst.l   d0
@@ -495,7 +535,10 @@ reload_chapter                      ; d0 = part: unpack it again if it is still 
 
 unpack_part                         ; filebuf -> part; Z=1 ok
         clr.b   part_ok
-        move.l  filebuf,a0
+        move.l  filebuf,a0          ; .l packed length, packed part, then the pictures
+        move.l  (a0)+,d0
+        lea     (a0,d0.l),a1
+        move.l  a1,pic_blob
         move.l  part,a1
         bsr     unzx
         move.l  part,a0
@@ -918,8 +961,8 @@ print_objname                       ; a0 = object
 ; ---- look: picture, description, objects, exits -------------------------
 look
         bsr     room_ptr
-        move.l  4(a0),a0            ; picture
-        add.l   part,a0
+        move.l  4(a0),a0            ; picture (in the blob)
+        add.l   pic_blob,a0
         bsr     draw_picture        ; (also: sprites, colour cycling, visited)
         bsr     room_ptr
         move.l  (a0),a0
@@ -1234,6 +1277,17 @@ is_here                             ; d5 = place: carried or the current room ->
 
 print_msg                           ; d0.b = message number 1..
         and.w   #$ff,d0
+        GETP    H_SPEECH,a0         ; V1.1: NOVA speaks
+.sp     move.w  (a0),d1
+        beq     .ns
+        cmp.w   d1,d0
+        beq     .say
+        addq.l  #8,a0
+        bra     .sp
+.say    move.l  4(a0),a0
+        add.l   pic_blob,a0
+        bsr     speak_clip
+.ns
         subq.w  #1,d0
         lsl.w   #2,d0
         GETP    H_MSGS,a0
@@ -1551,14 +1605,122 @@ ask_slot                            ; Z=1: slot 1-3 chosen (file name patched)
         moveq   #1,d0
         rts
 
-save_name                           ; -> a0 = "SAVEn-..." of this part
-        GETP    H_SAVEN,a0
+save_name                           ; -> a0 = "Stronkie(2/3):SAVEn-..." of this part, d1 = disk
+        moveq   #0,d0
+        move.b  cur_chap,d0
+        lea     part_disk-1,a0
+        moveq   #0,d1
+        tst.b   floppy
+        beq     .hd                 ; from a hard disk: the current directory
+        move.b  (a0,d0.w),d1
+.hd     move.w  d1,-(sp)
         lea     savename,a1
-        move.l  a1,d1
+        bsr     vol_prefix
+        move.l  a1,save_short
+        GETP    H_SAVEN,a0
 .cp     move.b  (a0)+,(a1)+
         bne   .cp
-        move.l  d1,a0
+        move.l  save_short,a0
         move.b  slot,4(a0)
+        lea     savename,a0
+        move.w  (sp)+,d1
+        rts
+
+vol_prefix                          ; d1 = disk 1/2 (0: none), a1 = buffer -> the volume name, a1 after it
+        tst.b   d1
+        beq     .x
+        lea     vol1,a0
+        cmp.b   #2,d1
+        bne     .v3
+        lea     vol2,a0
+.v3     cmp.b   #3,d1
+        bne     .cp
+        lea     vol3,a0
+.cp     move.b  (a0)+,(a1)+
+        bne     .cp
+        subq.l  #1,a1
+.x      rts
+
+disk_usable                         ; d1 = 0 (current directory) or disk 1-3 -> Z=0 if usable
+        tst.b   floppy
+        beq     .hd
+        tst.w   d1
+        beq     .no
+        bra     vol_present
+.hd     tst.w   d1                  ; from a hard disk: only the current directory
+        beq     .yes
+.no     moveq   #0,d0
+        rts
+.yes    moveq   #1,d0
+        rts
+
+vol_present                         ; d1 = disk 1-3 -> d0/Z=0 if that disk is in a drive
+        movem.l d1-d4/a0-a3/a6,-(sp) ; (a volume node in the DOS list with a handler task)
+        lea     vol1,a2
+        cmp.w   #2,d1
+        bne     .v3
+        lea     vol2,a2
+.v3     cmp.w   #3,d1
+        bne     .v
+        lea     vol3,a2
+.v      move.l  execbase,a6
+        jsr     _LVOForbid(a6)
+        moveq   #0,d4
+        move.l  dosbase,a0
+        move.l  34(a0),d0           ; dl_Root
+        beq     .x
+        move.l  d0,a0
+        move.l  24(a0),d0           ; rn_Info (BPTR)
+        lsl.l   #2,d0
+        beq     .x
+        move.l  d0,a0
+        move.l  4(a0),d0            ; di_DevInfo (BPTR)
+.lp     lsl.l   #2,d0
+        beq     .x
+        move.l  d0,a0
+        cmp.l   #2,4(a0)            ; DLT_VOLUME
+        bne     .next
+        tst.l   8(a0)               ; dl_Task: 0 = not in a drive
+        beq     .next
+        move.l  40(a0),d1           ; dl_Name (BSTR)
+        lsl.l   #2,d1
+        move.l  d1,a1
+        moveq   #0,d2
+        move.b  (a1)+,d2            ; length
+        move.l  a2,a3
+.c      move.b  (a3)+,d3
+        cmp.b   #':',d3
+        beq     .end
+        subq.w  #1,d2
+        bmi     .next
+        move.b  (a1)+,d1
+        or.b    #$20,d1             ; (any case)
+        or.b    #$20,d3
+        cmp.b   d1,d3
+        beq     .c
+        bra     .next
+.end    tst.w   d2
+        bne     .next
+        moveq   #1,d4               ; found
+        bra     .x
+.next   move.l  (a0),d0             ; dl_Next (BPTR)
+        bra     .lp
+.x      jsr     _LVOPermit(a6)
+        move.l  d4,d0
+        movem.l (sp)+,d1-d4/a0-a3/a6
+        tst.l   d0
+        rts
+
+slot_name                           ; a2 = part name suffix, d1 = disk -> savename
+        lea     savename,a1
+        bsr     vol_prefix
+        move.b  #'S',(a1)+
+        move.b  #'A',(a1)+
+        move.b  #'V',(a1)+
+        move.b  #'E',(a1)+
+        move.b  slot,(a1)+
+.cp     move.b  (a2)+,(a1)+
+        bne   .cp
         rts
 
 do_save
@@ -1628,14 +1790,24 @@ do_save
         move.l  d0,-(sp)
         bsr     scratch_slot        ; (as the C64's S0:SAVEn*)
         bsr     save_name
-        move.l  (sp)+,d0
+        moveq   #-1,d0
+        tst.w   d1                  ; on a floppy: only if that disk is in a drive
+        beq     .sv
+        move.l  a0,-(sp)
+        bsr     vol_present
+        move.l  (sp)+,a0
+        bne     .sv
+        moveq   #-1,d0              ; that disk is not in a drive
+        bra     .no
+.sv     move.l  (sp),d0
         lea     savebuf,a1
         bsr     disk_save
+.no     addq.l  #4,sp
         tst.l   d0
         bmi   .fail
         lea     m_saved,a0
         bsr     print
-        lea     savename,a0
+        move.l  save_short,a0
         bsr     print
         lea     m_quote_end,a0
         bra     print
@@ -1727,32 +1899,42 @@ do_restore                          ; Z=1 restored
 .ret1   moveq   #1,d0
         rts
 
-scratch_slot                        ; delete SAVEn-<every part>
-        lea     save_names,a2
+scratch_slot                        ; delete SAVEn-<every part>: current directory, every disk
+        movem.l d2/a2,-(sp)
         bsr     dos_begin
+        moveq   #0,d2
+.disk   lea     save_names,a2
+        move.w  d2,d1
+        bsr     disk_usable
+        beq     .nd
 .lp     tst.b   (a2)
-        beq   .x
-        lea     savename,a1
-        move.l  #'SAVE',(a1)+
-        move.b  slot,(a1)+
-.cp     move.b  (a2)+,(a1)+
-        bne   .cp
+        beq   .nd
+        move.w  d2,d1
+        bsr     slot_name
         move.l  dosbase,a6
         move.l  #savename,d1
         jsr     _LVODeleteFile(a6)
         bra   .lp
-.x      bra     dos_end
+.nd     addq.w  #1,d2
+        cmp.w   #3,d2
+        bls     .disk
+        bsr     dos_end
+        movem.l (sp)+,d2/a2
+        rts
 
 find_save                           ; -> savebuf filled, d0 = length or -1
-        ; the save file of slot n can belong to any part: try every part's name
-        lea     save_names,a2
+        ; the save file of slot n can belong to any part, on any disk
+        moveq   #0,d2
+.disk   lea     save_names,a2
+        move.w  d2,d1
+        bsr     disk_usable
+        beq     .nd
 .lp     tst.b   (a2)
-        beq   .no
-        lea     savename,a1
-        move.l  #'SAVE',(a1)+
-        move.b  slot,(a1)+
-.cp     move.b  (a2)+,(a1)+
-        bne   .cp
+        beq   .nd
+        move.w  d2,d1
+        move.l  d2,-(sp)
+        bsr     slot_name
+        move.l  (sp)+,d2
         move.l  a2,-(sp)
         lea     savename,a0
         lea     savebuf,a1
@@ -1762,7 +1944,10 @@ find_save                           ; -> savebuf filled, d0 = length or -1
         tst.l   d0
         bpl   .yes
         bra   .lp
-.no     moveq   #-1,d0
+.nd     addq.w  #1,d2
+        cmp.w   #3,d2
+        bls     .disk
+        moveq   #-1,d0
 .yes    rts
 
 ;======================================================================

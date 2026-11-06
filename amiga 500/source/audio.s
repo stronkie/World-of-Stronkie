@@ -187,14 +187,16 @@ sound_tick                          ; every frame (interrupt)
         lea     $10(a4),a4
         addq.w  #1,d7
         bra   .mv
-.env    tst.b   sfx_on              ; ---- sound effect on channel 3
-        beq   .env2
-        bsr     sfx_tick
-.env2   lea     voices,a1           ; envelopes -> volumes
+.env    bsr     sample_tick
+        lea     voices,a1           ; envelopes -> volumes
         lea     AUD0LC(a5),a4
         moveq   #3,d7
-.ev     bsr     envelope
-        lea     VO_SIZE(a1),a1
+.ev     tst.w   d7                  ; (channel 3: not while a sample plays)
+        bne     .e1
+        tst.b   sfx_on
+        bne     .e2
+.e1     bsr     envelope
+.e2     lea     VO_SIZE(a1),a1
         lea     $10(a4),a4
         dbf     d7,.ev
         rts
@@ -332,56 +334,191 @@ envelope                            ; a1 = voice, a4 = channel: ADSR -> volume
         rts
 
 ;----------------------------------------------------------------------
-play_sfx                            ; d0 = effect 1-13 (channel 3)
-        movem.l d0-d4/a0-a1/a4-a5,-(sp)
-        and.w   #$ff,d0
-        subq.w  #1,d0
-        add.w   d0,d0
-        lea     sfx_offs,a0
-        add.w   (a0,d0.w),a0
-        lea     voices+3*VO_SIZE,a1
-        move.b  (a0)+,VO_AD(a1)
-        move.b  (a0)+,VO_SR(a1)
-        move.l  a0,sfx_ptr
-        clr.w   VO_LEVEL(a1)
-        clr.b   VO_PHASE(a1)
-        clr.b   sfx_gate
-        move.b  #1,sfx_on
-        movem.l (sp)+,d0-d4/a0-a1/a4-a5
+;  V1.1: sampled sound effects and speech on channel 3
+;----------------------------------------------------------------------
+SND_COUNT = 16
+SND_DIED  = 14
+SND_CONGRATS = 15
+SND_TITLE = 16
+
+load_sounds                         ; SOUNDS -> chip memory (Fibonacci delta unpacked)
+        movem.l d2-d7/a2-a6,-(sp)
+        lea     soundsname,a0
+        move.l  filebuf,a1
+        move.l  #FILE_MAX,d0
+        bsr     disk_load
+        tst.l   d0
+        bmi     .x
+        move.l  filebuf,a2
+        move.w  (a2),d7             ; sounds
+        cmp.w   #SND_COUNT,d7
+        bls     .n
+        moveq   #SND_COUNT,d7
+.n      move.w  d7,snd_count
+        moveq   #0,d6               ; total samples
+        lea     2(a2),a3
+        move.w  d7,d5
+        subq.w  #1,d5
+.t      moveq   #0,d0
+        move.w  6(a3),d0
+        add.l   d0,d6
+        addq.l  #8,a3
+        dbf     d5,.t
+        move.l  d6,snd_mem_len
+        move.l  execbase,a6
+        move.l  d6,d0
+        move.l  #MEMF_CHIP,d1
+        jsr     _LVOAllocMem(a6)
+        move.l  d0,snd_mem
+        beq     .x
+        move.l  d0,a1               ; unpack every sound
+        lea     2(a2),a3
+        lea     snd_tab,a4
+        move.w  d7,d5
+        subq.w  #1,d5
+.u      move.l  (a3),a0
+        add.l   a2,a0
+        move.l  a1,(a4)             ; SN_PTR
+        move.w  6(a3),d0
+        lsr.w   #1,d0
+        move.w  d0,4(a4)            ; SN_WORDS
+        move.w  4(a3),6(a4)         ; SN_PER
+        moveq   #0,d0
+        move.w  6(a3),d0            ; frames = samples * period / 70938
+        mulu    4(a3),d0
+        divu    #35469,d0
+        lsr.w   #1,d0
+        addq.w  #2,d0
+        move.w  d0,8(a4)            ; SN_FRAMES
+        move.w  6(a3),d0
+        bsr     fib_decode          ; a0 -> a1 (a1 moves on)
+        addq.l  #8,a3
+        lea     10(a4),a4
+        dbf     d5,.u
+.x      movem.l (sp)+,d2-d7/a2-a6
         rts
 
-sfx_tick                            ; one (frequency high, control) pair a frame
-        lea     voices+3*VO_SIZE,a1
-        lea     AUD0LC+$30(a5),a4
-        move.l  sfx_ptr,a0
-        moveq   #0,d0
-        move.b  (a0)+,d0
-        beq   .end
-        moveq   #0,d1
-        move.b  (a0)+,d1
-        move.l  a0,sfx_ptr
-        lsl.w   #3,d0
-        btst    #7,d1
-        bne   .noise
-        lea     sfx_freq,a0         ; per frequency: period, length index, noise period
-        move.w  (a0,d0.w),d3
-        move.w  2(a0,d0.w),d4
-        moveq   #8,d2
-        bsr     set_wave
-        bra   .gate
-.noise  lea     sfx_freq,a0
-        move.w  4(a0,d0.w),d3
-        bsr     set_noise
-.gate   btst    #0,d1
-        beq   .goff
-        tst.b   sfx_gate
-        bne   .x
-        move.b  #1,sfx_gate
-        move.b  #1,VO_PHASE(a1)     ; gate on: attack
-        rts
-.goff   clr.b   sfx_gate
-        move.b  #4,VO_PHASE(a1)
+free_sounds
+        move.l  snd_mem,d0
+        beq     .x
+        move.l  d0,a1
+        move.l  snd_mem_len,d0
+        move.l  execbase,a6
+        jsr     _LVOFreeMem(a6)
 .x      rts
-.end    clr.b   sfx_on              ; gate off
-        move.b  #4,VO_PHASE(a1)
+
+fib_decode                          ; a0 = data (start value, then 2 samples a byte), a1 = out,
+        movem.l d0-d3/a2,-(sp)      ; d0.w = samples (even)
+        lea     fib_tab,a2
+        move.b  (a0)+,d1
+        lsr.w   #1,d0
+        subq.w  #1,d0
+        bmi     .x
+.lp     moveq   #0,d2
+        move.b  (a0)+,d2
+        move.w  d2,d3
+        lsr.w   #4,d3
+        add.b   (a2,d3.w),d1
+        move.b  d1,(a1)+
+        and.w   #15,d2
+        add.b   (a2,d2.w),d1
+        move.b  d1,(a1)+
+        dbf     d0,.lp
+.x      movem.l (sp)+,d0-d3/a2
         rts
+
+play_sfx                            ; d0 = effect 1-13 (not while somebody speaks)
+        tst.b   speech_on
+        bne     snd_rts
+play_sound                          ; d0 = sound 1-16
+        movem.l d0-d4/a0-a1/a5,-(sp)
+        and.w   #$ff,d0
+        beq     .x
+        cmp.w   snd_count,d0
+        bhi     .x
+        subq.w  #1,d0
+        mulu    #10,d0
+        lea     snd_tab,a1
+        add.w   d0,a1
+        move.l  (a1),a0
+        move.w  4(a1),d0
+        move.w  6(a1),d1
+        move.w  8(a1),d2
+        bsr     play_sample
+.x      movem.l (sp)+,d0-d4/a0-a1/a5
+snd_rts rts
+
+speak_sound                         ; d0 = sound 14-16: speech (has priority)
+        move.b  #1,speech_on
+        bsr     play_sound
+        tst.b   sfx_on
+        bne     .x
+        clr.b   speech_on
+.x      rts
+
+speak_clip                          ; a0 = clip: .w period, .w samples, Fibonacci data
+        movem.l d0-d4/a0-a1,-(sp)
+        move.w  (a0)+,d4            ; period
+        move.w  (a0)+,d0            ; samples
+        cmp.w   #SPEECH_MAX,d0
+        bls     .ok
+        move.w  #SPEECH_MAX,d0
+.ok     move.w  d0,d3
+        move.l  speech_buf,a1
+        bsr     fib_decode
+        move.l  speech_buf,a0
+        moveq   #0,d2
+        move.w  d3,d2
+        mulu    d4,d2
+        divu    #35469,d2
+        lsr.w   #1,d2
+        addq.w  #2,d2
+        move.w  d3,d0
+        lsr.w   #1,d0
+        move.w  d4,d1
+        move.b  #1,speech_on
+        bsr     play_sample
+        movem.l (sp)+,d0-d4/a0-a1
+        rts
+
+play_sample                         ; a0 = samples (chip), d0 = words, d1 = period, d2 = frames
+        lea     CUSTOM,a5
+        move.w  #$0008,DMACON(a5)   ; channel 3 off, so it starts again from the beginning
+        clr.w   AUD0VOL+$30(a5)
+        bsr     wait_lines
+        move.l  a0,AUD0LC+$30(a5)
+        move.w  d0,AUD0LEN+$30(a5)
+        move.w  d1,AUD0PER+$30(a5)
+        move.w  #64,AUD0VOL+$30(a5)
+        move.w  d2,smp_frames
+        move.b  #2,smp_state
+        move.b  #1,sfx_on
+        move.w  #$8008,DMACON(a5)
+        rts
+
+wait_lines                          ; a few raster lines (Paula notices DMA off)
+        moveq   #4,d4
+.l      move.b  CUSTOM+6,d3
+.w      cmp.b   CUSTOM+6,d3
+        beq     .w
+        dbf     d4,.l
+        rts
+
+sample_tick                         ; interrupt: after the start, loop on silence; then done
+        tst.b   smp_state
+        beq     .x
+        lea     CUSTOM,a5
+        cmp.b   #2,smp_state
+        bne     .c
+        move.l  #silence,AUD0LC+$30(a5)
+        move.w  #1,AUD0LEN+$30(a5)
+        move.b  #1,smp_state
+.c      subq.w  #1,smp_frames
+        bne     .x
+        clr.b   smp_state
+        clr.b   sfx_on
+        clr.b   speech_on
+        clr.w   AUD0VOL+$30(a5)
+        clr.w   voices+3*VO_SIZE+VO_LEVEL
+        clr.b   voices+3*VO_SIZE+VO_PHASE
+.x      rts

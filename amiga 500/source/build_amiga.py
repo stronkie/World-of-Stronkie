@@ -1,17 +1,19 @@
 """THE WORLD OF STRONKIE - Amiga 500 version: builds the data files and the disk.
 
-The story, the puzzles and the pictures come from the C64 version (/home/claude/adv): every
-part is compiled with the C64 chapter compiler, then turned into an Amiga part file with
-32-bit offsets. The pictures are kept as 160x96 'chunky' pixels (the C64 drawing, before
-the multicolour conversion, so without colour clash); the engine scales them up to
-320x192 with Scale2x and converts them to five bitplanes.
+The story and the puzzles come from the C64 version (/home/claude/adv): every part is
+compiled with the C64 chapter compiler, then turned into an Amiga part file with 32-bit
+offsets. V2.0: the pictures are new 320x192 paintings in 32 colours (../art: scenes1-4.py,
+painted with paint.py and kit.py). Every picture has its own palette, a copper sky and
+colour cycling, and is stored as packed 'chunky' pixels; the engine unpacks it and converts
+it to five bitplanes. Sampled sound effects and speech (flite) are Fibonacci-delta packed.
 
 Output (out/):
     partNN.s            vasm source of every part file (assembled with vasm -Fbin)
     PARTnn              the part files on the disk (packed with zxpack)
     menu.s / MENU       title picture, menu music
     Stronkie            the program (vasm -Fhunkexe)
-    The_World_of_Stronkie_Amiga_Vx.y.adf
+    The_World_of_Stronkie_Amiga_Vx.y_Disk1-3.adf (three disks)
+    sound_and_speech_preview.wav (soundpreview.py)
 """
 import os
 import random
@@ -32,7 +34,7 @@ import zxpack       # noqa: E402
 from story import CHAPTERS  # noqa: E402
 os.chdir(_cwd)
 
-VERSION = 'V1.0'
+VERSION = 'V2.0'
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, 'out')
 VASM = '/home/claude/amiga/tools/vasm/vasmm68k_mot'
@@ -298,6 +300,151 @@ def tune_voices(jingle, song):
     return s['inst'], out
 
 
+
+# ---------------------------------------------------------------------------
+# V1.1: new Amiga pictures (painted by the scenes in ../art), sprites, speech
+# ---------------------------------------------------------------------------
+ART = '/home/claude/amiga/art'
+sys.path.insert(0, ART)
+import amiga_sprites as AS      # noqa: E402
+import amiga_sound as SND       # noqa: E402
+
+PIC_OVERRIDE = {(17, 'garden'): 'egarden'}      # the epilogue garden: morning, the ship on the lawn
+_scenes = None
+
+
+def scenes():
+    global _scenes
+    if _scenes is None:
+        import scenes1, scenes2, scenes3, scenes4
+        _scenes = {}
+        for m in (scenes1, scenes2, scenes3, scenes4):
+            _scenes.update(m.SCENES)
+    return _scenes
+
+
+def sprite_pics():
+    """pictures of rooms with moving sprites: they keep colours 17-19 and 21-23 free"""
+    out = set()
+    for ch in CHAPTERS:
+        part = sprites.PARTS.get(ch['number'])
+        if not part:
+            continue
+        for a in part[1]:
+            if a['room'] != 'menu':
+                out.add(PIC_OVERRIDE.get((ch['number'], a['room']), ch['rooms'][a['room']]['pic']))
+    return out
+
+
+_rendered = {}
+
+
+def render_picture(name):
+    if name not in _rendered:
+        import paint
+        cv = scenes()[name]()
+        _rendered[name] = paint.finish(cv, sprite_regs=name in sprite_pics(), name=name)
+        _rendered[name]['preview'].save(os.path.join(OUT, 'pics', name + '.png'))
+    return _rendered[name]
+
+
+def pic_block(name, cache):
+    """.w flags (1 = sky), .w cycling registers, 32 colours, [192 sky colours],
+    per cycling register (.w register, speed, n, colours), .l packed length, packed
+    320x192 pixels (register*4)"""
+    import struct
+    r = render_picture(name)
+    assert len(r['cycles']) <= 16, f'{name}: more than 16 cycling registers (cyc_tab)'
+    w = [1 if r['sky'] else 0, len(r['cycles'])]
+    w += list(r['palette'])
+    if r['sky']:
+        w += r['sky']
+    for reg, speed, cols in r['cycles']:
+        w += [reg, speed, len(cols)] + cols
+    chunky = (r['chunky'].astype('uint8') * 4).tobytes()
+    packed = pack_file(chunky, cache)
+    b = struct.pack(f'>{len(w)}H', *w) + struct.pack('>L', len(packed)) + packed
+    if len(b) % 2:
+        b += b'\0'
+    return b
+
+
+def speech_clip(text, cache, voice='slt', robot=True, maxsec=4.2):
+    """flite -> 6.5 kHz 8 bit -> Fibonacci delta. .w period, .w samples, data"""
+    import hashlib
+    import struct
+    rate = 6500
+    key = hashlib.sha1(f'{text}|{voice}|{robot}|{maxsec}|{rate}'.encode()).hexdigest()
+    p = os.path.join(cache, key + '.spk')
+    if os.path.exists(p):
+        return open(p, 'rb').read()
+    words = text
+    x, _ = SND.speech(words, voice, rate, robot)
+    while len(x) > rate * maxsec and ('.' in words.strip('. ') or ',' in words or '!' in words.strip('! ')):
+        for sep in ('. ', '! ', '? ', ', '):
+            if sep in words:
+                words = words[:words.rfind(sep) + 1]
+                break
+        x, _ = SND.speech(words, voice, rate, robot)
+    if len(x) > rate * maxsec:
+        x = x[:int(rate * maxsec)]
+    if len(x) % 2:
+        x = x[:-1]
+    data = SND.fib_encode(x)
+    b = struct.pack('>HH', SND.period(rate), len(x)) + data
+    if len(b) % 2:
+        b += b'\0'
+    open(p, 'wb').write(b)
+    return b
+
+
+def nova_text(msg):
+    import re
+    flat = ' '.join(''.join(c if c >= ' ' else ' ' for c in msg).split())
+    m = re.search(r"NOVA(?:'S VOICE[A-Z ]*| ON [A-Z ]*)?: '(.*?)'(?:\s|$)", flat)
+    if not m:
+        return None
+    q = m.group(1).replace('PILOT', 'pilot').replace('STARRAVEN', 'Star Raven')
+    return q.capitalize() if len(q) > 3 else None
+
+
+def emit_actors(S, ch, rooms):
+    n = ch['number']
+    part = sprites.PARTS.get(n)
+    frames = []
+    entries = []
+    if part:
+        for a in part[1]:
+            if a['room'] == 'menu':
+                continue
+            f0 = len(frames)
+            frames += a['frames']
+            entries.append((rooms.index(a['room']) + 1, a, f0))
+    S('actors                               ; moving sprites per room')
+    S(';       room, sprites, first image, images, image delay, move delay, dx, dy')
+    S(';       x, y (C64 sprite coordinates), height in lines, colours 1-3')
+    per_room = {}
+    for room, a, f0 in entries:
+        cols, h = AS.columns(a['frames'][0])
+        per_room[room] = per_room.get(room, 0) + (len(cols) + 1) // 2 * 2
+        assert per_room[room] <= 4, f'part {n}: too many sprites in room {room}'
+        dx = a['dx'] if a['dx'] < 128 else a['dx'] - 256
+        dy = a['dy'] if a['dy'] < 128 else a['dy'] - 256
+        c1, c2, c3 = AS.COLOURS[AS.family(a['frames'][0])]
+        S(f'        dc.b {room},{len(cols)},{f0},{len(a["frames"])},{a["ad"]},{a["md"]},{dx},{dy}')
+        S(f'        dc.w {a["x"]},{a["y"]},{h},${c1:03x},${c2:03x},${c3:03x}')
+    S('        dc.b 0')
+    S.even()
+    S('frames                               ; offsets of the sprite images')
+    for i in range(len(frames)):
+        S(f'        dc.l fr{i}-base')
+    for i, f in enumerate(frames):
+        cols, h = AS.columns(f)
+        S(f'fr{i}                              ; "{f}": {len(cols)} sprite(s), {h} lines')
+        for p0, p1 in cols:
+            S.words([w for pair in zip(p0, p1) for w in pair])
+
+
 # ---------------------------------------------------------------------------
 # part files
 # ---------------------------------------------------------------------------
@@ -309,7 +456,7 @@ def cstr(mem, addr):
     return bytes(out + b'\0')
 
 
-def part_source(k):
+def part_source(k, cache=None):
     ch = CHAPTERS[k]
     nxt = CHAPTERS[k + 1] if k + 1 < len(CHAPTERS) else None
     n = ch['number']
@@ -352,7 +499,8 @@ def part_source(k):
     S('        dc.l t_save-base')
     S(f'        dc.l {"tune-base" if ch.get("tune") else "0"}            ; jingle (TUNE action)')
     S(f'        dc.b {statc},{border}')
-    S('        even')
+    S('        dc.w 0')
+    S('        dc.l speech-base                ; speech: message number -> sample (picture blob)')
     # rooms
     S('rooms                                ; description, picture, exits N S E W U D')
     pics = []
@@ -360,10 +508,10 @@ def part_source(k):
         a = rooms_a + i * 10
         d, p = w(a), w(a + 2)
         ex = list(mem[a + 4:a + 10])
-        pn = pic_name[p]
+        pn = PIC_OVERRIDE.get((n, rooms[i]), pic_name[p])
         if pn not in pics:
             pics.append(pn)
-        S(f'        dc.l d{i + 1}-base,pic_{pn}-base')
+        S(f'        dc.l d{i + 1}-base,PIC_{pn.upper()}')
         S(f'        dc.b {",".join(map(str, ex))},0,0      ; {rooms[i]}')
     S('objects                              ; noun, place, flags, 0, name, examine text')
     texts = {}                     # C64 address -> label
@@ -433,24 +581,38 @@ def part_source(k):
         emit_song(S, 'tune', inst, vs)
     # sprites
     emit_actors(S, ch, rooms)
-    # pictures
+    # pictures and speech: in the blob after the packed part (offsets from its start)
+    blob = bytearray()
+    equ = []
     for pn in pics:
-        emit_picture(S, f'pic_{pn}', pn)
-        S.even()
-    # title card of the next part: its title and the picture of its first room
+        equ.append(f'PIC_{pn.upper():<12}= ${len(blob):06x}      ; picture "{pn}" in the blob')
+        blob += pic_block(pn, cache)
+    S('speech                               ; message number, 0, offset of the sample in the blob')
+    for i in range(count):
+        t = nova_text(cstr(mem, w(msgs_a + 2 * i))[:-1].decode('latin1'))
+        if t:
+            S(f'        dc.w {i + 1},0')
+            S(f'        dc.l ${len(blob):06x}             ; NOVA: {t[:40]}')
+            blob += speech_clip(t, cache)
+    S('        dc.w 0')
     if nxt:
         kind, _, name = nxt['title'].partition(':')
-        S('card                                 ; next part: kind, name, picture')
-        S('        dc.l card_k-base,card_n-base,card_pic-base')
+        say = f'{kind.strip().title()}. {name.strip().title()}'.replace("'S", "'s")
+        S('card                                 ; next part: kind, name, spoken title (in the blob)')
+        S('        dc.l card_k-base,card_n-base')
+        S(f'        dc.l ${len(blob):06x}             ; "{say}"')
+        blob += speech_clip(say, cache, voice='rms', robot=False, maxsec=4.0)
         S('card_k')
         S.text(kind.strip().upper().encode() + b'\0')
         S('card_n')
         S.text(name.strip().upper().encode() + b'\0')
         S.even()
-        emit_picture(S, 'card_pic', nxt['rooms'][nxt['start']]['pic'])
     S.even()
     S('part_end')
-    return S.source()
+    src = S.source()
+    i = src.index('base\n')
+    src = src[:i] + '\n'.join(equ) + '\n\n' + src[i:]
+    return src, bytes(blob)
 
 
 def vasm_bin(src_path, out_path):
@@ -475,7 +637,7 @@ def pack_file(data, cache_dir):
 
 
 def main(only=None):
-    os.makedirs(OUT, exist_ok=True)
+    os.makedirs(os.path.join(OUT, 'pics'), exist_ok=True)
     cache = os.path.join(HERE, '.cache')
     os.makedirs(cache, exist_ok=True)
     files = []
@@ -483,14 +645,20 @@ def main(only=None):
         n = ch['number']
         if only and n not in only:
             continue
-        src = part_source(k)
+        src, blob = part_source(k, cache)
         sp = os.path.join(OUT, f'part{n:02d}.s')
         open(sp, 'w').write(src)
         data = vasm_bin(sp, os.path.join(OUT, f'part{n:02d}.bin'))
         packed = pack_file(data, cache)
-        open(os.path.join(OUT, f'PART{n:02d}'), 'wb').write(packed)
-        files.append((f'PART{n:02d}', packed))
-        print(f'part{n:02d}: {len(data):6} bytes -> packed {len(packed):6}')
+        if len(packed) % 2:
+            packed += b'\0'
+        import struct
+        f = struct.pack('>L', len(packed)) + packed + blob
+        open(os.path.join(OUT, f'PART{n:02d}'), 'wb').write(f)
+        files.append((f'PART{n:02d}', f))
+        assert len(data) <= 32768, f'part {n}: more than PART_MAX'
+        assert len(f) <= 196608, f'part {n}: more than FILE_MAX'
+        print(f'part{n:02d}: core {len(data):6} -> {len(packed):6}, pictures+speech {len(blob):7}, file {len(f):7}', flush=True)
     return files
 
 
@@ -500,6 +668,9 @@ def main(only=None):
 # engine tables (tables.i): font, sound, verbs, credits ...
 # ===========================================================================
 PAL_CLOCK = 3546895
+PART_DISK = {}
+SPEECH_LINES = [('YOU HAVE DIED.', 'rms', False), ('CONGRATULATIONS!', 'rms', False),
+                ('WELCOME TO THE WORLD OF STRONKIE!', 'rms', True)]
 SID_CLOCK = 985248
 WAVE_LENS = [256, 128, 64, 32, 16, 8]
 
@@ -621,19 +792,15 @@ def engine_tables():
     S.words([max(1, min(0x4000, round(0x4000 * 20 / t))) for t in attack])
     S('dec_tab                              ; SID decay/release times -> step a frame')
     S.words([max(1, min(0x4000, round(0x4000 * 20 / t))) for t in decay])
-    # sound effects: the C64 data
-    sfx = re.findall(r'^(sfx_\w+)\s*;.*\n\s*\.byte (.*)$', src, re.M)
-    S('sfx_offs                             ; the C64 sound effects: AD, SR, (frequency, control)... 0')
-    for name, _ in sfx:
-        S(f'        dc.w {name}-sfx_offs')
-    for name, data in sfx:
-        S(f'{name}')
-        S('        dc.b ' + data.replace('$', '$'))
+    S('fib_tab                              ; Fibonacci delta steps (speech, sampled effects)')
+    S('        dc.b ' + ','.join(str(v & 255) for v in SND.FIB))
+    S('part_disk                            ; the disk every part is on (1-3)')
+    S('        dc.b ' + ','.join(str(PART_DISK.get(n, 1)) for n in range(1, 18)))
     S.even()
     # end credits
     cred = list(sprites.CREDITS)
     i = cred.index('MENU MUSIC')
-    cred[i:i + 5] = ['AMIGA 500 VERSION', '', 'COPPER, BLITTER, SPRITES', 'AND PAULA AT WORK', '']
+    cred[i:i + 5] = ['AMIGA 500 VERSION', '', 'COPPER, BLITTER, SPRITES', 'AND PAULA AT WORK', '', 'SPEECH: FLITE', '(CARNEGIE MELLON UNIVERSITY)', '']
     S('credit_text')
     for line in cred:
         S(f'        dc.b "{line}",0')
@@ -651,7 +818,7 @@ def engine_tables():
 MENU_ART = '/mnt/user-data/attachments/af600111-0128-59b3-89d6-57733582f259/780d739a-image.jpg'
 SCROLL_TEXT = (
     "WELCOME TO THE WORLD OF STRONKIE!     CREATED BY MARK STRONKS AKA STRONKIE  (C) 2026     "
-    "NOW ON THE AMIGA 500: COPPER SKIES, BLITTER MAGIC AND FOUR CHANNELS OF PAULA MUSIC     "
+    "NOW ON THE AMIGA 500: 81 PAINTED PICTURES IN 32 COLOURS, COPPER SKIES, SAMPLED SOUND AND SPEECH     "
     "PRESS N FOR A NEW GAME, L TO LOAD A SAVED GAME     "
     "17 PARTS, 92 LOCATIONS AND 16 STAR FRAGMENTS...  FIND THEM ALL FOR THE TRUE ENDING!     "
     "WATCH OUT FOR WOODEN MONKEYS, GHOST PIRATES AND COMMANDER VEX...     "
@@ -721,10 +888,9 @@ def menu_source():
     S('base')
     S('        dc.b "MENU"')
     S('        dc.l pic-base,pal-base,song-base')
-    (mc1, mc2), actors = sprites.PARTS[1]
-    ship = [a for a in actors if a['room'] == 'menu'][0]
-    cols, h = sprite_columns(frame_rows(ship['frames'][0]), True, False)
-    S(f'        dc.w ${PAL12[mc1]:03x},${PAL12[ship["colour"]]:03x},${PAL12[mc2]:03x}   ; spaceship colours')
+    cols, h = AS.columns('ship1')
+    c1, c2, c3 = AS.COLOURS['ship']
+    S(f'        dc.w ${c1:03x},${c2:03x},${c3:03x}   ; spaceship colours')
     S(f'        dc.w {h}                     ; its height')
     S('        dc.l scroll-base,ship0-base,ship1-base')
     pal, planes, prev = menu_picture()
@@ -733,8 +899,8 @@ def menu_source():
     S.words(pal)
     inst, vs = menu_song()
     emit_song(S, 'song', inst, vs)
-    for i, f in enumerate(ship['frames']):
-        cols, h = sprite_columns(frame_rows(f), True, False)
+    for i, f in enumerate(['ship1', 'ship2']):
+        cols, h = AS.columns(f)
         S(f'ship{i}                             ; "{f}": 3 sprites, {h} lines')
         for p0, p1 in cols:
             S.words([w for pair in zip(p0, p1) for w in pair])
@@ -775,22 +941,51 @@ def build_menu(cache):
     return packed
 
 
-def make_adf(files):
-    adf = os.path.join(OUT, f'The_World_of_Stronkie_Amiga_{VERSION}.adf')
-    if os.path.exists(adf):
-        os.remove(adf)
+def build_sounds(cache):
+    """SOUNDS: the sampled effects (1-13) and speech (14 died, 15 congratulations, 16 title),
+    Fibonacci delta packed. .w count, per sound .l offset .w period .w samples, data"""
+    import struct
+    entries = []
+    for name, x in SND.make_sfx().items():
+        if len(x) % 2:
+            x = x[:-1]
+        entries.append((SND.period(SND.RATE), len(x), SND.fib_encode(x)))
+    for text, voice, robot in SPEECH_LINES:
+        b = speech_clip(text.capitalize(), cache, voice=voice, robot=robot)
+        per, n = struct.unpack('>HH', b[:4])
+        entries.append((per, n, b[4:4 + 1 + n // 2]))
+    head = struct.pack('>H', len(entries))
+    off = 2 + len(entries) * 8
+    body = b''
+    for per, n, data in entries:
+        head += struct.pack('>LHH', off + len(body), per, n)
+        body += data + (b'\0' if len(data) % 2 else b'')
+    f = head + body
+    open(os.path.join(OUT, 'SOUNDS'), 'wb').write(f)
+    print(f'sounds: {len(f)} bytes, {sum(n for _, n, _ in entries)} samples when unpacked')
+    return f
+
+
+def make_adf(files, label, path):
+    if os.path.exists(path):
+        os.remove(path)
     env = dict(os.environ, PYTHONPATH='/home/claude/amiga/tools/amitools')
-    xdf = ['python3', '/home/claude/amiga/tools/amitools/bin/xdftool', adf]
-    cmds = ['create', '+', 'format', 'Stronkie', 'ofs', '+', 'boot', 'install', '+', 'makedir', 's']
-    for name, path in files:
-        cmds += ['+', 'write', path, name]
+    xdf = ['python3', '/home/claude/amiga/tools/amitools/bin/xdftool', path]
+    cmds = ['create', '+', 'format', label, 'ofs']
+    if any(n == 'Stronkie' for n, _ in files):
+        cmds += ['+', 'boot', 'install', '+', 'makedir', 's']
+    for name, src in files:
+        cmds += ['+', 'write', src, name]
     r = subprocess.run(xdf + cmds, capture_output=True, text=True, env=env)
     if r.returncode:
         print(r.stdout, r.stderr)
         raise SystemExit('xdftool failed')
-    r = subprocess.run(xdf + ['list'], capture_output=True, text=True, env=env)
-    print(r.stdout[-1500:])
-    return adf
+    r = subprocess.run(xdf + ['info'], capture_output=True, text=True, env=env)
+    print(path, r.stdout.strip().splitlines()[-3:])
+    return path
+
+
+DISK_BLOCKS = 1756 - 2          # 1760 minus boot blocks, root, bitmap; a little spare
 
 
 def build_all():
@@ -798,15 +993,33 @@ def build_all():
     os.makedirs(cache, exist_ok=True)
     main()
     build_menu(cache)
-    build_engine()
+    build_sounds(cache)
     ss = os.path.join(OUT, 'startup-sequence')
     open(ss, 'w').write('Stronkie\n')
-    files = [('Stronkie', os.path.join(OUT, 'Stronkie')), ('s/startup-sequence', ss),
-             ('MENU', os.path.join(OUT, 'MENU'))]
+    # disk 1: the program, title screen, sounds and the first parts; then disks 2 and 3
+    def blocks(path):                    # OFS: 488 data bytes a block, a header per 72
+        n = (os.path.getsize(path) + 487) // 488
+        return n + 1 + (max(n - 1, 0)) // 72
+    disks = [[('MENU', os.path.join(OUT, 'MENU')), ('SOUNDS', os.path.join(OUT, 'SOUNDS'))]]
+    used = sum(blocks(f) for _, f in disks[0]) + 60 + 6     # the program, s/, startup-sequence
     for ch in CHAPTERS:
         n = ch['number']
-        files.append((f'PART{n:02d}', os.path.join(OUT, f'PART{n:02d}')))
-    return make_adf(files)
+        f = os.path.join(OUT, f'PART{n:02d}')
+        if used + blocks(f) > DISK_BLOCKS:
+            disks.append([])
+            used = 0
+        disks[-1].append((f'PART{n:02d}', f))
+        used += blocks(f)
+        PART_DISK[n] = len(disks)
+    assert len(disks) <= 3, 'more than three disks'
+    build_engine()
+    disks[0] = [('Stronkie', os.path.join(OUT, 'Stronkie')), ('s/startup-sequence', ss)] + disks[0]
+    out = []
+    for i, files in enumerate(disks):
+        label = 'Stronkie' if i == 0 else f'Stronkie{i + 1}'
+        out.append(make_adf(files, label, os.path.join(OUT, f'The_World_of_Stronkie_Amiga_{VERSION}_Disk{i + 1}.adf')))
+    print('parts per disk:', PART_DISK)
+    return out
 
 
 if __name__ == '__main__':

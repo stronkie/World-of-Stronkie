@@ -18,19 +18,23 @@ gfxname   dc.b "graphics.library",0
 inputname dc.b "input.device",0
 vbl_name  dc.b "Stronkie",0
 menuname  dc.b "MENU",0
-fname     dc.b "PART01",0
+soundsname dc.b "SOUNDS",0
+vol1      dc.b "Stronkie:",0
+vol2      dc.b "Stronkie2:",0
+vol3      dc.b "Stronkie3:",0
 dirnames  dc.b "NSEWUD"
         even
 
 ; ---- messages (as on the C64; $10-$1F = colour, 13 = new line) ---------
-m_banner  dc.b $17,"THE WORLD OF STRONKIE  V1.0",13
+m_banner  dc.b $17,"THE WORLD OF STRONKIE  V2.0",13
           dc.b $1f,"AMIGA 500 VERSION",13
           dc.b "CREATED BY MARK STRONKS",13
           dc.b "TYPE HELP FOR INSTRUCTIONS.",13,13,0
 m_loading dc.b "LOADING... PLEASE WAIT",0
 m_cardload dc.b "LOADING...",0
-m_diskerr dc.b "CANNOT FIND THE NEXT PART ON THIS DISK.",0
-m_diskerr2 dc.b "INSERT THE GAME DISK AND PRESS A KEY.",0
+m_diskerr dc.b "CANNOT FIND THE NEXT PART OF THE GAME.",0
+m_diskerr2 dc.b "PLEASE INSERT DISK "
+m_disknum dc.b "1 AND PRESS A KEY.",0
 m_more    dc.b "        -- PRESS A KEY FOR MORE --",0
 m_huh     dc.b "I DON'T KNOW HOW TO ",0
 m_word    dc.b "I DON'T KNOW THE WORD ",0
@@ -112,7 +116,7 @@ menu_texts
           dc.b "PRESS ESC TO RETURN TO WORKBENCH",0
           even
           dc.w 220,11
-          dc.b "AMIGA 500  V1.0",0
+          dc.b "AMIGA 500  V2.0",0
           even
           dc.w -1
 
@@ -183,7 +187,7 @@ cred_end  ds.w 1
 pic_pal   ds.w 32
 fs_pal    ds.w 32
 sky       ds.w 192
-cyc_tab   ds.b 8*CY_SIZE
+cyc_tab   ds.b 16*CY_SIZE          ; up to 16 cycling registers a picture
 actors    ds.b NACT*AC_SIZE
 voices    ds.b 4*VO_SIZE
 vbl_int   ds.b 22
@@ -200,7 +204,8 @@ lastbuf   ds.b 40
 st_line   ds.b 40
 key_buf   ds.b 32
 dig       ds.b 6
-savename  ds.b 24
+savename  ds.b 40
+fname     ds.b 32
 savebuf   ds.b SAVE_MAX
 cp_frags  ds.b 1
 frags     ds.b 1
@@ -247,6 +252,21 @@ job_pic   ds.l 1
 job_src   ds.l 1
 job_slot  ds.w 1
 job_row   ds.w 1
+        even
+cop_g_c0  ds.l 1
+pic_blob  ds.l 1
+fname_plain ds.l 1
+save_short ds.l 1
+speech_buf ds.l 1
+snd_mem   ds.l 1
+snd_mem_len ds.l 1
+snd_tab   ds.b SND_COUNT*10
+snd_count ds.w 1
+smp_frames ds.w 1
+smp_state ds.b 1
+speech_on ds.b 1
+want_disk ds.b 1
+floppy    ds.b 1
         even
 menu_buf  ds.b 40000
 

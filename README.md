@@ -13,7 +13,7 @@ Want the full 1980s experience? The [`game box`](game%20box) folder has a printa
 
 Playing on real floppies? Print the black and white disk labels for side A and side B from the [`disk labels`](disk%20labels) folder (`Disk_Labels_A4.pdf` prints both at their real size, 3.5 x 1.5 inch).
 
-Side project: an **Amiga 500 version** (1 MB chip RAM) is in the [`amiga 500`](amiga%20500) folder, a bootable disk with copper skies, sprites and Paula music.
+Side project: an **Amiga 500 version** (1 MB chip RAM) is in the [`amiga 500`](amiga%20500) folder: three bootable disks with 81 pictures painted for the Amiga in 32 colours, copper skies, sprites, Paula music, sampled sound effects and speech.
 
 Older versions are in the `previous versions` folder.
 

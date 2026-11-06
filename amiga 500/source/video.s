@@ -7,8 +7,9 @@ PIC_TOP   = $24             ; first line of the room picture
 TEXT_TOP  = $e5             ; first line of the text window
 PIC_BYTES = 40*5*192        ; a picture: 5 bitplanes, interleaved lines
 CACHE_SLOTS = 8
-PART_MAX  = 131072
-FILE_MAX  = 32768
+PART_MAX  = 32768             ; an unpacked part (texts, puzzles, music, sprites)
+FILE_MAX  = 196608          ; a part file: packed part + pictures + speech
+SPEECH_MAX = 28000         ; the longest spoken line (samples)
 SAVE_MAX  = 512
 FS_LINES  = 1500            ; full screen bitmap (title screen, cards, credits)
 NACT      = 4
@@ -328,6 +329,8 @@ make_game_copper
         bne   .pal
         CWAIT   PIC_TOP
         CMOVE   BPLCON0,#$5200
+        move.l  a0,cop_g_c0         ; colour 0 of the picture
+        CMOVE   COLOR00,#$000
         move.l  a0,cop_g_sky        ; colour 20 (the sky) on every line
         moveq   #0,d0
 .sky    move.w  d0,d1
@@ -714,13 +717,14 @@ draw_status
 
 ;======================================================================
 ;  pictures
-;  a picture block in the part file: .w flags (1 = sky), .w cycling registers,
-;  [192 sky colours], per cycling register (.w register, speed, colours,
-;  colour list), then 162x98 pixels (with a border; value*4)
+;  a picture block (in the blob after the part): .w flags (1 = sky),
+;  .w cycling registers, 32 colours, [192 sky colours], per cycling
+;  register (.w register, speed, n, colours), .l packed length, then
+;  320x192 pixels (register*4), packed
 ;======================================================================
-pic_info                            ; a0 = picture block -> a1 = pixels, d0 = flags
+pic_info                            ; a0 = picture block -> a1 = packed pixels, d0 = flags
         move.w  (a0),d0
-        lea     4(a0),a1
+        lea     4+64(a0),a1
         btst    #0,d0
         beq   .ns
         lea     192*2(a1),a1
@@ -730,6 +734,7 @@ pic_info                            ; a0 = picture block -> a1 = pixels, d0 = fl
         add.w   d2,d2
         lea     6(a1,d2.w),a1
 .cf     dbf     d1,.cl
+        addq.l  #4,a1
         rts
 
 cache_reset                         ; a new part: the cache is empty
@@ -749,7 +754,7 @@ cache_reset                         ; a new part: the cache is empty
 ;  pictures are decoded a few lines at a time: in the background while
 ;  the game waits for a key, or at once when a picture is needed now
 ;----------------------------------------------------------------------
-JOB_ROWS = 4
+JOB_ROWS = 6                ; lines of bitplanes per slice
 
 bg_step                             ; a little background work (keeps all registers)
         movem.l d0-d7/a0-a6,-(sp)
@@ -774,7 +779,7 @@ bg_step                             ; a little background work (keeps all regist
         bsr     room_ptr_d1
         move.w  (sp)+,d1
         move.l  4(a0),a0
-        add.l   part,a0
+        add.l   pic_blob,a0
         bsr     cache_slot_of
         bmi     .new
         addq.w  #1,d7
@@ -797,7 +802,8 @@ cache_slot_of                       ; a0 = picture -> d0 = slot, N=1 if not in t
 .yes    tst.w   d0
         rts
 
-job_start                           ; a0 = picture, d1 = slot
+job_start                           ; a0 = picture, d1 = slot: unpack the pixels
+        movem.l d2-d7/a2-a6,-(sp)
         move.w  d1,d0
         lsl.w   #2,d0
         lea     cache_key,a1
@@ -808,31 +814,24 @@ job_start                           ; a0 = picture, d1 = slot
         move.w  d1,job_slot
         clr.w   job_row
         bsr     pic_info
-        lea     162+1(a1),a1        ; the first real pixel
-        move.l  a1,job_src
+        move.l  a1,a0
+        move.l  chunky,a1
+        bsr     unzx
+        movem.l (sp)+,d2-d7/a2-a6
         rts
 
-job_slice                           ; scale2x + bitplanes for JOB_ROWS rows
+job_slice                           ; bitplanes for JOB_ROWS lines
         movem.l d2-d7/a2-a6,-(sp)
         move.w  job_row,d5
         moveq   #JOB_ROWS,d6
-        move.w  #96,d0
+        move.w  #192,d0
         sub.w   d5,d0
         cmp.w   d0,d6
         bls     .1
         move.w  d0,d6
 .1      move.w  d6,-(sp)
-        move.l  job_src,a0
         move.w  d5,d0
-        mulu    #640,d0
-        move.l  chunky,a1
-        add.l   d0,a1
-        subq.w  #1,d6
-        bsr     scale2x
-        move.l  a0,job_src
-        move.w  job_row,d5
-        move.w  d5,d0
-        mulu    #640,d0
+        mulu    #320,d0
         move.l  chunky,a0
         add.l   d0,a0
         move.w  job_slot,d1
@@ -840,15 +839,14 @@ job_slice                           ; scale2x + bitplanes for JOB_ROWS rows
         lea     cache_mem,a1
         move.l  (a1,d1.w),a1
         move.w  d5,d0
-        mulu    #400,d0
+        mulu    #200,d0
         add.l   d0,a1
-        move.w  (sp),d7
-        add.w   d7,d7
+        move.w  d6,d7
         subq.w  #1,d7
         bsr     c2p_conv
         move.w  (sp)+,d6
         add.w   d6,job_row
-        cmp.w   #96,job_row
+        cmp.w   #192,job_row
         blo     .x
         move.w  job_slot,d1         ; finished
         lea     cache_done,a1
@@ -894,52 +892,6 @@ find_pic                            ; a0 = picture block -> a0 = bitplanes (deco
         lea     cache_mem,a1
         move.l  (a1,d0.w),a0
         movem.l (sp)+,d2-d7/a2-a4
-        rts
-
-scale2x                             ; a0 = pixels (in a 162 wide frame) -> a1 = 320 wide, d6 = rows-1
-.y      lea     320(a1),a2          ; the second output line
-        move.w  #159,d7
-.x      move.b  (a0),d0             ; E
-        move.b  -1(a0),d1           ; D (left)
-        move.b  1(a0),d2            ; F (right)
-        cmp.b   d1,d2
-        beq   .same
-        move.b  -162(a0),d3         ; B (above)
-        move.b  162(a0),d4          ; H (below)
-        cmp.b   d3,d4
-        beq   .same
-        move.b  d0,d5               ; E0 = D==B ? D : E
-        cmp.b   d1,d3
-        bne   .e0
-        move.b  d1,d5
-.e0     move.b  d5,(a1)+
-        move.b  d0,d5               ; E1 = B==F ? F : E
-        cmp.b   d3,d2
-        bne   .e1
-        move.b  d2,d5
-.e1     move.b  d5,(a1)+
-        move.b  d0,d5               ; E2 = D==H ? D : E
-        cmp.b   d1,d4
-        bne   .e2
-        move.b  d1,d5
-.e2     move.b  d5,(a2)+
-        move.b  d0,d5               ; E3 = H==F ? F : E
-        cmp.b   d4,d2
-        bne   .e3
-        move.b  d2,d5
-.e3     move.b  d5,(a2)+
-        addq.l  #1,a0
-        dbf     d7,.x
-        bra   .nexty
-.same   move.b  d0,(a1)+
-        move.b  d0,(a1)+
-        move.b  d0,(a2)+
-        move.b  d0,(a2)+
-        addq.l  #1,a0
-        dbf     d7,.x
-.nexty  addq.l  #2,a0               ; skip the frame
-        lea     320(a1),a1
-        dbf     d6,.y
         rts
 
 c2p_conv                            ; a0 = 320 wide pixels (value*4) -> a1 = 5 interleaved planes,
@@ -1048,29 +1000,23 @@ fade_to                             ; d0 = -2: to black, 2: to full colour
         bne   .lp
 .end    bra     wait_frame
 
-set_pic_colours                     ; a0 = picture block: sky, cycling registers
+set_pic_colours                     ; a0 = picture block: colours, sky, cycling registers
         movem.l d2/a2-a3,-(sp)
         move.b  #1,vbl_lock         ; (the interrupt reads these)
-        lea     pic_pal,a1          ; registers 1-15 C64 colours, the rest black
-        lea     c64pal,a2
-        moveq   #15,d0
+        lea     pic_pal,a1          ; the picture's own 32 colours
+        lea     4(a0),a2
+        moveq   #31,d0
 .c      move.w  (a2)+,(a1)+
         dbf     d0,.c
-        moveq   #15,d0
-.z      clr.w   (a1)+
-        dbf     d0,.z
         lea     sky,a1              ; the sky
         move.w  #191,d0
         btst    #0,1(a0)
         beq   .nosky
-        lea     4(a0),a2
 .s      move.w  (a2)+,(a1)+
         dbf     d0,.s
-        lea     4+192*2(a0),a2
         bra   .cyc
 .nosky  clr.w   (a1)+
         dbf     d0,.nosky
-        lea     4(a0),a2
 .cyc    move.w  2(a0),d0            ; colour cycling
         move.w  d0,ncyc
         lea     cyc_tab,a1
@@ -1107,7 +1053,11 @@ pic_copper
         tst.b   flash_on
         beq   .nf
         lea     fade_tab+17*16,a2   ; a flash: everything bright
-.nf     lea     pic_pal+2,a0
+.nf     move.w  pic_pal,d0          ; colour 0 (in the picture only)
+        bsr   .fadec
+        move.l  cop_g_c0,a1
+        move.w  d0,2(a1)
+        lea     pic_pal+2,a0
         move.l  cop_g_pal,a1
         addq.l  #2,a1
         moveq   #30,d7
@@ -1560,7 +1510,9 @@ show_menu
         move.l  12(a2),a0
         add.l   a2,a0
         move.l  a2,a1
-        bra     music_force         ; the title music (always)
+        bsr     music_force         ; the title music (always)
+        moveq   #SND_TITLE,d0       ; "Welcome to the World of Stronkie!"
+        bra     speak_sound
 .fail   clr.b   menu_on
         rts
 
@@ -1782,36 +1734,23 @@ ship_tick
 ;======================================================================
 ;  title card of the next part (shown while it loads)
 ;======================================================================
+;  a copper gradient, the title twice the size, and a voice speaks it
 show_card
         bsr     actors_off
         move.l  part,a2
         move.l  H_CARD(a2),d0
         beq     .none
-        add.l   d0,a2               ; kind, name, picture
+        add.l   d0,a2               ; kind, name, spoken title
         bsr     fs_clear
-        move.l  8(a2),a0
-        add.l   part,a0
-        move.l  a0,-(sp)
-        bsr     find_pic
-        move.l  a0,a3
-        bsr     blit_wait           ; the picture at line 44
-        lea     CUSTOM,a1
-        move.l  #$09f00000,BLTCON0(a1)
-        move.l  #-1,BLTAFWM(a1)
-        move.l  a3,BLTAPT(a1)
-        move.l  #fs_bm+44*200,BLTDPT(a1)
-        clr.l   BLTAMOD(a1)
-        move.w  #(960<<6)|20,BLTSIZE(a1)
-        bsr     blit_wait
         ; the texts, centred, twice the size
         move.l  (a2),a1
         add.l   part,a1
-        moveq   #4,d0
+        moveq   #90,d0
         moveq   #7,d2               ; yellow
         bsr     .centre
         move.l  4(a2),a1
         add.l   part,a1
-        moveq   #22,d0
+        moveq   #112,d0
         moveq   #1,d2               ; white
         bsr     .centre
         lea     m_cardload,a1
@@ -1821,9 +1760,18 @@ show_card
         move.w  #200,d4
         moveq   #0,d5
         bsr     text_at
-        ; colours: the picture's own, plus the sky
-        move.l  (sp)+,a0
-        bsr     set_pic_colours
+        ; colours: the C64 colours for the texts, no cycling
+        move.b  #1,vbl_lock
+        clr.w   ncyc
+        lea     pic_pal,a1
+        lea     c64pal,a0
+        moveq   #15,d0
+.c      move.w  (a0)+,(a1)+
+        dbf     d0,.c
+        moveq   #15,d0
+.z      clr.w   (a1)+
+        dbf     d0,.z
+        clr.b   vbl_lock
         lea     cop_fs,a0
         move.l  #fs_bm,d0
         moveq   #5,d1
@@ -1832,35 +1780,27 @@ show_card
         move.w  #COLOR00,d3
         move.w  #COLOR00+40,d4
         bsr     make_fs_copper
-        moveq   #0,d7               ; a deep blue background, black behind the picture
+        moveq   #0,d7               ; background: night blue -> purple -> black
 .bg     move.w  d7,d0
         bsr     fs_line
-        moveq   #0,d1
-        cmp.w   #44,d7
-        bhs   .b1
         move.w  d7,d1
-        lsr.w   #3,d1
+        sub.w   #110,d1
+        bpl     .p
         neg.w   d1
-        addq.w  #6,d1
-        bra   .b3
-.b1     cmp.w   #44+192,d7
-        blo   .b2
-        move.w  d7,d1
-        sub.w   #44+192,d1
-        lsr.w   #2,d1
-.b2
-.b3     move.w  d1,6(a0)
-        moveq   #0,d1
-        cmp.w   #44,d7
-        blo   .s1
-        cmp.w   #44+192,d7
-        bhs   .s1
-        lea     sky,a1
-        move.w  d7,d1
-        sub.w   #44,d1
-        add.w   d1,d1
-        move.w  (a1,d1.w),d1
-.s1     move.w  d1,10(a0)
+.p      lsr.w   #4,d1               ; 0 in the middle .. 8 at the edges
+        moveq   #8,d0
+        sub.w   d1,d0
+        bpl     .q
+        moveq   #0,d0
+.q      move.w  d0,d1               ; blue = d0, red = d0/2, a line of light behind the title
+        lsr.w   #1,d1
+        lsl.w   #8,d1
+        or.w    d0,d1
+        cmp.w   #110,d7
+        bne     .r
+        move.w  #$a8f,d1
+.r      move.w  d1,6(a0)
+        clr.w   10(a0)
         addq.w  #1,d7
         cmp.w   #256,d7
         bne   .bg
@@ -1869,6 +1809,9 @@ show_card
         bsr     set_copper
         move.b  #1,menu_on
         move.l  frames,card_t0
+        move.l  8(a2),a0            ; "Chapter 2. The Derelict Station"
+        add.l   pic_blob,a0
+        bsr     speak_clip
 .none   rts
 .centre                             ; a1 = text, d0 = line, d2 = colour
         move.l  a1,a0
@@ -1923,6 +1866,9 @@ loading_screen                      ; LOADING PART nn in the text window
         bra     text_at
 
 disk_error_screen
+        move.b  want_disk,d0        ; PLEASE INSERT DISK n
+        add.b   #'0',d0
+        move.b  d0,m_disknum
         bsr     game_screen
         lea     text_bm+2*8*160+1,a0
         lea     m_diskerr,a1
